@@ -20,7 +20,57 @@ public static class DbSeeder
         await SeedRolesAsync(db);
         await SeedMembresiasAsync(db);
         await SeedAdminAsync(db, config);
+        await SeedUsuarioCascAsync(db);
         await SeedProyectosAsync(db);
+    }
+
+    /// <summary>
+    /// Garantiza que casc2024@gmail.com sea Administrador. Si ya existe (p. ej. registrado
+    /// desde la página) lo promueve a administrador sin tocar su contraseña ni sus datos;
+    /// si no existe, lo crea con la contraseña por defecto "Casc2024!".
+    /// </summary>
+    private static async Task SeedUsuarioCascAsync(AppDbContext db)
+    {
+        const string correo = "casc2024@gmail.com";
+        var rolAdmin = await db.Roles.FirstAsync(r => r.Nombre == Roles.Administrador);
+
+        var usuario = await db.Usuarios.FirstOrDefaultAsync(u => u.Correo == correo);
+        if (usuario is not null)
+        {
+            var cambio = false;
+            if (usuario.RolId != rolAdmin.Id) { usuario.RolId = rolAdmin.Id; cambio = true; }
+            if (!usuario.CorreoConfirmado) { usuario.CorreoConfirmado = true; cambio = true; }
+            if (!usuario.Activo) { usuario.Activo = true; cambio = true; }
+            if (usuario.MembresiaFin is null)
+            {
+                usuario.MembresiaInicio ??= DateTime.UtcNow;
+                usuario.MembresiaFin = usuario.MembresiaInicio.Value.AddMonths(1);
+                cambio = true;
+            }
+            if (cambio) await db.SaveChangesAsync();
+            return;
+        }
+
+        var plan = await db.Membresias.FirstOrDefaultAsync(m => m.Nombre == "Professional");
+        var hasher = new PasswordHasher<Usuario>();
+        var nuevo = new Usuario
+        {
+            Nombre = "Christian",
+            Apellido = "Schereiber",
+            Compania = "Concrete Sales Radar",
+            Correo = correo,
+            Telefono = "000-000-0000",
+            CorreoConfirmado = true,
+            Activo = true,
+            RolId = rolAdmin.Id,
+            MembresiaId = plan?.Id,
+            MembresiaInicio = DateTime.UtcNow,
+            MembresiaFin = DateTime.UtcNow.AddMonths(1)
+        };
+        nuevo.PasswordHash = hasher.HashPassword(nuevo, "Casc2024!");
+
+        db.Usuarios.Add(nuevo);
+        await db.SaveChangesAsync();
     }
 
     private static async Task SeedRolesAsync(AppDbContext db)
@@ -87,7 +137,8 @@ public static class DbSeeder
             Activo = true,
             RolId = rolAdmin.Id,
             MembresiaId = planBusiness?.Id,
-            MembresiaInicio = DateTime.UtcNow
+            MembresiaInicio = DateTime.UtcNow,
+            MembresiaFin = DateTime.UtcNow.AddMonths(1)
         };
         admin.PasswordHash = hasher.HashPassword(admin, config["Admin:Password"] ?? "Admin123!");
 

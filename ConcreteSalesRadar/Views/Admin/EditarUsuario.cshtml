@@ -56,6 +56,17 @@
 
                 <div class="form-row">
                     <div class="form-group">
+                        <label>@L["Adm_MembStart"]</label>
+                        <input asp-for="MembresiaInicio" type="date" class="form-control" value="@(Model.MembresiaInicio?.ToString("yyyy-MM-dd"))" />
+                    </div>
+                    <div class="form-group">
+                        <label>@L["Adm_MembEnd"]</label>
+                        <input asp-for="MembresiaFin" type="date" class="form-control" value="@(Model.MembresiaFin?.ToString("yyyy-MM-dd"))" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
                         <label>@L["Adm_NewPassword"]</label>
                         <input type="password" name="nuevaPassword" class="form-control" placeholder="@L["Adm_NewPasswordPh"]" />
                     </div>

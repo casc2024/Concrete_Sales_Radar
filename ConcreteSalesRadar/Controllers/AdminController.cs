@@ -1,5 +1,6 @@
 using ConcreteSalesRadar.Data;
 using ConcreteSalesRadar.Models.Entities;
+using ConcreteSalesRadar.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -27,14 +28,34 @@ public class AdminController : Controller
     // ================= USUARIOS =================
 
     [HttpGet]
-    public async Task<IActionResult> Usuarios()
+    public async Task<IActionResult> Usuarios(AdminUsuariosViewModel filtro)
     {
-        var usuarios = await _db.Usuarios
+        var q = _db.Usuarios
             .Include(u => u.Rol)
             .Include(u => u.Membresia)
-            .OrderByDescending(u => u.FechaRegistro)
-            .ToListAsync();
-        return View(usuarios);
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(filtro.Nombre))
+            q = q.Where(u => EF.Functions.ILike(u.Nombre, $"%{filtro.Nombre.Trim()}%"));
+        if (!string.IsNullOrWhiteSpace(filtro.Apellido))
+            q = q.Where(u => EF.Functions.ILike(u.Apellido, $"%{filtro.Apellido.Trim()}%"));
+        if (!string.IsNullOrWhiteSpace(filtro.Compania))
+            q = q.Where(u => EF.Functions.ILike(u.Compania, $"%{filtro.Compania.Trim()}%"));
+
+        // El rango de fechas se compara en UTC (la columna es timestamptz).
+        if (filtro.FechaDesde.HasValue)
+        {
+            var desde = DateTime.SpecifyKind(filtro.FechaDesde.Value.Date, DateTimeKind.Utc);
+            q = q.Where(u => u.FechaRegistro >= desde);
+        }
+        if (filtro.FechaHasta.HasValue)
+        {
+            var hasta = DateTime.SpecifyKind(filtro.FechaHasta.Value.Date.AddDays(1), DateTimeKind.Utc);
+            q = q.Where(u => u.FechaRegistro < hasta);
+        }
+
+        filtro.Usuarios = await q.OrderByDescending(u => u.FechaRegistro).ToListAsync();
+        return View(filtro);
     }
 
     [HttpGet]
@@ -61,6 +82,10 @@ public class AdminController : Controller
         usuario.MembresiaId = modelo.MembresiaId;
         usuario.Activo = modelo.Activo;
         usuario.CorreoConfirmado = modelo.CorreoConfirmado;
+
+        // Fechas de membresía: las columnas son timestamptz, así que se guardan en UTC.
+        usuario.MembresiaInicio = ComoUtc(modelo.MembresiaInicio);
+        usuario.MembresiaFin = ComoUtc(modelo.MembresiaFin);
 
         if (!string.IsNullOrWhiteSpace(nuevaPassword))
             usuario.PasswordHash = _hasher.HashPassword(usuario, nuevaPassword);
@@ -153,6 +178,10 @@ public class AdminController : Controller
         }
         return RedirectToAction(nameof(Membresias));
     }
+
+    /// <summary>Normaliza una fecha (de un input date) a UTC para columnas timestamptz.</summary>
+    private static DateTime? ComoUtc(DateTime? fecha) =>
+        fecha.HasValue ? DateTime.SpecifyKind(fecha.Value, DateTimeKind.Utc) : null;
 
     private async Task CargarCombosAsync()
     {

@@ -1,6 +1,7 @@
-@model List<Usuario>
+@model AdminUsuariosViewModel
 @{
     ViewData["Title"] = L["Adm_UsersTitle"].Value;
+    var hoy = DateTime.UtcNow.Date;
 }
 <div class="app-main">
     <div class="container-xl">
@@ -17,25 +18,80 @@
             <div class="alert alert-success">@TempData["Exito"]</div>
         }
 
+        <!-- Filtros -->
+        <div class="card">
+            <h3 class="card-title">@L["AdmU_Filters"]</h3>
+            <form asp-action="Usuarios" method="get">
+                <div class="filter-grid">
+                    <div>
+                        <label>@L["F_Nombre"]</label>
+                        <input class="form-control" name="Nombre" value="@Model.Nombre" maxlength="50" />
+                    </div>
+                    <div>
+                        <label>@L["F_Apellido"]</label>
+                        <input class="form-control" name="Apellido" value="@Model.Apellido" maxlength="50" />
+                    </div>
+                    <div>
+                        <label>@L["F_Compania"]</label>
+                        <input class="form-control" name="Compania" value="@Model.Compania" maxlength="50" />
+                    </div>
+                    <div>
+                        <label>@L["AdmU_DateFrom"]</label>
+                        <input class="form-control" type="date" name="FechaDesde" value="@(Model.FechaDesde?.ToString("yyyy-MM-dd"))" />
+                    </div>
+                    <div>
+                        <label>@L["AdmU_DateTo"]</label>
+                        <input class="form-control" type="date" name="FechaHasta" value="@(Model.FechaHasta?.ToString("yyyy-MM-dd"))" />
+                    </div>
+                    <div class="filter-actions">
+                        <button type="submit" class="btn btn-primary">@L["AdmU_Search"]</button>
+                        <a class="btn btn-ghost" asp-action="Usuarios">@L["AdmU_Clear"]</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+
         <div class="card">
             <div class="tablewrap">
-                <table class="data" style="min-width:1000px">
+                <table class="data" style="min-width:1200px">
                     <thead>
                         <tr>
-                            <th>@L["Adm_Col_Name"]</th><th>@L["Adm_Col_Company"]</th><th>@L["Adm_Col_Email"]</th><th>@L["Adm_Col_Phone"]</th>
-                            <th>@L["Adm_Col_Role"]</th><th>@L["Adm_Col_Plan"]</th><th>@L["Adm_Col_Verified"]</th><th>@L["Adm_Col_Status"]</th><th>@L["Adm_Col_Registered"]</th><th>@L["Col_Actions"]</th>
+                            <th>@L["Adm_Col_Name"]</th><th>@L["F_Apellido"]</th><th>@L["Adm_Col_Company"]</th><th>@L["Adm_Col_Email"]</th>
+                            <th>@L["Adm_Col_Role"]</th><th>@L["Adm_Col_Plan"]</th><th>@L["AdmU_Col_Purchase"]</th><th>@L["AdmU_Col_Validity"]</th>
+                            <th>@L["Adm_Col_Verified"]</th><th>@L["Adm_Col_Status"]</th><th>@L["Adm_Col_Registered"]</th><th>@L["Col_Actions"]</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var u in Model)
+                        @foreach (var u in Model.Usuarios)
                         {
                             <tr>
-                                <td><b>@u.NombreCompleto</b></td>
+                                <td><b>@u.Nombre</b></td>
+                                <td>@u.Apellido</td>
                                 <td>@u.Compania</td>
                                 <td>@u.Correo</td>
-                                <td>@u.Telefono</td>
                                 <td>@(u.Rol?.Nombre ?? "-")</td>
                                 <td>@(u.Membresia?.Nombre ?? "-")</td>
+                                <td>@(u.MembresiaInicio?.ToString("yyyy-MM-dd") ?? "-")</td>
+                                <td>
+                                    @if (u.MembresiaFin is null)
+                                    {
+                                        <text>-</text>
+                                    }
+                                    else
+                                    {
+                                        var fin = u.MembresiaFin.Value.Date;
+                                        var dias = (fin - hoy).Days;
+                                        <div>@fin.ToString("yyyy-MM-dd")</div>
+                                        @if (dias >= 0)
+                                        {
+                                            <span class="pill on">@L["AdmU_DaysLeft", dias]</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="pill off">@L["AdmU_Expired"]</span>
+                                        }
+                                    }
+                                </td>
                                 <td>@if (u.CorreoConfirmado) { <span class="pill on">@L["Adm_Yes"]</span> } else { <span class="pill off">@L["Adm_No"]</span> }</td>
                                 <td>@if (u.Activo) { <span class="pill on">@L["Adm_Active"]</span> } else { <span class="pill off">@L["Adm_Inactive"]</span> }</td>
                                 <td>@u.FechaRegistro.ToString("yyyy-MM-dd")</td>
@@ -50,7 +106,7 @@
                         }
                     </tbody>
                 </table>
-                @if (!Model.Any())
+                @if (!Model.Usuarios.Any())
                 {
                     <div class="empty">@L["Adm_NoUsers"]</div>
                 }

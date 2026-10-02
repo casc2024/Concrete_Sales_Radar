@@ -67,6 +67,7 @@ public class CuentaController : Controller
             RolId = rolUsuario.Id,
             MembresiaId = vm.MembresiaId,
             MembresiaInicio = DateTime.UtcNow,
+            MembresiaFin = DateTime.UtcNow.AddMonths(1),
             CorreoConfirmado = false
         };
         usuario.PasswordHash = _hasher.HashPassword(usuario, vm.Password);

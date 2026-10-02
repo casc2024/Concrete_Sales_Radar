@@ -783,4 +783,37 @@
   <data name="Page_Records" xml:space="preserve">
     <value>{0} records</value>
   </data>
+  <data name="AdmU_Filters" xml:space="preserve">
+    <value>Search filters</value>
+  </data>
+  <data name="AdmU_DateFrom" xml:space="preserve">
+    <value>Registered from</value>
+  </data>
+  <data name="AdmU_DateTo" xml:space="preserve">
+    <value>Registered to</value>
+  </data>
+  <data name="AdmU_Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="AdmU_Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="AdmU_Col_Purchase" xml:space="preserve">
+    <value>Purchase date</value>
+  </data>
+  <data name="AdmU_Col_Validity" xml:space="preserve">
+    <value>Validity</value>
+  </data>
+  <data name="AdmU_DaysLeft" xml:space="preserve">
+    <value>{0} days left</value>
+  </data>
+  <data name="AdmU_Expired" xml:space="preserve">
+    <value>Expired</value>
+  </data>
+  <data name="Adm_MembStart" xml:space="preserve">
+    <value>Membership start</value>
+  </data>
+  <data name="Adm_MembEnd" xml:space="preserve">
+    <value>Validity (end date)</value>
+  </data>
 </root>
