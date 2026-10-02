@@ -5,6 +5,7 @@ using ConcreteSalesRadar.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 namespace ConcreteSalesRadar.Controllers;
 
@@ -12,8 +13,13 @@ namespace ConcreteSalesRadar.Controllers;
 public class DashboardController : Controller
 {
     private readonly AppDbContext _db;
+    private readonly IStringLocalizer<SharedResource> _loc;
 
-    public DashboardController(AppDbContext db) => _db = db;
+    public DashboardController(AppDbContext db, IStringLocalizer<SharedResource> loc)
+    {
+        _db = db;
+        _loc = loc;
+    }
 
     [HttpGet]
     public async Task<IActionResult> Index(DashboardViewModel filtro)
@@ -111,7 +117,7 @@ public class DashboardController : Controller
         }
 
         await _db.SaveChangesAsync();
-        TempData["Exito"] = "Obra guardada correctamente.";
+        TempData["Exito"] = _loc["Msg_ProjectSaved"].Value;
         return RedirectToAction(nameof(Index));
     }
 
@@ -124,7 +130,7 @@ public class DashboardController : Controller
         {
             _db.Proyectos.Remove(proyecto);
             await _db.SaveChangesAsync();
-            TempData["Exito"] = "Obra eliminada.";
+            TempData["Exito"] = _loc["Msg_ProjectDeleted"].Value;
         }
         return RedirectToAction(nameof(Index));
     }

@@ -17,15 +17,19 @@ public static class Formato
 
     public static string Numero(int n) => n.ToString("#,0", En);
 
-    public static (string Label, string Clase) Antiguedad(DateTime? fecha)
+    /// <summary>
+    /// Devuelve los meses transcurridos (null = sin fecha, negativo = futura) y la clase
+    /// CSS del badge. La etiqueta de texto se arma y localiza en la vista.
+    /// </summary>
+    public static (int? Meses, string Clase) Antiguedad(DateTime? fecha)
     {
-        if (fecha is null) return ("No disponible", "cold");
+        if (fecha is null) return (null, "cold");
         var hoy = DateTime.UtcNow;
         var meses = (hoy.Year - fecha.Value.Year) * 12 + (hoy.Month - fecha.Value.Month);
-        if (meses < 0) return ("Próxima / no iniciada", "new");
-        if (meses <= 3) return ($"{meses} mes{(meses == 1 ? "" : "es")}", "new");
-        if (meses <= 12) return ($"{meses} meses", "active");
-        return ($"{meses} meses", "mature");
+        if (meses < 0) return (meses, "new");
+        if (meses <= 3) return (meses, "new");
+        if (meses <= 12) return (meses, "active");
+        return (meses, "mature");
     }
 
     public static string Calor(int prioridad) =>

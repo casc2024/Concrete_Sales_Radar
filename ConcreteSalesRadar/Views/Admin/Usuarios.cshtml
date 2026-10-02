@@ -1,15 +1,15 @@
 @model List<Usuario>
 @{
-    ViewData["Title"] = "Usuarios";
+    ViewData["Title"] = L["Adm_UsersTitle"].Value;
 }
 <div class="app-main">
     <div class="container-xl">
-        <h1 class="page-title">Usuarios</h1>
-        <p class="page-sub">Mantenimiento de cuentas registradas.</p>
+        <h1 class="page-title">@L["Adm_UsersTitle"]</h1>
+        <p class="page-sub">@L["Adm_UsersListSub"]</p>
 
         <div class="app-tabs">
-            <a class="active" asp-action="Usuarios">Usuarios</a>
-            <a asp-action="Membresias">Membresías</a>
+            <a class="active" asp-action="Usuarios">@L["Adm_TabUsers"]</a>
+            <a asp-action="Membresias">@L["Adm_TabPlans"]</a>
         </div>
 
         @if (TempData["Exito"] != null)
@@ -22,8 +22,8 @@
                 <table class="data" style="min-width:1000px">
                     <thead>
                         <tr>
-                            <th>Nombre</th><th>Compañía</th><th>Correo</th><th>Teléfono</th>
-                            <th>Rol</th><th>Membresía</th><th>Verificado</th><th>Estado</th><th>Registro</th><th>Acciones</th>
+                            <th>@L["Adm_Col_Name"]</th><th>@L["Adm_Col_Company"]</th><th>@L["Adm_Col_Email"]</th><th>@L["Adm_Col_Phone"]</th>
+                            <th>@L["Adm_Col_Role"]</th><th>@L["Adm_Col_Plan"]</th><th>@L["Adm_Col_Verified"]</th><th>@L["Adm_Col_Status"]</th><th>@L["Adm_Col_Registered"]</th><th>@L["Col_Actions"]</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -36,12 +36,12 @@
                                 <td>@u.Telefono</td>
                                 <td>@(u.Rol?.Nombre ?? "-")</td>
                                 <td>@(u.Membresia?.Nombre ?? "-")</td>
-                                <td>@if (u.CorreoConfirmado) { <span class="pill on">Sí</span> } else { <span class="pill off">No</span> }</td>
-                                <td>@if (u.Activo) { <span class="pill on">Activo</span> } else { <span class="pill off">Inactivo</span> }</td>
+                                <td>@if (u.CorreoConfirmado) { <span class="pill on">@L["Adm_Yes"]</span> } else { <span class="pill off">@L["Adm_No"]</span> }</td>
+                                <td>@if (u.Activo) { <span class="pill on">@L["Adm_Active"]</span> } else { <span class="pill off">@L["Adm_Inactive"]</span> }</td>
                                 <td>@u.FechaRegistro.ToString("yyyy-MM-dd")</td>
                                 <td class="actions-cell">
-                                    <a class="btn btn-ghost btn-sm" asp-action="EditarUsuario" asp-route-id="@u.Id">Editar</a>
-                                    <form asp-action="EliminarUsuario" asp-route-id="@u.Id" method="post" onsubmit="return confirm('¿Eliminar este usuario?');" style="margin:0">
+                                    <a class="btn btn-ghost btn-sm" asp-action="EditarUsuario" asp-route-id="@u.Id">@L["Act_Edit"]</a>
+                                    <form asp-action="EliminarUsuario" asp-route-id="@u.Id" method="post" onsubmit="return confirm('@L["Confirm_DeleteUser"]');" style="margin:0">
                                         @Html.AntiForgeryToken()
                                         <button type="submit" class="btn btn-danger btn-sm">X</button>
                                     </form>
@@ -52,7 +52,7 @@
                 </table>
                 @if (!Model.Any())
                 {
-                    <div class="empty">No hay usuarios registrados.</div>
+                    <div class="empty">@L["Adm_NoUsers"]</div>
                 }
             </div>
         </div>

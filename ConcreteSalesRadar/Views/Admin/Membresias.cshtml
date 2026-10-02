@@ -1,15 +1,15 @@
 @model List<Membresia>
 @{
-    ViewData["Title"] = "Membresías";
+    ViewData["Title"] = L["Adm_PlansTitle"].Value;
 }
 <div class="app-main">
     <div class="container-xl">
-        <h1 class="page-title">Membresías</h1>
-        <p class="page-sub">Planes mostrados en la página de precios.</p>
+        <h1 class="page-title">@L["Adm_PlansTitle"]</h1>
+        <p class="page-sub">@L["Adm_PlansListSub"]</p>
 
         <div class="app-tabs">
-            <a asp-action="Usuarios">Usuarios</a>
-            <a class="active" asp-action="Membresias">Membresías</a>
+            <a asp-action="Usuarios">@L["Adm_TabUsers"]</a>
+            <a class="active" asp-action="Membresias">@L["Adm_TabPlans"]</a>
         </div>
 
         @if (TempData["Exito"] != null)
@@ -22,14 +22,14 @@
         }
 
         <div style="margin-bottom:14px">
-            <a class="btn btn-primary" asp-action="CrearMembresia">+ Nueva membresía</a>
+            <a class="btn btn-primary" asp-action="CrearMembresia">@L["Adm_NewPlan"]</a>
         </div>
 
         <div class="card">
             <div class="tablewrap">
                 <table class="data" style="min-width:800px">
                     <thead>
-                        <tr><th>Orden</th><th>Nombre</th><th>Precio/mes</th><th>Máx. usuarios</th><th>Popular</th><th>Activa</th><th>Acciones</th></tr>
+                        <tr><th>@L["Adm_Col_Order"]</th><th>@L["Adm_Col_PlanName"]</th><th>@L["Adm_Col_Price"]</th><th>@L["Adm_Col_MaxUsers"]</th><th>@L["Adm_Col_Popular"]</th><th>@L["Adm_Col_ActivePlan"]</th><th>@L["Col_Actions"]</th></tr>
                     </thead>
                     <tbody>
                         @foreach (var m in Model)
@@ -37,13 +37,13 @@
                             <tr>
                                 <td>@m.Orden</td>
                                 <td><b>@m.Nombre</b></td>
-                                <td>@(m.PrecioMensual > 0 ? $"${m.PrecioMensual:0}" : "Contactar ventas")</td>
+                                <td>@(m.PrecioMensual > 0 ? $"${m.PrecioMensual:0}" : L["Pricing_Contact"].Value)</td>
                                 <td>@m.MaxUsuarios</td>
-                                <td>@if (m.EsPopular) { <span class="pill on">Sí</span> } else { <span class="muted">—</span> }</td>
-                                <td>@if (m.Activa) { <span class="pill on">Sí</span> } else { <span class="pill off">No</span> }</td>
+                                <td>@if (m.EsPopular) { <span class="pill on">@L["Adm_Yes"]</span> } else { <span class="muted">—</span> }</td>
+                                <td>@if (m.Activa) { <span class="pill on">@L["Adm_Yes"]</span> } else { <span class="pill off">@L["Adm_No"]</span> }</td>
                                 <td class="actions-cell">
-                                    <a class="btn btn-ghost btn-sm" asp-action="EditarMembresia" asp-route-id="@m.Id">Editar</a>
-                                    <form asp-action="EliminarMembresia" asp-route-id="@m.Id" method="post" onsubmit="return confirm('¿Eliminar este plan?');" style="margin:0">
+                                    <a class="btn btn-ghost btn-sm" asp-action="EditarMembresia" asp-route-id="@m.Id">@L["Act_Edit"]</a>
+                                    <form asp-action="EliminarMembresia" asp-route-id="@m.Id" method="post" onsubmit="return confirm('@L["Confirm_DeletePlan"]');" style="margin:0">
                                         @Html.AntiForgeryToken()
                                         <button type="submit" class="btn btn-danger btn-sm">X</button>
                                     </form>

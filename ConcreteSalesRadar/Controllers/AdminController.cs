@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 namespace ConcreteSalesRadar.Controllers;
 
@@ -12,9 +13,14 @@ namespace ConcreteSalesRadar.Controllers;
 public class AdminController : Controller
 {
     private readonly AppDbContext _db;
+    private readonly IStringLocalizer<SharedResource> _loc;
     private readonly PasswordHasher<Usuario> _hasher = new();
 
-    public AdminController(AppDbContext db) => _db = db;
+    public AdminController(AppDbContext db, IStringLocalizer<SharedResource> loc)
+    {
+        _db = db;
+        _loc = loc;
+    }
 
     public IActionResult Index() => View();
 
@@ -60,7 +66,7 @@ public class AdminController : Controller
             usuario.PasswordHash = _hasher.HashPassword(usuario, nuevaPassword);
 
         await _db.SaveChangesAsync();
-        TempData["Exito"] = "Usuario actualizado.";
+        TempData["Exito"] = _loc["Msg_UserUpdated"].Value;
         return RedirectToAction(nameof(Usuarios));
     }
 
@@ -73,7 +79,7 @@ public class AdminController : Controller
         {
             _db.Usuarios.Remove(usuario);
             await _db.SaveChangesAsync();
-            TempData["Exito"] = "Usuario eliminado.";
+            TempData["Exito"] = _loc["Msg_UserDeleted"].Value;
         }
         return RedirectToAction(nameof(Usuarios));
     }
@@ -124,7 +130,7 @@ public class AdminController : Controller
         }
 
         await _db.SaveChangesAsync();
-        TempData["Exito"] = "Membresía guardada.";
+        TempData["Exito"] = _loc["Msg_PlanSaved"].Value;
         return RedirectToAction(nameof(Membresias));
     }
 
@@ -137,12 +143,12 @@ public class AdminController : Controller
         {
             var enUso = await _db.Usuarios.AnyAsync(u => u.MembresiaId == id);
             if (enUso)
-                TempData["Error"] = "No se puede eliminar: hay usuarios con este plan. Desactívalo en su lugar.";
+                TempData["Error"] = _loc["Msg_PlanInUse"].Value;
             else
             {
                 _db.Membresias.Remove(plan);
                 await _db.SaveChangesAsync();
-                TempData["Exito"] = "Membresía eliminada.";
+                TempData["Exito"] = _loc["Msg_PlanDeleted"].Value;
             }
         }
         return RedirectToAction(nameof(Membresias));

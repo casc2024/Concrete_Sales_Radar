@@ -1,13 +1,17 @@
 @using ConcreteSalesRadar.Helpers
 @model DashboardViewModel
 @{
-    ViewData["Title"] = "Dashboard";
+    ViewData["Title"] = L["Dash_Title"].Value;
+    string AgeLabel(int? meses) =>
+        meses is null ? L["Age_NA"].Value
+        : meses < 0 ? L["Age_Upcoming"].Value
+        : $"{meses} {(meses == 1 ? L["Age_Month"].Value : L["Age_Months"].Value)}";
 }
 
 <div class="app-main">
     <div class="container-xl">
-        <h1 class="page-title">Buscador de obras</h1>
-        <p class="page-sub">Prospección de obras y clientes potenciales para venta de Ready-Mix Concrete.</p>
+        <h1 class="page-title">@L["Dash_Title"]</h1>
+        <p class="page-sub">@L["Dash_Sub"]</p>
 
         @if (TempData["Exito"] != null)
         {
@@ -16,18 +20,18 @@
 
         <!-- Búsqueda -->
         <div class="card">
-            <h3 class="card-title">Buscar oportunidades</h3>
+            <h3 class="card-title">@L["Dash_SearchTitle"]</h3>
             <form asp-action="Index" method="get" id="filtros">
                 <div class="search-grid">
                     <div>
-                        <label>Zona / Ciudad / ZIP</label>
-                        <input class="form-control" name="Zona" value="@Model.Zona" placeholder="Ej. Ponder, TX / 76259" />
+                        <label>@L["Dash_Zone"]</label>
+                        <input class="form-control" name="Zona" value="@Model.Zona" placeholder="Ponder, TX / 76259" />
                     </div>
                     <div>
-                        <label>Presupuesto mínimo</label>
+                        <label>@L["Dash_BudgetMin"]</label>
                         <select class="form-control" name="PresupuestoMin">
                             @{
-                                var montos = new (decimal v, string t)[] { (0, "Sin mínimo"), (1000000, "$1M+"), (5000000, "$5M+"), (10000000, "$10M+"), (25000000, "$25M+"), (50000000, "$50M+") };
+                                var montos = new (decimal v, string t)[] { (0, L["Dash_NoMin"].Value), (1000000, "$1M+"), (5000000, "$5M+"), (10000000, "$10M+"), (25000000, "$25M+"), (50000000, "$50M+") };
                             }
                             @foreach (var m in montos)
                             {
@@ -36,9 +40,9 @@
                         </select>
                     </div>
                     <div>
-                        <label>Tipo de obra</label>
+                        <label>@L["Dash_Type"]</label>
                         <select class="form-control" name="Tipo">
-                            <option value="">Todas</option>
+                            <option value="">@L["Dash_All"]</option>
                             @foreach (var t in DashboardViewModel.TiposObra)
                             {
                                 <option value="@t" selected="@(Model.Tipo == t)">@t</option>
@@ -46,17 +50,17 @@
                         </select>
                     </div>
                     <div>
-                        <label>Antigüedad</label>
+                        <label>@L["Dash_Age"]</label>
                         <select class="form-control" name="Antiguedad">
-                            <option value="">Cualquiera</option>
-                            <option value="new" selected="@(Model.Antiguedad == "new")">0-3 meses</option>
-                            <option value="active" selected="@(Model.Antiguedad == "active")">3-12 meses</option>
-                            <option value="mature" selected="@(Model.Antiguedad == "mature")">12+ meses</option>
+                            <option value="">@L["Dash_AnyAge"]</option>
+                            <option value="new" selected="@(Model.Antiguedad == "new")">@L["Dash_Age1"]</option>
+                            <option value="active" selected="@(Model.Antiguedad == "active")">@L["Dash_Age2"]</option>
+                            <option value="mature" selected="@(Model.Antiguedad == "mature")">@L["Dash_Age3"]</option>
                         </select>
                     </div>
                     <div>
                         <label>&nbsp;</label>
-                        <button type="submit" class="btn btn-primary btn-block">Buscar obras</button>
+                        <button type="submit" class="btn btn-primary btn-block">@L["Dash_SearchBtn"]</button>
                     </div>
                 </div>
             </form>
@@ -64,17 +68,17 @@
 
         <!-- KPIs -->
         <div class="kpis">
-            <div class="kpi"><strong>@Formato.Numero(Model.TotalObras)</strong><span>Obras encontradas</span></div>
-            <div class="kpi"><strong>@Formato.Dinero(Model.PresupuestoTotal)</strong><span>Presupuesto visible</span></div>
-            <div class="kpi"><strong>@Formato.Numero(Model.YardasTotal)</strong><span>Yardas potenciales</span></div>
-            <div class="kpi"><strong>@Model.Calientes</strong><span>Oportunidades calientes</span></div>
-            <div class="kpi"><strong>@Model.ConContacto</strong><span>Con contacto</span></div>
+            <div class="kpi"><strong>@Formato.Numero(Model.TotalObras)</strong><span>@L["Dash_KPI_Projects"]</span></div>
+            <div class="kpi"><strong>@Formato.Dinero(Model.PresupuestoTotal)</strong><span>@L["Dash_KPI_Budget"]</span></div>
+            <div class="kpi"><strong>@Formato.Numero(Model.YardasTotal)</strong><span>@L["Dash_KPI_Yards"]</span></div>
+            <div class="kpi"><strong>@Model.Calientes</strong><span>@L["Dash_KPI_Hot"]</span></div>
+            <div class="kpi"><strong>@Model.ConContacto</strong><span>@L["Dash_KPI_Contact"]</span></div>
         </div>
 
         <!-- Pipeline -->
         <div class="grid2">
             <div class="card">
-                <h3 class="card-title">Pipeline por tipo de obra</h3>
+                <h3 class="card-title">@L["Dash_PipelineType"]</h3>
                 @if (Model.PorTipo.Any())
                 {
                     foreach (var t in Model.PorTipo)
@@ -84,14 +88,14 @@
                 }
                 else
                 {
-                    <span class="muted">Sin datos</span>
+                    <span class="muted">@L["Dash_NoData"]</span>
                 }
             </div>
             <div class="card">
-                <h3 class="card-title">Prioridad comercial</h3>
-                <p style="margin:6px 0"><b>Alta:</b> @Model.PrioridadAlta</p>
-                <p style="margin:6px 0"><b>Media:</b> @Model.PrioridadMedia</p>
-                <p style="margin:6px 0"><b>Baja:</b> @Model.PrioridadBaja</p>
+                <h3 class="card-title">@L["Dash_Priority"]</h3>
+                <p style="margin:6px 0"><b>@L["Dash_PrioHigh"]:</b> @Model.PrioridadAlta</p>
+                <p style="margin:6px 0"><b>@L["Dash_PrioMid"]:</b> @Model.PrioridadMedia</p>
+                <p style="margin:6px 0"><b>@L["Dash_PrioLow"]:</b> @Model.PrioridadBaja</p>
             </div>
         </div>
 
@@ -102,24 +106,24 @@
                 <input type="hidden" name="Tipo" value="@Model.Tipo" />
                 <input type="hidden" name="PresupuestoMin" value="@Model.PresupuestoMin" />
                 <input type="hidden" name="Antiguedad" value="@Model.Antiguedad" />
-                <input class="form-control" name="Busqueda" value="@Model.Busqueda" placeholder="Buscar empresa, proyecto, contacto..." />
+                <input class="form-control" name="Busqueda" value="@Model.Busqueda" placeholder="@L["Dash_SearchPlaceholder"]" />
                 <select class="form-control" name="Contacto" onchange="this.form.submit()">
-                    <option value="">Contacto: todos</option>
-                    <option value="yes" selected="@(Model.Contacto == "yes")">Con teléfono/email</option>
-                    <option value="no" selected="@(Model.Contacto == "no")">Sin contacto</option>
+                    <option value="">@L["Dash_ContactAll"]</option>
+                    <option value="yes" selected="@(Model.Contacto == "yes")">@L["Dash_ContactYes"]</option>
+                    <option value="no" selected="@(Model.Contacto == "no")">@L["Dash_ContactNo"]</option>
                 </select>
-                <button type="submit" class="btn btn-ghost">Filtrar</button>
+                <button type="submit" class="btn btn-ghost">@L["Dash_Filter"]</button>
                 <span></span>
-                <a class="btn btn-primary" asp-action="Crear">+ Agregar obra</a>
+                <a class="btn btn-primary" asp-action="Crear">@L["Dash_AddProject"]</a>
             </form>
 
             <div class="tablewrap">
                 <table class="data">
                     <thead>
                         <tr>
-                            <th>Prioridad</th><th>Dirección</th><th>Proyecto / Empresa</th><th>Tipo</th>
-                            <th>Antigüedad</th><th>Presupuesto</th><th>Yardas</th><th>Empresa contacto</th>
-                            <th>Nombre</th><th>Email</th><th>Tel. directo</th><th>Tel. empresa</th><th>Fuente / Nota</th><th>Acciones</th>
+                            <th>@L["Col_Priority"]</th><th>@L["Col_Address"]</th><th>@L["Col_Project"]</th><th>@L["Col_Type"]</th>
+                            <th>@L["Col_Age"]</th><th>@L["Col_Budget"]</th><th>@L["Col_Yards"]</th><th>@L["Col_ContactCompany"]</th>
+                            <th>@L["Col_Name"]</th><th>@L["Col_Email"]</th><th>@L["Col_PhoneDirect"]</th><th>@L["Col_PhoneCompany"]</th><th>@L["Col_Source"]</th><th>@L["Col_Actions"]</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -131,7 +135,7 @@
                                 <td>@(p.Direccion ?? "-")</td>
                                 <td><b>@p.NombreProyecto</b></td>
                                 <td>@(p.Tipo ?? "-")</td>
-                                <td><span class="badge @age.Clase">@age.Label</span></td>
+                                <td><span class="badge @age.Clase">@AgeLabel(age.Meses)</span></td>
                                 <td>@Formato.Dinero(p.Presupuesto)</td>
                                 <td><b>@Formato.Numero(p.Yardas)</b> yd³</td>
                                 <td>@(p.EmpresaContacto ?? "-")</td>
@@ -141,8 +145,8 @@
                                 <td>@if (!string.IsNullOrWhiteSpace(p.TelefonoEmpresa)) { <a href="tel:@p.TelefonoEmpresa">@p.TelefonoEmpresa</a> } else { <text>-</text> }</td>
                                 <td>@(($"{p.Fuente}{(string.IsNullOrWhiteSpace(p.Nota) ? "" : " · " + p.Nota)}").Trim(' ', '·'))</td>
                                 <td class="actions-cell">
-                                    <a class="btn btn-ghost btn-sm" asp-action="Editar" asp-route-id="@p.Id">Editar</a>
-                                    <form asp-action="Eliminar" asp-route-id="@p.Id" method="post" onsubmit="return confirm('¿Eliminar esta obra?');" style="margin:0">
+                                    <a class="btn btn-ghost btn-sm" asp-action="Editar" asp-route-id="@p.Id">@L["Act_Edit"]</a>
+                                    <form asp-action="Eliminar" asp-route-id="@p.Id" method="post" onsubmit="return confirm('@L["Confirm_DeleteProject"]');" style="margin:0">
                                         @Html.AntiForgeryToken()
                                         <button type="submit" class="btn btn-danger btn-sm">X</button>
                                     </form>
@@ -153,7 +157,7 @@
                 </table>
                 @if (!Model.Proyectos.Any())
                 {
-                    <div class="empty">No hay obras que coincidan con los filtros.</div>
+                    <div class="empty">@L["Dash_Empty"]</div>
                 }
             </div>
         </div>

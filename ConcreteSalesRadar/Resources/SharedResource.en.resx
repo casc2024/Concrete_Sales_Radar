@@ -1,0 +1,774 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Nav_Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Nav_Features" xml:space="preserve">
+    <value>Features</value>
+  </data>
+  <data name="Nav_Pricing" xml:space="preserve">
+    <value>Pricing</value>
+  </data>
+  <data name="Nav_Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="Nav_Admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="Nav_Hello" xml:space="preserve">
+    <value>Hi</value>
+  </data>
+  <data name="Nav_Logout" xml:space="preserve">
+    <value>Log out</value>
+  </data>
+  <data name="Nav_Login" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="Nav_FreeTrial" xml:space="preserve">
+    <value>Free trial</value>
+  </data>
+  <data name="Footer_Text" xml:space="preserve">
+    <value>Construction project prospecting for concrete sales.</value>
+  </data>
+  <data name="Footer_Privacy" xml:space="preserve">
+    <value>Privacy</value>
+  </data>
+  <data name="Lang_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Hero_Title1" xml:space="preserve">
+    <value>Find construction projects. </value>
+  </data>
+  <data name="Hero_Title2" xml:space="preserve">
+    <value>Sell more concrete.</value>
+  </data>
+  <data name="Hero_Lead" xml:space="preserve">
+    <value>Search active and upcoming construction projects by location, get concrete demand estimates and connect directly with contractors, developers and decision-makers.</value>
+  </data>
+  <data name="Hero_Check1" xml:space="preserve">
+    <value>Real project data</value>
+  </data>
+  <data name="Hero_Check2" xml:space="preserve">
+    <value>Contact information</value>
+  </data>
+  <data name="Hero_Check3" xml:space="preserve">
+    <value>Budget and estimated yards</value>
+  </data>
+  <data name="Hero_Check4" xml:space="preserve">
+    <value>Win more business</value>
+  </data>
+  <data name="Hero_CTA_Start" xml:space="preserve">
+    <value>Start free trial</value>
+  </data>
+  <data name="Hero_CTA_How" xml:space="preserve">
+    <value>▶ See how it works</value>
+  </data>
+  <data name="Hero_Note" xml:space="preserve">
+    <value>14-day free trial · No credit card required</value>
+  </data>
+  <data name="Hero_CardSub" xml:space="preserve">
+    <value>Prospecting by area + radius + dashboard</value>
+  </data>
+  <data name="Aud_1" xml:space="preserve">
+    <value>Ready-Mix producers</value>
+  </data>
+  <data name="Aud_2" xml:space="preserve">
+    <value>Concrete contractors</value>
+  </data>
+  <data name="Aud_3" xml:space="preserve">
+    <value>Developers &amp; GCs</value>
+  </data>
+  <data name="Aud_4" xml:space="preserve">
+    <value>Pumping companies</value>
+  </data>
+  <data name="Aud_5" xml:space="preserve">
+    <value>Cement &amp; aggregates</value>
+  </data>
+  <data name="Aud_6" xml:space="preserve">
+    <value>Sales teams</value>
+  </data>
+  <data name="How_Title" xml:space="preserve">
+    <value>How it works</value>
+  </data>
+  <data name="How_Sub" xml:space="preserve">
+    <value>From search to new opportunities in minutes.</value>
+  </data>
+  <data name="How_Step1_T" xml:space="preserve">
+    <value>Enter a location or ZIP</value>
+  </data>
+  <data name="How_Step1_D" xml:space="preserve">
+    <value>Choose your area and radius (5-75 miles).</value>
+  </data>
+  <data name="How_Step2_T" xml:space="preserve">
+    <value>Find active projects</value>
+  </data>
+  <data name="How_Step2_D" xml:space="preserve">
+    <value>Commercial, residential and industrial projects.</value>
+  </data>
+  <data name="How_Step3_T" xml:space="preserve">
+    <value>Review the key data</value>
+  </data>
+  <data name="How_Step3_D" xml:space="preserve">
+    <value>Budget, estimated yards and timeline.</value>
+  </data>
+  <data name="How_Step4_T" xml:space="preserve">
+    <value>Get the contact information</value>
+  </data>
+  <data name="How_Step4_D" xml:space="preserve">
+    <value>Connect with contractors and developers.</value>
+  </data>
+  <data name="How_Step5_T" xml:space="preserve">
+    <value>Add to your pipeline</value>
+  </data>
+  <data name="How_Step5_D" xml:space="preserve">
+    <value>Follow up and manage your opportunities.</value>
+  </data>
+  <data name="Mock_KPI1" xml:space="preserve">
+    <value>Projects found</value>
+  </data>
+  <data name="Mock_KPI2" xml:space="preserve">
+    <value>Total value</value>
+  </data>
+  <data name="Mock_KPI3" xml:space="preserve">
+    <value>Estimated yards</value>
+  </data>
+  <data name="Mock_Text" xml:space="preserve">
+    <value>Search by location and radius, filter by project type and budget, and export your leads with direct contact.</value>
+  </data>
+  <data name="Mock_Btn" xml:space="preserve">
+    <value>Try the dashboard</value>
+  </data>
+  <data name="Pricing_Title" xml:space="preserve">
+    <value>Simple, transparent pricing</value>
+  </data>
+  <data name="Pricing_Sub" xml:space="preserve">
+    <value>Choose the plan for your team. All include real project data and contact information.</value>
+  </data>
+  <data name="Pricing_Popular" xml:space="preserve">
+    <value>MOST POPULAR</value>
+  </data>
+  <data name="Pricing_PerMonth" xml:space="preserve">
+    <value>/ month</value>
+  </data>
+  <data name="Pricing_Contact" xml:space="preserve">
+    <value>Contact sales</value>
+  </data>
+  <data name="Val1_T" xml:space="preserve">
+    <value>Find opportunities first</value>
+  </data>
+  <data name="Val1_D" xml:space="preserve">
+    <value>Stay ahead of your competitors.</value>
+  </data>
+  <data name="Val2_T" xml:space="preserve">
+    <value>Save time</value>
+  </data>
+  <data name="Val2_D" xml:space="preserve">
+    <value>All the key information in one place.</value>
+  </data>
+  <data name="Val3_T" xml:space="preserve">
+    <value>Increase sales</value>
+  </data>
+  <data name="Val3_D" xml:space="preserve">
+    <value>More projects. More concrete.</value>
+  </data>
+  <data name="Val4_T" xml:space="preserve">
+    <value>Trusted data</value>
+  </data>
+  <data name="Val4_D" xml:space="preserve">
+    <value>From official permit sources.</value>
+  </data>
+  <data name="CTA_Title" xml:space="preserve">
+    <value>Ready to find more concrete opportunities?</value>
+  </data>
+  <data name="CTA_Sub" xml:space="preserve">
+    <value>Start your 14-day free trial today. No credit card required.</value>
+  </data>
+  <data name="CTA_Btn" xml:space="preserve">
+    <value>Start free trial →</value>
+  </data>
+  <data name="F_Nombre" xml:space="preserve">
+    <value>First name</value>
+  </data>
+  <data name="F_Apellido" xml:space="preserve">
+    <value>Last name</value>
+  </data>
+  <data name="F_Compania" xml:space="preserve">
+    <value>Company</value>
+  </data>
+  <data name="F_Correo" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="F_Telefono" xml:space="preserve">
+    <value>Contact phone</value>
+  </data>
+  <data name="F_Plan" xml:space="preserve">
+    <value>Membership plan</value>
+  </data>
+  <data name="F_Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="F_ConfirmPassword" xml:space="preserve">
+    <value>Confirm password</value>
+  </data>
+  <data name="F_Codigo" xml:space="preserve">
+    <value>Verification code</value>
+  </data>
+  <data name="F_Recordarme" xml:space="preserve">
+    <value>Remember me</value>
+  </data>
+  <data name="Reg_Title" xml:space="preserve">
+    <value>Create your account and membership</value>
+  </data>
+  <data name="Reg_Sub" xml:space="preserve">
+    <value>Sign up to start your free trial. We'll send a verification code to your email.</value>
+  </data>
+  <data name="Reg_SelectPlan" xml:space="preserve">
+    <value>— Select a plan —</value>
+  </data>
+  <data name="Reg_Submit" xml:space="preserve">
+    <value>Create account</value>
+  </data>
+  <data name="Reg_Have" xml:space="preserve">
+    <value>Already have an account?</value>
+  </data>
+  <data name="Reg_SignIn" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="Ver_Title" xml:space="preserve">
+    <value>Verify your email</value>
+  </data>
+  <data name="Ver_Sub1" xml:space="preserve">
+    <value>Enter the 6-digit code we sent to</value>
+  </data>
+  <data name="Ver_Dev" xml:space="preserve">
+    <value>Test mode (SMTP not configured). Your code is:</value>
+  </data>
+  <data name="Ver_Submit" xml:space="preserve">
+    <value>Verify</value>
+  </data>
+  <data name="Ver_Resend" xml:space="preserve">
+    <value>Resend code</value>
+  </data>
+  <data name="Login_Title" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="Login_Sub" xml:space="preserve">
+    <value>Access your project prospecting dashboard.</value>
+  </data>
+  <data name="Login_Submit" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="Login_NoAccount" xml:space="preserve">
+    <value>Don't have an account?</value>
+  </data>
+  <data name="Login_Register" xml:space="preserve">
+    <value>Sign up</value>
+  </data>
+  <data name="Denied_Title" xml:space="preserve">
+    <value>Access denied</value>
+  </data>
+  <data name="Denied_Sub" xml:space="preserve">
+    <value>You don't have permission to access this section.</value>
+  </data>
+  <data name="Denied_Btn" xml:space="preserve">
+    <value>Go to dashboard</value>
+  </data>
+  <data name="Dash_Title" xml:space="preserve">
+    <value>Project finder</value>
+  </data>
+  <data name="Dash_Sub" xml:space="preserve">
+    <value>Prospecting of projects and potential clients for Ready-Mix Concrete sales.</value>
+  </data>
+  <data name="Dash_SearchTitle" xml:space="preserve">
+    <value>Search opportunities</value>
+  </data>
+  <data name="Dash_Zone" xml:space="preserve">
+    <value>Area / City / ZIP</value>
+  </data>
+  <data name="Dash_BudgetMin" xml:space="preserve">
+    <value>Minimum budget</value>
+  </data>
+  <data name="Dash_NoMin" xml:space="preserve">
+    <value>No minimum</value>
+  </data>
+  <data name="Dash_Type" xml:space="preserve">
+    <value>Project type</value>
+  </data>
+  <data name="Dash_All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="Dash_Age" xml:space="preserve">
+    <value>Age</value>
+  </data>
+  <data name="Dash_AnyAge" xml:space="preserve">
+    <value>Any</value>
+  </data>
+  <data name="Dash_Age1" xml:space="preserve">
+    <value>0-3 months</value>
+  </data>
+  <data name="Dash_Age2" xml:space="preserve">
+    <value>3-12 months</value>
+  </data>
+  <data name="Dash_Age3" xml:space="preserve">
+    <value>12+ months</value>
+  </data>
+  <data name="Dash_SearchBtn" xml:space="preserve">
+    <value>Search projects</value>
+  </data>
+  <data name="Dash_KPI_Projects" xml:space="preserve">
+    <value>Projects found</value>
+  </data>
+  <data name="Dash_KPI_Budget" xml:space="preserve">
+    <value>Visible budget</value>
+  </data>
+  <data name="Dash_KPI_Yards" xml:space="preserve">
+    <value>Potential yards</value>
+  </data>
+  <data name="Dash_KPI_Hot" xml:space="preserve">
+    <value>Hot opportunities</value>
+  </data>
+  <data name="Dash_KPI_Contact" xml:space="preserve">
+    <value>With contact</value>
+  </data>
+  <data name="Dash_PipelineType" xml:space="preserve">
+    <value>Pipeline by project type</value>
+  </data>
+  <data name="Dash_NoData" xml:space="preserve">
+    <value>No data</value>
+  </data>
+  <data name="Dash_Priority" xml:space="preserve">
+    <value>Sales priority</value>
+  </data>
+  <data name="Dash_PrioHigh" xml:space="preserve">
+    <value>High</value>
+  </data>
+  <data name="Dash_PrioMid" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="Dash_PrioLow" xml:space="preserve">
+    <value>Low</value>
+  </data>
+  <data name="Dash_SearchPlaceholder" xml:space="preserve">
+    <value>Search company, project, contact...</value>
+  </data>
+  <data name="Dash_ContactAll" xml:space="preserve">
+    <value>Contact: all</value>
+  </data>
+  <data name="Dash_ContactYes" xml:space="preserve">
+    <value>With phone/email</value>
+  </data>
+  <data name="Dash_ContactNo" xml:space="preserve">
+    <value>Without contact</value>
+  </data>
+  <data name="Dash_Filter" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="Dash_AddProject" xml:space="preserve">
+    <value>+ Add project</value>
+  </data>
+  <data name="Dash_Empty" xml:space="preserve">
+    <value>No projects match the filters.</value>
+  </data>
+  <data name="Col_Priority" xml:space="preserve">
+    <value>Priority</value>
+  </data>
+  <data name="Col_Address" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="Col_Project" xml:space="preserve">
+    <value>Project / Company</value>
+  </data>
+  <data name="Col_Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Col_Age" xml:space="preserve">
+    <value>Age</value>
+  </data>
+  <data name="Col_Budget" xml:space="preserve">
+    <value>Budget</value>
+  </data>
+  <data name="Col_Yards" xml:space="preserve">
+    <value>Yards</value>
+  </data>
+  <data name="Col_ContactCompany" xml:space="preserve">
+    <value>Contact company</value>
+  </data>
+  <data name="Col_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Col_Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Col_PhoneDirect" xml:space="preserve">
+    <value>Direct phone</value>
+  </data>
+  <data name="Col_PhoneCompany" xml:space="preserve">
+    <value>Company phone</value>
+  </data>
+  <data name="Col_Source" xml:space="preserve">
+    <value>Source / Note</value>
+  </data>
+  <data name="Col_Actions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="Act_Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Age_NA" xml:space="preserve">
+    <value>Not available</value>
+  </data>
+  <data name="Age_Upcoming" xml:space="preserve">
+    <value>Upcoming / not started</value>
+  </data>
+  <data name="Age_Month" xml:space="preserve">
+    <value>month</value>
+  </data>
+  <data name="Age_Months" xml:space="preserve">
+    <value>months</value>
+  </data>
+  <data name="Proj_AddTitle" xml:space="preserve">
+    <value>Add project</value>
+  </data>
+  <data name="Proj_EditTitle" xml:space="preserve">
+    <value>Edit project</value>
+  </data>
+  <data name="Proj_Sub" xml:space="preserve">
+    <value>Complete the information for this sales opportunity.</value>
+  </data>
+  <data name="Proj_Address" xml:space="preserve">
+    <value>Project address</value>
+  </data>
+  <data name="Proj_Name" xml:space="preserve">
+    <value>Project / Company</value>
+  </data>
+  <data name="Proj_Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Proj_Start" xml:space="preserve">
+    <value>Start date</value>
+  </data>
+  <data name="Proj_Budget" xml:space="preserve">
+    <value>Budget ($)</value>
+  </data>
+  <data name="Proj_Yards" xml:space="preserve">
+    <value>Estimated yards</value>
+  </data>
+  <data name="Proj_ContactCompany" xml:space="preserve">
+    <value>Contact company</value>
+  </data>
+  <data name="Proj_ContactName" xml:space="preserve">
+    <value>Contact name</value>
+  </data>
+  <data name="Proj_Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Proj_PhoneDirect" xml:space="preserve">
+    <value>Direct phone</value>
+  </data>
+  <data name="Proj_PhoneCompany" xml:space="preserve">
+    <value>Company phone</value>
+  </data>
+  <data name="Proj_Prio" xml:space="preserve">
+    <value>Priority (0-100)</value>
+  </data>
+  <data name="Proj_Source" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="Proj_Note" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="Btn_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Btn_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Adm_Title" xml:space="preserve">
+    <value>Administration panel</value>
+  </data>
+  <data name="Adm_Sub" xml:space="preserve">
+    <value>User and membership maintenance.</value>
+  </data>
+  <data name="Adm_UsersCard" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="Adm_UsersCardDesc" xml:space="preserve">
+    <value>Create, edit, roles, memberships and account status.</value>
+  </data>
+  <data name="Adm_UsersBtn" xml:space="preserve">
+    <value>Manage users</value>
+  </data>
+  <data name="Adm_PlansCard" xml:space="preserve">
+    <value>Memberships</value>
+  </data>
+  <data name="Adm_PlansCardDesc" xml:space="preserve">
+    <value>Create and edit the plans shown on the pricing page.</value>
+  </data>
+  <data name="Adm_PlansBtn" xml:space="preserve">
+    <value>Manage memberships</value>
+  </data>
+  <data name="Adm_TabUsers" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="Adm_TabPlans" xml:space="preserve">
+    <value>Memberships</value>
+  </data>
+  <data name="Adm_UsersTitle" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="Adm_UsersListSub" xml:space="preserve">
+    <value>Maintenance of registered accounts.</value>
+  </data>
+  <data name="Adm_Col_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Adm_Col_Company" xml:space="preserve">
+    <value>Company</value>
+  </data>
+  <data name="Adm_Col_Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Adm_Col_Phone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="Adm_Col_Role" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="Adm_Col_Plan" xml:space="preserve">
+    <value>Membership</value>
+  </data>
+  <data name="Adm_Col_Verified" xml:space="preserve">
+    <value>Verified</value>
+  </data>
+  <data name="Adm_Col_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Adm_Col_Registered" xml:space="preserve">
+    <value>Registered</value>
+  </data>
+  <data name="Adm_Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="Adm_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Adm_Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Adm_Inactive" xml:space="preserve">
+    <value>Inactive</value>
+  </data>
+  <data name="Adm_NoUsers" xml:space="preserve">
+    <value>No registered users.</value>
+  </data>
+  <data name="Adm_EditUserTitle" xml:space="preserve">
+    <value>Edit user</value>
+  </data>
+  <data name="Adm_Role" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="Adm_Plan" xml:space="preserve">
+    <value>Membership</value>
+  </data>
+  <data name="Adm_NoPlan" xml:space="preserve">
+    <value>— No membership —</value>
+  </data>
+  <data name="Adm_NewPassword" xml:space="preserve">
+    <value>New password (optional)</value>
+  </data>
+  <data name="Adm_NewPasswordPh" xml:space="preserve">
+    <value>Leave blank to keep current</value>
+  </data>
+  <data name="Adm_Verified" xml:space="preserve">
+    <value>Verified</value>
+  </data>
+  <data name="Adm_ActiveLbl" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Adm_PlansTitle" xml:space="preserve">
+    <value>Memberships</value>
+  </data>
+  <data name="Adm_PlansListSub" xml:space="preserve">
+    <value>Plans shown on the pricing page.</value>
+  </data>
+  <data name="Adm_NewPlan" xml:space="preserve">
+    <value>+ New membership</value>
+  </data>
+  <data name="Adm_Col_Order" xml:space="preserve">
+    <value>Order</value>
+  </data>
+  <data name="Adm_Col_PlanName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Adm_Col_Price" xml:space="preserve">
+    <value>Price/month</value>
+  </data>
+  <data name="Adm_Col_MaxUsers" xml:space="preserve">
+    <value>Max. users</value>
+  </data>
+  <data name="Adm_Col_Popular" xml:space="preserve">
+    <value>Popular</value>
+  </data>
+  <data name="Adm_Col_ActivePlan" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Adm_NewPlanTitle" xml:space="preserve">
+    <value>New membership</value>
+  </data>
+  <data name="Adm_EditPlanTitle" xml:space="preserve">
+    <value>Edit membership</value>
+  </data>
+  <data name="Adm_Plan_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Adm_Plan_Order" xml:space="preserve">
+    <value>Order</value>
+  </data>
+  <data name="Adm_Plan_Price" xml:space="preserve">
+    <value>Monthly price ($) — 0 = contact sales</value>
+  </data>
+  <data name="Adm_Plan_MaxUsers" xml:space="preserve">
+    <value>Max. users</value>
+  </data>
+  <data name="Adm_Plan_Desc" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Adm_Plan_Features" xml:space="preserve">
+    <value>Features (one per line)</value>
+  </data>
+  <data name="Adm_Plan_Popular" xml:space="preserve">
+    <value>Most popular</value>
+  </data>
+  <data name="Adm_Plan_Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Confirm_DeleteProject" xml:space="preserve">
+    <value>Delete this project?</value>
+  </data>
+  <data name="Confirm_DeleteUser" xml:space="preserve">
+    <value>Delete this user?</value>
+  </data>
+  <data name="Confirm_DeletePlan" xml:space="preserve">
+    <value>Delete this plan?</value>
+  </data>
+  <data name="Msg_CodeSent" xml:space="preserve">
+    <value>We sent a verification code to your email.</value>
+  </data>
+  <data name="Msg_NewCodeSent" xml:space="preserve">
+    <value>We sent a new code to your email.</value>
+  </data>
+  <data name="Msg_EmailExists" xml:space="preserve">
+    <value>An account with this email already exists.</value>
+  </data>
+  <data name="Msg_Verified" xml:space="preserve">
+    <value>Account verified! You can now sign in.</value>
+  </data>
+  <data name="Msg_CodeInvalid" xml:space="preserve">
+    <value>The code is invalid or expired. Request a new one.</value>
+  </data>
+  <data name="Msg_BadCredentials" xml:space="preserve">
+    <value>Incorrect email or password.</value>
+  </data>
+  <data name="Msg_Disabled" xml:space="preserve">
+    <value>Your account is disabled. Contact the administrator.</value>
+  </data>
+  <data name="Msg_MustVerify" xml:space="preserve">
+    <value>You must verify your email before signing in. We sent a new code.</value>
+  </data>
+  <data name="Msg_ProjectSaved" xml:space="preserve">
+    <value>Project saved successfully.</value>
+  </data>
+  <data name="Msg_ProjectDeleted" xml:space="preserve">
+    <value>Project deleted.</value>
+  </data>
+  <data name="Msg_UserUpdated" xml:space="preserve">
+    <value>User updated.</value>
+  </data>
+  <data name="Msg_UserDeleted" xml:space="preserve">
+    <value>User deleted.</value>
+  </data>
+  <data name="Msg_PlanSaved" xml:space="preserve">
+    <value>Membership saved.</value>
+  </data>
+  <data name="Msg_PlanDeleted" xml:space="preserve">
+    <value>Membership deleted.</value>
+  </data>
+  <data name="Msg_PlanInUse" xml:space="preserve">
+    <value>Cannot delete: there are users with this plan. Deactivate it instead.</value>
+  </data>
+  <data name="Email_SubjectConfirm" xml:space="preserve">
+    <value>Confirm your account on Concrete Sales Radar</value>
+  </data>
+  <data name="Email_SubjectNewCode" xml:space="preserve">
+    <value>Your new verification code</value>
+  </data>
+  <data name="Email_Hello" xml:space="preserve">
+    <value>Hi</value>
+  </data>
+  <data name="Email_Intro" xml:space="preserve">
+    <value>Your verification code is:</value>
+  </data>
+  <data name="Email_Expire" xml:space="preserve">
+    <value>This code expires in 15 minutes. If you didn't request this, please ignore this message.</value>
+  </data>
+  <data name="Val_Nombre_Req" xml:space="preserve">
+    <value>First name is required.</value>
+  </data>
+  <data name="Val_Apellido_Req" xml:space="preserve">
+    <value>Last name is required.</value>
+  </data>
+  <data name="Val_Compania_Req" xml:space="preserve">
+    <value>Company is required.</value>
+  </data>
+  <data name="Val_Correo_Req" xml:space="preserve">
+    <value>Email is required.</value>
+  </data>
+  <data name="Val_Telefono_Req" xml:space="preserve">
+    <value>Phone is required.</value>
+  </data>
+  <data name="Val_Pass_Req" xml:space="preserve">
+    <value>Password is required.</value>
+  </data>
+  <data name="Val_Confirm_Req" xml:space="preserve">
+    <value>Confirm your password.</value>
+  </data>
+  <data name="Val_Plan_Req" xml:space="preserve">
+    <value>Select a membership plan.</value>
+  </data>
+  <data name="Val_Codigo_Req" xml:space="preserve">
+    <value>Enter the code you received by email.</value>
+  </data>
+  <data name="Val_Max50" xml:space="preserve">
+    <value>Maximum 50 characters.</value>
+  </data>
+  <data name="Val_Max100" xml:space="preserve">
+    <value>Maximum 100 characters.</value>
+  </data>
+  <data name="Val_TextoNumero" xml:space="preserve">
+    <value>Only letters and numbers are allowed.</value>
+  </data>
+  <data name="Val_Correo_Fmt" xml:space="preserve">
+    <value>Enter a valid email address.</value>
+  </data>
+  <data name="Val_Pass_Len" xml:space="preserve">
+    <value>The password must be between 6 and 100 characters.</value>
+  </data>
+  <data name="Val_Pass_Match" xml:space="preserve">
+    <value>Passwords do not match.</value>
+  </data>
+  <data name="Val_Codigo_Fmt" xml:space="preserve">
+    <value>The code must have 6 digits.</value>
+  </data>
+</root>

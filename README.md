@@ -20,6 +20,11 @@ de marketing, dashboard de oportunidades, registro de usuarios con **verificaci�
   por tipo de obra, prioridad comercial, búsqueda/filtros y CRUD de obras.
 - **Administración** (`/Admin`, solo rol *Administrador*): mantenimiento de usuarios y de membresías.
 - **Roles**: `Administrador` y `Usuario` (sembrados automáticamente).
+- **Multilenguaje (i18n)**: interfaz en **Español, Inglés y Portugués** con selector de idioma
+  en la barra superior. Se traducen vistas, etiquetas, mensajes de validación, mensajes del
+  sistema y los correos. El idioma se guarda en una cookie de cultura. Los recursos están en
+  `Resources/SharedResource.{resx,en.resx,pt.resx}`. *(El catálogo de planes y las obras de
+  ejemplo se almacenan como datos en la base, en español.)*
 
 ## Modelo de datos (PostgreSQL)
 

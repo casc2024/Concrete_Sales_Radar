@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 namespace ConcreteSalesRadar.Controllers;
 
@@ -16,12 +17,14 @@ public class CuentaController : Controller
 {
     private readonly AppDbContext _db;
     private readonly IEmailService _email;
+    private readonly IStringLocalizer<SharedResource> _loc;
     private readonly PasswordHasher<Usuario> _hasher = new();
 
-    public CuentaController(AppDbContext db, IEmailService email)
+    public CuentaController(AppDbContext db, IEmailService email, IStringLocalizer<SharedResource> loc)
     {
         _db = db;
         _email = email;
+        _loc = loc;
     }
 
     // ---------------- REGISTRO ----------------
@@ -48,7 +51,7 @@ public class CuentaController : Controller
         var correo = vm.Correo.Trim().ToLowerInvariant();
         if (await _db.Usuarios.AnyAsync(u => u.Correo == correo))
         {
-            ModelState.AddModelError(nameof(vm.Correo), "Ya existe una cuenta con este correo.");
+            ModelState.AddModelError(nameof(vm.Correo), _loc["Msg_EmailExists"]);
             await CargarPlanesAsync();
             return View(vm);
         }
@@ -72,9 +75,9 @@ public class CuentaController : Controller
         await _db.SaveChangesAsync();
 
         var codigo = await GenerarCodigoAsync(usuario, TipoCodigo.ConfirmacionCorreo);
-        await EnviarCodigoAsync(usuario, codigo, "Confirma tu cuenta en Concrete Sales Radar");
+        await EnviarCodigoAsync(usuario, codigo, _loc["Email_SubjectConfirm"]);
 
-        TempData["Info"] = "Te enviamos un código de verificación a tu correo.";
+        TempData["Info"] = _loc["Msg_CodeSent"].Value;
         if (!_email.EstaConfigurado)
             TempData["CodigoDev"] = codigo; // Solo para pruebas sin SMTP.
 
@@ -108,7 +111,7 @@ public class CuentaController : Controller
 
         if (codigo is null || !codigo.EsValido)
         {
-            ModelState.AddModelError(nameof(vm.Codigo), "El código es inválido o expiró. Solicita uno nuevo.");
+            ModelState.AddModelError(nameof(vm.Codigo), _loc["Msg_CodeInvalid"]);
             return View(vm);
         }
 
@@ -119,7 +122,7 @@ public class CuentaController : Controller
         usuario.CorreoConfirmado = true;
         await _db.SaveChangesAsync();
 
-        TempData["Exito"] = "¡Cuenta verificada! Ya puedes iniciar sesión.";
+        TempData["Exito"] = _loc["Msg_Verified"].Value;
         return RedirectToAction(nameof(Login));
     }
 
@@ -131,9 +134,9 @@ public class CuentaController : Controller
         if (usuario is null) return RedirectToAction(nameof(Registro));
 
         var codigo = await GenerarCodigoAsync(usuario, TipoCodigo.ConfirmacionCorreo);
-        await EnviarCodigoAsync(usuario, codigo, "Tu nuevo código de verificación");
+        await EnviarCodigoAsync(usuario, codigo, _loc["Email_SubjectNewCode"]);
 
-        TempData["Info"] = "Enviamos un nuevo código a tu correo.";
+        TempData["Info"] = _loc["Msg_NewCodeSent"].Value;
         if (!_email.EstaConfigurado) TempData["CodigoDev"] = codigo;
 
         return RedirectToAction(nameof(Verificar), new { usuarioId });
@@ -162,21 +165,21 @@ public class CuentaController : Controller
         if (usuario is null ||
             _hasher.VerifyHashedPassword(usuario, usuario.PasswordHash, vm.Password) == PasswordVerificationResult.Failed)
         {
-            ModelState.AddModelError(string.Empty, "Correo o contraseña incorrectos.");
+            ModelState.AddModelError(string.Empty, _loc["Msg_BadCredentials"]);
             return View(vm);
         }
 
         if (!usuario.Activo)
         {
-            ModelState.AddModelError(string.Empty, "Tu cuenta está desactivada. Contacta al administrador.");
+            ModelState.AddModelError(string.Empty, _loc["Msg_Disabled"]);
             return View(vm);
         }
 
         if (!usuario.CorreoConfirmado)
         {
-            TempData["Info"] = "Debes verificar tu correo antes de iniciar sesión. Te enviamos un nuevo código.";
+            TempData["Info"] = _loc["Msg_MustVerify"].Value;
             var codigo = await GenerarCodigoAsync(usuario, TipoCodigo.ConfirmacionCorreo);
-            await EnviarCodigoAsync(usuario, codigo, "Confirma tu cuenta en Concrete Sales Radar");
+            await EnviarCodigoAsync(usuario, codigo, _loc["Email_SubjectConfirm"]);
             if (!_email.EstaConfigurado) TempData["CodigoDev"] = codigo;
             return RedirectToAction(nameof(Verificar), new { usuarioId = usuario.Id });
         }
@@ -210,7 +213,9 @@ public class CuentaController : Controller
         ViewBag.Planes = planes.Select(m => new SelectListItem
         {
             Value = m.Id.ToString(),
-            Text = m.PrecioMensual > 0 ? $"{m.Nombre} — ${m.PrecioMensual:0}/mes" : $"{m.Nombre} — Contactar ventas"
+            Text = m.PrecioMensual > 0
+                ? $"{m.Nombre} — ${m.PrecioMensual:0} {_loc["Pricing_PerMonth"].Value}"
+                : $"{m.Nombre} — {_loc["Pricing_Contact"].Value}"
         }).ToList();
     }
 
@@ -236,11 +241,11 @@ public class CuentaController : Controller
     <h2 style='margin:0'>Concrete Sales Radar</h2>
   </div>
   <div style='padding:26px'>
-    <p>Hola <b>{usuario.Nombre}</b>,</p>
-    <p>Tu código de verificación es:</p>
+    <p>{_loc["Email_Hello"].Value} <b>{usuario.Nombre}</b>,</p>
+    <p>{_loc["Email_Intro"].Value}</p>
     <div style='font-size:34px;font-weight:bold;letter-spacing:8px;color:#153d2f;text-align:center;
                 background:#e9f1ed;border-radius:10px;padding:18px;margin:18px 0'>{codigo}</div>
-    <p style='color:#64748b;font-size:14px'>Este código expira en 15 minutos. Si no solicitaste este registro, ignora este mensaje.</p>
+    <p style='color:#64748b;font-size:14px'>{_loc["Email_Expire"].Value}</p>
   </div>
 </div>";
         return _email.EnviarAsync(usuario.Correo, asunto, html);

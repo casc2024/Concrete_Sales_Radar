@@ -1,11 +1,11 @@
 @model Membresia
 @{
     var esNuevo = Model.Id == 0;
-    ViewData["Title"] = esNuevo ? "Nueva membresía" : "Editar membresía";
+    ViewData["Title"] = (esNuevo ? L["Adm_NewPlanTitle"] : L["Adm_EditPlanTitle"]).Value;
 }
 <div class="app-main">
     <div class="container-xl">
-        <h1 class="page-title">@(esNuevo ? "Nueva membresía" : "Editar membresía")</h1>
+        <h1 class="page-title">@(esNuevo ? L["Adm_NewPlanTitle"] : L["Adm_EditPlanTitle"])</h1>
 
         <div class="card" style="max-width:720px">
             <form asp-action="GuardarMembresia" method="post">
@@ -15,45 +15,45 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label asp-for="Nombre"></label>
+                        <label>@L["Adm_Plan_Name"]</label>
                         <input asp-for="Nombre" class="form-control" maxlength="50" />
                         <span asp-validation-for="Nombre"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Orden">Orden</label>
+                        <label>@L["Adm_Plan_Order"]</label>
                         <input asp-for="Orden" type="number" class="form-control" />
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label asp-for="PrecioMensual">Precio mensual ($) — 0 = contactar ventas</label>
+                        <label>@L["Adm_Plan_Price"]</label>
                         <input asp-for="PrecioMensual" type="number" step="0.01" class="form-control" />
                     </div>
                     <div class="form-group">
-                        <label asp-for="MaxUsuarios">Máx. usuarios</label>
+                        <label>@L["Adm_Plan_MaxUsers"]</label>
                         <input asp-for="MaxUsuarios" type="number" class="form-control" />
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="Descripcion">Descripción</label>
+                    <label>@L["Adm_Plan_Desc"]</label>
                     <input asp-for="Descripcion" class="form-control" maxlength="250" />
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="Caracteristicas">Características (una por línea)</label>
+                    <label>@L["Adm_Plan_Features"]</label>
                     <textarea asp-for="Caracteristicas" class="form-control" rows="7" maxlength="1000"></textarea>
                 </div>
 
                 <div style="display:flex;gap:18px;margin-bottom:16px">
-                    <label style="font-weight:600"><input type="checkbox" asp-for="EsPopular" /> Más popular</label>
-                    <label style="font-weight:600"><input type="checkbox" asp-for="Activa" /> Activa</label>
+                    <label style="font-weight:600"><input type="checkbox" asp-for="EsPopular" /> @L["Adm_Plan_Popular"]</label>
+                    <label style="font-weight:600"><input type="checkbox" asp-for="Activa" /> @L["Adm_Plan_Active"]</label>
                 </div>
 
                 <div style="display:flex;gap:10px">
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                    <a class="btn btn-ghost" asp-action="Membresias">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">@L["Btn_Save"]</button>
+                    <a class="btn btn-ghost" asp-action="Membresias">@L["Btn_Cancel"]</a>
                 </div>
             </form>
         </div>

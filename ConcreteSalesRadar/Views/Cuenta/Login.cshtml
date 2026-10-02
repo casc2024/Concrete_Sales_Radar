@@ -1,12 +1,12 @@
 @model LoginViewModel
 @{
-    ViewData["Title"] = "Iniciar sesión";
+    ViewData["Title"] = L["Login_Title"].Value;
 }
 
 <div class="auth-wrap">
     <div class="auth-card">
-        <h1>Iniciar sesión</h1>
-        <p class="sub">Accede a tu dashboard de prospección de obras.</p>
+        <h1>@L["Login_Title"]</h1>
+        <p class="sub">@L["Login_Sub"]</p>
 
         @if (TempData["Exito"] != null)
         {
@@ -23,26 +23,26 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
-                <label asp-for="Correo"></label>
+                <label>@L["F_Correo"]</label>
                 <input asp-for="Correo" class="form-control" type="email" autofocus />
                 <span asp-validation-for="Correo"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Password"></label>
+                <label>@L["F_Password"]</label>
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password"></span>
             </div>
             <div class="form-group">
                 <label style="font-weight:600;font-size:13px">
-                    <input type="checkbox" asp-for="Recordarme" /> Recordarme
+                    <input type="checkbox" asp-for="Recordarme" /> @L["F_Recordarme"]
                 </label>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+            <button type="submit" class="btn btn-primary btn-block">@L["Login_Submit"]</button>
         </form>
 
         <p class="sub" style="margin-top:18px;text-align:center">
-            ¿No tienes cuenta? <a asp-action="Registro">Regístrate</a>
+            @L["Login_NoAccount"] <a asp-action="Registro">@L["Login_Register"]</a>
         </p>
     </div>
 </div>

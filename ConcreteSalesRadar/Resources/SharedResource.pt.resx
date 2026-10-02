@@ -1,0 +1,774 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Nav_Home" xml:space="preserve">
+    <value>Início</value>
+  </data>
+  <data name="Nav_Features" xml:space="preserve">
+    <value>Recursos</value>
+  </data>
+  <data name="Nav_Pricing" xml:space="preserve">
+    <value>Preços</value>
+  </data>
+  <data name="Nav_Dashboard" xml:space="preserve">
+    <value>Painel</value>
+  </data>
+  <data name="Nav_Admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="Nav_Hello" xml:space="preserve">
+    <value>Olá</value>
+  </data>
+  <data name="Nav_Logout" xml:space="preserve">
+    <value>Sair</value>
+  </data>
+  <data name="Nav_Login" xml:space="preserve">
+    <value>Entrar</value>
+  </data>
+  <data name="Nav_FreeTrial" xml:space="preserve">
+    <value>Teste grátis</value>
+  </data>
+  <data name="Footer_Text" xml:space="preserve">
+    <value>Prospecção de obras para venda de concreto.</value>
+  </data>
+  <data name="Footer_Privacy" xml:space="preserve">
+    <value>Privacidade</value>
+  </data>
+  <data name="Lang_Language" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="Hero_Title1" xml:space="preserve">
+    <value>Encontre obras de construção. </value>
+  </data>
+  <data name="Hero_Title2" xml:space="preserve">
+    <value>Venda mais concreto.</value>
+  </data>
+  <data name="Hero_Lead" xml:space="preserve">
+    <value>Busque projetos de construção ativos e futuros por localização, obtenha estimativas de demanda de concreto e conecte-se diretamente com empreiteiros, incorporadores e tomadores de decisão.</value>
+  </data>
+  <data name="Hero_Check1" xml:space="preserve">
+    <value>Dados reais de projetos</value>
+  </data>
+  <data name="Hero_Check2" xml:space="preserve">
+    <value>Informações de contato</value>
+  </data>
+  <data name="Hero_Check3" xml:space="preserve">
+    <value>Orçamento e jardas estimadas</value>
+  </data>
+  <data name="Hero_Check4" xml:space="preserve">
+    <value>Ganhe mais negócios</value>
+  </data>
+  <data name="Hero_CTA_Start" xml:space="preserve">
+    <value>Começar teste grátis</value>
+  </data>
+  <data name="Hero_CTA_How" xml:space="preserve">
+    <value>▶ Veja como funciona</value>
+  </data>
+  <data name="Hero_Note" xml:space="preserve">
+    <value>Teste grátis de 14 dias · Sem cartão de crédito</value>
+  </data>
+  <data name="Hero_CardSub" xml:space="preserve">
+    <value>Prospecção por zona + raio + painel</value>
+  </data>
+  <data name="Aud_1" xml:space="preserve">
+    <value>Produtoras de concreto usinado</value>
+  </data>
+  <data name="Aud_2" xml:space="preserve">
+    <value>Empreiteiros de concreto</value>
+  </data>
+  <data name="Aud_3" xml:space="preserve">
+    <value>Incorporadores e GCs</value>
+  </data>
+  <data name="Aud_4" xml:space="preserve">
+    <value>Empresas de bombeamento</value>
+  </data>
+  <data name="Aud_5" xml:space="preserve">
+    <value>Cimento e agregados</value>
+  </data>
+  <data name="Aud_6" xml:space="preserve">
+    <value>Equipes de vendas</value>
+  </data>
+  <data name="How_Title" xml:space="preserve">
+    <value>Como funciona</value>
+  </data>
+  <data name="How_Sub" xml:space="preserve">
+    <value>Da busca a novas oportunidades em minutos.</value>
+  </data>
+  <data name="How_Step1_T" xml:space="preserve">
+    <value>Digite uma localização ou CEP</value>
+  </data>
+  <data name="How_Step1_D" xml:space="preserve">
+    <value>Escolha sua zona e raio (5-75 milhas).</value>
+  </data>
+  <data name="How_Step2_T" xml:space="preserve">
+    <value>Encontre obras ativas</value>
+  </data>
+  <data name="How_Step2_D" xml:space="preserve">
+    <value>Projetos comerciais, residenciais e industriais.</value>
+  </data>
+  <data name="How_Step3_T" xml:space="preserve">
+    <value>Revise os dados-chave</value>
+  </data>
+  <data name="How_Step3_D" xml:space="preserve">
+    <value>Orçamento, jardas estimadas e cronograma.</value>
+  </data>
+  <data name="How_Step4_T" xml:space="preserve">
+    <value>Obtenha as informações de contato</value>
+  </data>
+  <data name="How_Step4_D" xml:space="preserve">
+    <value>Conecte-se com empreiteiros e incorporadores.</value>
+  </data>
+  <data name="How_Step5_T" xml:space="preserve">
+    <value>Adicione ao seu pipeline</value>
+  </data>
+  <data name="How_Step5_D" xml:space="preserve">
+    <value>Acompanhe e gerencie suas oportunidades.</value>
+  </data>
+  <data name="Mock_KPI1" xml:space="preserve">
+    <value>Obras encontradas</value>
+  </data>
+  <data name="Mock_KPI2" xml:space="preserve">
+    <value>Valor total</value>
+  </data>
+  <data name="Mock_KPI3" xml:space="preserve">
+    <value>Jardas estimadas</value>
+  </data>
+  <data name="Mock_Text" xml:space="preserve">
+    <value>Busque por localização e raio, filtre por tipo de obra e orçamento, e exporte seus leads com contato direto.</value>
+  </data>
+  <data name="Mock_Btn" xml:space="preserve">
+    <value>Experimente o painel</value>
+  </data>
+  <data name="Pricing_Title" xml:space="preserve">
+    <value>Preços simples e transparentes</value>
+  </data>
+  <data name="Pricing_Sub" xml:space="preserve">
+    <value>Escolha o plano para sua equipe. Todos incluem dados reais de projetos e informações de contato.</value>
+  </data>
+  <data name="Pricing_Popular" xml:space="preserve">
+    <value>MAIS POPULAR</value>
+  </data>
+  <data name="Pricing_PerMonth" xml:space="preserve">
+    <value>/ mês</value>
+  </data>
+  <data name="Pricing_Contact" xml:space="preserve">
+    <value>Falar com vendas</value>
+  </data>
+  <data name="Val1_T" xml:space="preserve">
+    <value>Encontre oportunidades primeiro</value>
+  </data>
+  <data name="Val1_D" xml:space="preserve">
+    <value>Fique à frente dos concorrentes.</value>
+  </data>
+  <data name="Val2_T" xml:space="preserve">
+    <value>Economize tempo</value>
+  </data>
+  <data name="Val2_D" xml:space="preserve">
+    <value>Todas as informações-chave em um só lugar.</value>
+  </data>
+  <data name="Val3_T" xml:space="preserve">
+    <value>Aumente as vendas</value>
+  </data>
+  <data name="Val3_D" xml:space="preserve">
+    <value>Mais projetos. Mais concreto.</value>
+  </data>
+  <data name="Val4_T" xml:space="preserve">
+    <value>Dados confiáveis</value>
+  </data>
+  <data name="Val4_D" xml:space="preserve">
+    <value>De fontes oficiais de licenças.</value>
+  </data>
+  <data name="CTA_Title" xml:space="preserve">
+    <value>Pronto para encontrar mais oportunidades de concreto?</value>
+  </data>
+  <data name="CTA_Sub" xml:space="preserve">
+    <value>Comece seu teste grátis de 14 dias hoje. Sem cartão de crédito.</value>
+  </data>
+  <data name="CTA_Btn" xml:space="preserve">
+    <value>Começar teste grátis →</value>
+  </data>
+  <data name="F_Nombre" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="F_Apellido" xml:space="preserve">
+    <value>Sobrenome</value>
+  </data>
+  <data name="F_Compania" xml:space="preserve">
+    <value>Empresa</value>
+  </data>
+  <data name="F_Correo" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="F_Telefono" xml:space="preserve">
+    <value>Telefone de contato</value>
+  </data>
+  <data name="F_Plan" xml:space="preserve">
+    <value>Plano de assinatura</value>
+  </data>
+  <data name="F_Password" xml:space="preserve">
+    <value>Senha</value>
+  </data>
+  <data name="F_ConfirmPassword" xml:space="preserve">
+    <value>Confirmar senha</value>
+  </data>
+  <data name="F_Codigo" xml:space="preserve">
+    <value>Código de verificação</value>
+  </data>
+  <data name="F_Recordarme" xml:space="preserve">
+    <value>Lembrar de mim</value>
+  </data>
+  <data name="Reg_Title" xml:space="preserve">
+    <value>Crie sua conta e assinatura</value>
+  </data>
+  <data name="Reg_Sub" xml:space="preserve">
+    <value>Cadastre-se para iniciar seu teste grátis. Enviaremos um código de verificação ao seu e-mail.</value>
+  </data>
+  <data name="Reg_SelectPlan" xml:space="preserve">
+    <value>— Selecione um plano —</value>
+  </data>
+  <data name="Reg_Submit" xml:space="preserve">
+    <value>Criar conta</value>
+  </data>
+  <data name="Reg_Have" xml:space="preserve">
+    <value>Já tem uma conta?</value>
+  </data>
+  <data name="Reg_SignIn" xml:space="preserve">
+    <value>Entrar</value>
+  </data>
+  <data name="Ver_Title" xml:space="preserve">
+    <value>Verifique seu e-mail</value>
+  </data>
+  <data name="Ver_Sub1" xml:space="preserve">
+    <value>Digite o código de 6 dígitos que enviamos para</value>
+  </data>
+  <data name="Ver_Dev" xml:space="preserve">
+    <value>Modo de teste (SMTP não configurado). Seu código é:</value>
+  </data>
+  <data name="Ver_Submit" xml:space="preserve">
+    <value>Verificar</value>
+  </data>
+  <data name="Ver_Resend" xml:space="preserve">
+    <value>Reenviar código</value>
+  </data>
+  <data name="Login_Title" xml:space="preserve">
+    <value>Entrar</value>
+  </data>
+  <data name="Login_Sub" xml:space="preserve">
+    <value>Acesse seu painel de prospecção de obras.</value>
+  </data>
+  <data name="Login_Submit" xml:space="preserve">
+    <value>Entrar</value>
+  </data>
+  <data name="Login_NoAccount" xml:space="preserve">
+    <value>Não tem uma conta?</value>
+  </data>
+  <data name="Login_Register" xml:space="preserve">
+    <value>Cadastre-se</value>
+  </data>
+  <data name="Denied_Title" xml:space="preserve">
+    <value>Acesso negado</value>
+  </data>
+  <data name="Denied_Sub" xml:space="preserve">
+    <value>Você não tem permissão para acessar esta seção.</value>
+  </data>
+  <data name="Denied_Btn" xml:space="preserve">
+    <value>Ir para o painel</value>
+  </data>
+  <data name="Dash_Title" xml:space="preserve">
+    <value>Localizador de obras</value>
+  </data>
+  <data name="Dash_Sub" xml:space="preserve">
+    <value>Prospecção de obras e clientes potenciais para venda de concreto usinado.</value>
+  </data>
+  <data name="Dash_SearchTitle" xml:space="preserve">
+    <value>Buscar oportunidades</value>
+  </data>
+  <data name="Dash_Zone" xml:space="preserve">
+    <value>Zona / Cidade / CEP</value>
+  </data>
+  <data name="Dash_BudgetMin" xml:space="preserve">
+    <value>Orçamento mínimo</value>
+  </data>
+  <data name="Dash_NoMin" xml:space="preserve">
+    <value>Sem mínimo</value>
+  </data>
+  <data name="Dash_Type" xml:space="preserve">
+    <value>Tipo de obra</value>
+  </data>
+  <data name="Dash_All" xml:space="preserve">
+    <value>Todas</value>
+  </data>
+  <data name="Dash_Age" xml:space="preserve">
+    <value>Idade</value>
+  </data>
+  <data name="Dash_AnyAge" xml:space="preserve">
+    <value>Qualquer</value>
+  </data>
+  <data name="Dash_Age1" xml:space="preserve">
+    <value>0-3 meses</value>
+  </data>
+  <data name="Dash_Age2" xml:space="preserve">
+    <value>3-12 meses</value>
+  </data>
+  <data name="Dash_Age3" xml:space="preserve">
+    <value>12+ meses</value>
+  </data>
+  <data name="Dash_SearchBtn" xml:space="preserve">
+    <value>Buscar obras</value>
+  </data>
+  <data name="Dash_KPI_Projects" xml:space="preserve">
+    <value>Obras encontradas</value>
+  </data>
+  <data name="Dash_KPI_Budget" xml:space="preserve">
+    <value>Orçamento visível</value>
+  </data>
+  <data name="Dash_KPI_Yards" xml:space="preserve">
+    <value>Jardas potenciais</value>
+  </data>
+  <data name="Dash_KPI_Hot" xml:space="preserve">
+    <value>Oportunidades quentes</value>
+  </data>
+  <data name="Dash_KPI_Contact" xml:space="preserve">
+    <value>Com contato</value>
+  </data>
+  <data name="Dash_PipelineType" xml:space="preserve">
+    <value>Pipeline por tipo de obra</value>
+  </data>
+  <data name="Dash_NoData" xml:space="preserve">
+    <value>Sem dados</value>
+  </data>
+  <data name="Dash_Priority" xml:space="preserve">
+    <value>Prioridade comercial</value>
+  </data>
+  <data name="Dash_PrioHigh" xml:space="preserve">
+    <value>Alta</value>
+  </data>
+  <data name="Dash_PrioMid" xml:space="preserve">
+    <value>Média</value>
+  </data>
+  <data name="Dash_PrioLow" xml:space="preserve">
+    <value>Baixa</value>
+  </data>
+  <data name="Dash_SearchPlaceholder" xml:space="preserve">
+    <value>Buscar empresa, projeto, contato...</value>
+  </data>
+  <data name="Dash_ContactAll" xml:space="preserve">
+    <value>Contato: todos</value>
+  </data>
+  <data name="Dash_ContactYes" xml:space="preserve">
+    <value>Com telefone/e-mail</value>
+  </data>
+  <data name="Dash_ContactNo" xml:space="preserve">
+    <value>Sem contato</value>
+  </data>
+  <data name="Dash_Filter" xml:space="preserve">
+    <value>Filtrar</value>
+  </data>
+  <data name="Dash_AddProject" xml:space="preserve">
+    <value>+ Adicionar obra</value>
+  </data>
+  <data name="Dash_Empty" xml:space="preserve">
+    <value>Nenhuma obra corresponde aos filtros.</value>
+  </data>
+  <data name="Col_Priority" xml:space="preserve">
+    <value>Prioridade</value>
+  </data>
+  <data name="Col_Address" xml:space="preserve">
+    <value>Endereço</value>
+  </data>
+  <data name="Col_Project" xml:space="preserve">
+    <value>Projeto / Empresa</value>
+  </data>
+  <data name="Col_Type" xml:space="preserve">
+    <value>Tipo</value>
+  </data>
+  <data name="Col_Age" xml:space="preserve">
+    <value>Idade</value>
+  </data>
+  <data name="Col_Budget" xml:space="preserve">
+    <value>Orçamento</value>
+  </data>
+  <data name="Col_Yards" xml:space="preserve">
+    <value>Jardas</value>
+  </data>
+  <data name="Col_ContactCompany" xml:space="preserve">
+    <value>Empresa de contato</value>
+  </data>
+  <data name="Col_Name" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="Col_Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="Col_PhoneDirect" xml:space="preserve">
+    <value>Tel. direto</value>
+  </data>
+  <data name="Col_PhoneCompany" xml:space="preserve">
+    <value>Tel. empresa</value>
+  </data>
+  <data name="Col_Source" xml:space="preserve">
+    <value>Fonte / Nota</value>
+  </data>
+  <data name="Col_Actions" xml:space="preserve">
+    <value>Ações</value>
+  </data>
+  <data name="Act_Edit" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="Age_NA" xml:space="preserve">
+    <value>Não disponível</value>
+  </data>
+  <data name="Age_Upcoming" xml:space="preserve">
+    <value>Futura / não iniciada</value>
+  </data>
+  <data name="Age_Month" xml:space="preserve">
+    <value>mês</value>
+  </data>
+  <data name="Age_Months" xml:space="preserve">
+    <value>meses</value>
+  </data>
+  <data name="Proj_AddTitle" xml:space="preserve">
+    <value>Adicionar obra</value>
+  </data>
+  <data name="Proj_EditTitle" xml:space="preserve">
+    <value>Editar obra</value>
+  </data>
+  <data name="Proj_Sub" xml:space="preserve">
+    <value>Preencha as informações da oportunidade comercial.</value>
+  </data>
+  <data name="Proj_Address" xml:space="preserve">
+    <value>Endereço da obra</value>
+  </data>
+  <data name="Proj_Name" xml:space="preserve">
+    <value>Projeto / Empresa</value>
+  </data>
+  <data name="Proj_Type" xml:space="preserve">
+    <value>Tipo</value>
+  </data>
+  <data name="Proj_Start" xml:space="preserve">
+    <value>Data de início</value>
+  </data>
+  <data name="Proj_Budget" xml:space="preserve">
+    <value>Orçamento ($)</value>
+  </data>
+  <data name="Proj_Yards" xml:space="preserve">
+    <value>Jardas estimadas</value>
+  </data>
+  <data name="Proj_ContactCompany" xml:space="preserve">
+    <value>Empresa de contato</value>
+  </data>
+  <data name="Proj_ContactName" xml:space="preserve">
+    <value>Nome do contato</value>
+  </data>
+  <data name="Proj_Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="Proj_PhoneDirect" xml:space="preserve">
+    <value>Telefone direto</value>
+  </data>
+  <data name="Proj_PhoneCompany" xml:space="preserve">
+    <value>Telefone da empresa</value>
+  </data>
+  <data name="Proj_Prio" xml:space="preserve">
+    <value>Prioridade (0-100)</value>
+  </data>
+  <data name="Proj_Source" xml:space="preserve">
+    <value>Fonte</value>
+  </data>
+  <data name="Proj_Note" xml:space="preserve">
+    <value>Nota</value>
+  </data>
+  <data name="Btn_Save" xml:space="preserve">
+    <value>Salvar</value>
+  </data>
+  <data name="Btn_Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="Adm_Title" xml:space="preserve">
+    <value>Painel de administração</value>
+  </data>
+  <data name="Adm_Sub" xml:space="preserve">
+    <value>Manutenção de usuários e assinaturas.</value>
+  </data>
+  <data name="Adm_UsersCard" xml:space="preserve">
+    <value>Usuários</value>
+  </data>
+  <data name="Adm_UsersCardDesc" xml:space="preserve">
+    <value>Cadastro, edição, perfis, assinaturas e status das contas.</value>
+  </data>
+  <data name="Adm_UsersBtn" xml:space="preserve">
+    <value>Gerenciar usuários</value>
+  </data>
+  <data name="Adm_PlansCard" xml:space="preserve">
+    <value>Assinaturas</value>
+  </data>
+  <data name="Adm_PlansCardDesc" xml:space="preserve">
+    <value>Crie e edite os planos exibidos na página de preços.</value>
+  </data>
+  <data name="Adm_PlansBtn" xml:space="preserve">
+    <value>Gerenciar assinaturas</value>
+  </data>
+  <data name="Adm_TabUsers" xml:space="preserve">
+    <value>Usuários</value>
+  </data>
+  <data name="Adm_TabPlans" xml:space="preserve">
+    <value>Assinaturas</value>
+  </data>
+  <data name="Adm_UsersTitle" xml:space="preserve">
+    <value>Usuários</value>
+  </data>
+  <data name="Adm_UsersListSub" xml:space="preserve">
+    <value>Manutenção de contas registradas.</value>
+  </data>
+  <data name="Adm_Col_Name" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="Adm_Col_Company" xml:space="preserve">
+    <value>Empresa</value>
+  </data>
+  <data name="Adm_Col_Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="Adm_Col_Phone" xml:space="preserve">
+    <value>Telefone</value>
+  </data>
+  <data name="Adm_Col_Role" xml:space="preserve">
+    <value>Perfil</value>
+  </data>
+  <data name="Adm_Col_Plan" xml:space="preserve">
+    <value>Assinatura</value>
+  </data>
+  <data name="Adm_Col_Verified" xml:space="preserve">
+    <value>Verificado</value>
+  </data>
+  <data name="Adm_Col_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Adm_Col_Registered" xml:space="preserve">
+    <value>Cadastro</value>
+  </data>
+  <data name="Adm_Yes" xml:space="preserve">
+    <value>Sim</value>
+  </data>
+  <data name="Adm_No" xml:space="preserve">
+    <value>Não</value>
+  </data>
+  <data name="Adm_Active" xml:space="preserve">
+    <value>Ativo</value>
+  </data>
+  <data name="Adm_Inactive" xml:space="preserve">
+    <value>Inativo</value>
+  </data>
+  <data name="Adm_NoUsers" xml:space="preserve">
+    <value>Nenhum usuário registrado.</value>
+  </data>
+  <data name="Adm_EditUserTitle" xml:space="preserve">
+    <value>Editar usuário</value>
+  </data>
+  <data name="Adm_Role" xml:space="preserve">
+    <value>Perfil</value>
+  </data>
+  <data name="Adm_Plan" xml:space="preserve">
+    <value>Assinatura</value>
+  </data>
+  <data name="Adm_NoPlan" xml:space="preserve">
+    <value>— Sem assinatura —</value>
+  </data>
+  <data name="Adm_NewPassword" xml:space="preserve">
+    <value>Nova senha (opcional)</value>
+  </data>
+  <data name="Adm_NewPasswordPh" xml:space="preserve">
+    <value>Deixe em branco para não alterar</value>
+  </data>
+  <data name="Adm_Verified" xml:space="preserve">
+    <value>Verificado</value>
+  </data>
+  <data name="Adm_ActiveLbl" xml:space="preserve">
+    <value>Ativo</value>
+  </data>
+  <data name="Adm_PlansTitle" xml:space="preserve">
+    <value>Assinaturas</value>
+  </data>
+  <data name="Adm_PlansListSub" xml:space="preserve">
+    <value>Planos exibidos na página de preços.</value>
+  </data>
+  <data name="Adm_NewPlan" xml:space="preserve">
+    <value>+ Nova assinatura</value>
+  </data>
+  <data name="Adm_Col_Order" xml:space="preserve">
+    <value>Ordem</value>
+  </data>
+  <data name="Adm_Col_PlanName" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="Adm_Col_Price" xml:space="preserve">
+    <value>Preço/mês</value>
+  </data>
+  <data name="Adm_Col_MaxUsers" xml:space="preserve">
+    <value>Máx. usuários</value>
+  </data>
+  <data name="Adm_Col_Popular" xml:space="preserve">
+    <value>Popular</value>
+  </data>
+  <data name="Adm_Col_ActivePlan" xml:space="preserve">
+    <value>Ativa</value>
+  </data>
+  <data name="Adm_NewPlanTitle" xml:space="preserve">
+    <value>Nova assinatura</value>
+  </data>
+  <data name="Adm_EditPlanTitle" xml:space="preserve">
+    <value>Editar assinatura</value>
+  </data>
+  <data name="Adm_Plan_Name" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="Adm_Plan_Order" xml:space="preserve">
+    <value>Ordem</value>
+  </data>
+  <data name="Adm_Plan_Price" xml:space="preserve">
+    <value>Preço mensal ($) — 0 = falar com vendas</value>
+  </data>
+  <data name="Adm_Plan_MaxUsers" xml:space="preserve">
+    <value>Máx. usuários</value>
+  </data>
+  <data name="Adm_Plan_Desc" xml:space="preserve">
+    <value>Descrição</value>
+  </data>
+  <data name="Adm_Plan_Features" xml:space="preserve">
+    <value>Recursos (um por linha)</value>
+  </data>
+  <data name="Adm_Plan_Popular" xml:space="preserve">
+    <value>Mais popular</value>
+  </data>
+  <data name="Adm_Plan_Active" xml:space="preserve">
+    <value>Ativa</value>
+  </data>
+  <data name="Confirm_DeleteProject" xml:space="preserve">
+    <value>Excluir esta obra?</value>
+  </data>
+  <data name="Confirm_DeleteUser" xml:space="preserve">
+    <value>Excluir este usuário?</value>
+  </data>
+  <data name="Confirm_DeletePlan" xml:space="preserve">
+    <value>Excluir este plano?</value>
+  </data>
+  <data name="Msg_CodeSent" xml:space="preserve">
+    <value>Enviamos um código de verificação ao seu e-mail.</value>
+  </data>
+  <data name="Msg_NewCodeSent" xml:space="preserve">
+    <value>Enviamos um novo código ao seu e-mail.</value>
+  </data>
+  <data name="Msg_EmailExists" xml:space="preserve">
+    <value>Já existe uma conta com este e-mail.</value>
+  </data>
+  <data name="Msg_Verified" xml:space="preserve">
+    <value>Conta verificada! Você já pode entrar.</value>
+  </data>
+  <data name="Msg_CodeInvalid" xml:space="preserve">
+    <value>O código é inválido ou expirou. Solicite um novo.</value>
+  </data>
+  <data name="Msg_BadCredentials" xml:space="preserve">
+    <value>E-mail ou senha incorretos.</value>
+  </data>
+  <data name="Msg_Disabled" xml:space="preserve">
+    <value>Sua conta está desativada. Entre em contato com o administrador.</value>
+  </data>
+  <data name="Msg_MustVerify" xml:space="preserve">
+    <value>Você precisa verificar seu e-mail antes de entrar. Enviamos um novo código.</value>
+  </data>
+  <data name="Msg_ProjectSaved" xml:space="preserve">
+    <value>Obra salva com sucesso.</value>
+  </data>
+  <data name="Msg_ProjectDeleted" xml:space="preserve">
+    <value>Obra excluída.</value>
+  </data>
+  <data name="Msg_UserUpdated" xml:space="preserve">
+    <value>Usuário atualizado.</value>
+  </data>
+  <data name="Msg_UserDeleted" xml:space="preserve">
+    <value>Usuário excluído.</value>
+  </data>
+  <data name="Msg_PlanSaved" xml:space="preserve">
+    <value>Assinatura salva.</value>
+  </data>
+  <data name="Msg_PlanDeleted" xml:space="preserve">
+    <value>Assinatura excluída.</value>
+  </data>
+  <data name="Msg_PlanInUse" xml:space="preserve">
+    <value>Não é possível excluir: há usuários com este plano. Desative-o em vez disso.</value>
+  </data>
+  <data name="Email_SubjectConfirm" xml:space="preserve">
+    <value>Confirme sua conta no Concrete Sales Radar</value>
+  </data>
+  <data name="Email_SubjectNewCode" xml:space="preserve">
+    <value>Seu novo código de verificação</value>
+  </data>
+  <data name="Email_Hello" xml:space="preserve">
+    <value>Olá</value>
+  </data>
+  <data name="Email_Intro" xml:space="preserve">
+    <value>Seu código de verificação é:</value>
+  </data>
+  <data name="Email_Expire" xml:space="preserve">
+    <value>Este código expira em 15 minutos. Se você não solicitou isto, ignore esta mensagem.</value>
+  </data>
+  <data name="Val_Nombre_Req" xml:space="preserve">
+    <value>O nome é obrigatório.</value>
+  </data>
+  <data name="Val_Apellido_Req" xml:space="preserve">
+    <value>O sobrenome é obrigatório.</value>
+  </data>
+  <data name="Val_Compania_Req" xml:space="preserve">
+    <value>A empresa é obrigatória.</value>
+  </data>
+  <data name="Val_Correo_Req" xml:space="preserve">
+    <value>O e-mail é obrigatório.</value>
+  </data>
+  <data name="Val_Telefono_Req" xml:space="preserve">
+    <value>O telefone é obrigatório.</value>
+  </data>
+  <data name="Val_Pass_Req" xml:space="preserve">
+    <value>A senha é obrigatória.</value>
+  </data>
+  <data name="Val_Confirm_Req" xml:space="preserve">
+    <value>Confirme sua senha.</value>
+  </data>
+  <data name="Val_Plan_Req" xml:space="preserve">
+    <value>Selecione um plano de assinatura.</value>
+  </data>
+  <data name="Val_Codigo_Req" xml:space="preserve">
+    <value>Digite o código que você recebeu por e-mail.</value>
+  </data>
+  <data name="Val_Max50" xml:space="preserve">
+    <value>Máximo de 50 caracteres.</value>
+  </data>
+  <data name="Val_Max100" xml:space="preserve">
+    <value>Máximo de 100 caracteres.</value>
+  </data>
+  <data name="Val_TextoNumero" xml:space="preserve">
+    <value>Apenas letras e números são permitidos.</value>
+  </data>
+  <data name="Val_Correo_Fmt" xml:space="preserve">
+    <value>Digite um e-mail válido.</value>
+  </data>
+  <data name="Val_Pass_Len" xml:space="preserve">
+    <value>A senha deve ter entre 6 e 100 caracteres.</value>
+  </data>
+  <data name="Val_Pass_Match" xml:space="preserve">
+    <value>As senhas não coincidem.</value>
+  </data>
+  <data name="Val_Codigo_Fmt" xml:space="preserve">
+    <value>O código deve ter 6 dígitos.</value>
+  </data>
+</root>

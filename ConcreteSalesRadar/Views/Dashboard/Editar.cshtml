@@ -1,14 +1,14 @@
 @model Proyecto
 @{
     var esNuevo = Model.Id == 0;
-    ViewData["Title"] = esNuevo ? "Agregar obra" : "Editar obra";
+    ViewData["Title"] = (esNuevo ? L["Proj_AddTitle"] : L["Proj_EditTitle"]).Value;
     var tipos = DashboardViewModel.TiposObra;
 }
 
 <div class="app-main">
     <div class="container-xl">
-        <h1 class="page-title">@(esNuevo ? "Agregar obra" : "Editar obra")</h1>
-        <p class="page-sub">Completa la información de la oportunidad comercial.</p>
+        <h1 class="page-title">@(esNuevo ? L["Proj_AddTitle"] : L["Proj_EditTitle"])</h1>
+        <p class="page-sub">@L["Proj_Sub"]</p>
 
         <div class="card" style="max-width:860px">
             <form asp-action="Guardar" method="post">
@@ -18,12 +18,12 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label asp-for="Direccion">Dirección de la obra</label>
+                        <label>@L["Proj_Address"]</label>
                         <input asp-for="Direccion" class="form-control" />
                         <span asp-validation-for="Direccion"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="NombreProyecto">Proyecto / Empresa</label>
+                        <label>@L["Proj_Name"]</label>
                         <input asp-for="NombreProyecto" class="form-control" />
                         <span asp-validation-for="NombreProyecto"></span>
                     </div>
@@ -31,7 +31,7 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label asp-for="Tipo">Tipo</label>
+                        <label>@L["Proj_Type"]</label>
                         <select asp-for="Tipo" class="form-control">
                             @foreach (var t in tipos)
                             {
@@ -40,68 +40,68 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label asp-for="FechaInicio">Fecha de inicio</label>
+                        <label>@L["Proj_Start"]</label>
                         <input asp-for="FechaInicio" type="date" class="form-control" value="@(Model.FechaInicio?.ToString("yyyy-MM-dd"))" />
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label asp-for="Presupuesto">Presupuesto ($)</label>
+                        <label>@L["Proj_Budget"]</label>
                         <input asp-for="Presupuesto" type="number" step="0.01" class="form-control" />
                     </div>
                     <div class="form-group">
-                        <label asp-for="Yardas">Yardas estimadas</label>
+                        <label>@L["Proj_Yards"]</label>
                         <input asp-for="Yardas" type="number" class="form-control" />
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label asp-for="EmpresaContacto">Empresa de contacto</label>
+                        <label>@L["Proj_ContactCompany"]</label>
                         <input asp-for="EmpresaContacto" class="form-control" />
                     </div>
                     <div class="form-group">
-                        <label asp-for="NombreContacto">Nombre de contacto</label>
+                        <label>@L["Proj_ContactName"]</label>
                         <input asp-for="NombreContacto" class="form-control" />
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label asp-for="Email">Email</label>
+                        <label>@L["Proj_Email"]</label>
                         <input asp-for="Email" class="form-control" />
                         <span asp-validation-for="Email"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Telefono">Teléfono directo</label>
+                        <label>@L["Proj_PhoneDirect"]</label>
                         <input asp-for="Telefono" class="form-control" />
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label asp-for="TelefonoEmpresa">Teléfono empresa</label>
+                        <label>@L["Proj_PhoneCompany"]</label>
                         <input asp-for="TelefonoEmpresa" class="form-control" />
                     </div>
                     <div class="form-group">
-                        <label asp-for="Prioridad">Prioridad (0-100)</label>
+                        <label>@L["Proj_Prio"]</label>
                         <input asp-for="Prioridad" type="number" min="0" max="100" class="form-control" />
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="Fuente">Fuente</label>
+                    <label>@L["Proj_Source"]</label>
                     <input asp-for="Fuente" class="form-control" placeholder="TDLR, city permit, GC website..." />
                 </div>
                 <div class="form-group">
-                    <label asp-for="Nota">Nota</label>
-                    <input asp-for="Nota" class="form-control" placeholder="Foundation, paving, tilt-wall, multifamily, etc." />
+                    <label>@L["Proj_Note"]</label>
+                    <input asp-for="Nota" class="form-control" />
                 </div>
 
                 <div style="display:flex;gap:10px;margin-top:8px">
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                    <a class="btn btn-ghost" asp-action="Index">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">@L["Btn_Save"]</button>
+                    <a class="btn btn-ghost" asp-action="Index">@L["Btn_Cancel"]</a>
                 </div>
             </form>
         </div>

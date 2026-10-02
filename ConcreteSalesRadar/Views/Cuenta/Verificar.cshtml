@@ -1,12 +1,12 @@
 @model VerificarCodigoViewModel
 @{
-    ViewData["Title"] = "Verificar correo";
+    ViewData["Title"] = L["Ver_Title"].Value;
 }
 
 <div class="auth-wrap">
     <div class="auth-card">
-        <h1>Verifica tu correo</h1>
-        <p class="sub">Ingresa el código de 6 dígitos que enviamos a <b>@Model.Correo</b>.</p>
+        <h1>@L["Ver_Title"]</h1>
+        <p class="sub">@L["Ver_Sub1"] <b>@Model.Correo</b>.</p>
 
         @if (TempData["Info"] != null)
         {
@@ -15,7 +15,7 @@
         @if (TempData["CodigoDev"] != null)
         {
             <div class="code-dev">
-                Modo de prueba (SMTP no configurado). Tu código es: <b>@TempData["CodigoDev"]</b>
+                @L["Ver_Dev"] <b>@TempData["CodigoDev"]</b>
             </div>
         }
 
@@ -26,19 +26,19 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
-                <label asp-for="Codigo"></label>
+                <label>@L["F_Codigo"]</label>
                 <input asp-for="Codigo" class="form-control" maxlength="6" inputmode="numeric"
                        style="font-size:22px;letter-spacing:8px;text-align:center" autofocus />
                 <span asp-validation-for="Codigo"></span>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-block">Verificar</button>
+            <button type="submit" class="btn btn-primary btn-block">@L["Ver_Submit"]</button>
         </form>
 
         <form asp-action="ReenviarCodigo" method="post" style="margin-top:14px;text-align:center">
             @Html.AntiForgeryToken()
             <input type="hidden" name="usuarioId" value="@Model.UsuarioId" />
-            <button type="submit" class="btn btn-ghost btn-sm">Reenviar código</button>
+            <button type="submit" class="btn btn-ghost btn-sm">@L["Ver_Resend"]</button>
         </form>
     </div>
 </div>
