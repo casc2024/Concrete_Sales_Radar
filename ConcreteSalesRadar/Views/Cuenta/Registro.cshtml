@@ -1,0 +1,85 @@
+@model RegistroViewModel
+@{
+    ViewData["Title"] = "Crear cuenta";
+    var planes = ViewBag.Planes as List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>;
+}
+
+<div class="auth-wrap">
+    <div class="auth-card wide">
+        <h1>Crea tu cuenta y membresía</h1>
+        <p class="sub">Regístrate para comenzar tu prueba gratuita. Te enviaremos un código de verificación a tu correo.</p>
+
+        @if (TempData["Info"] != null)
+        {
+            <div class="alert alert-info">@TempData["Info"]</div>
+        }
+
+        <form asp-action="Registro" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="Nombre"></label>
+                    <input asp-for="Nombre" class="form-control" maxlength="50" />
+                    <span asp-validation-for="Nombre"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Apellido"></label>
+                    <input asp-for="Apellido" class="form-control" maxlength="50" />
+                    <span asp-validation-for="Apellido"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="Compania"></label>
+                    <input asp-for="Compania" class="form-control" maxlength="50" />
+                    <span asp-validation-for="Compania"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Telefono"></label>
+                    <input asp-for="Telefono" class="form-control" maxlength="50" />
+                    <span asp-validation-for="Telefono"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Correo"></label>
+                <input asp-for="Correo" class="form-control" type="email" maxlength="100" />
+                <span asp-validation-for="Correo"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="MembresiaId"></label>
+                <select asp-for="MembresiaId" class="form-control" asp-items="planes">
+                    <option value="">— Selecciona un plan —</option>
+                </select>
+                <span asp-validation-for="MembresiaId"></span>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="Password"></label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ConfirmarPassword"></label>
+                    <input asp-for="ConfirmarPassword" class="form-control" />
+                    <span asp-validation-for="ConfirmarPassword"></span>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Crear cuenta</button>
+        </form>
+
+        <p class="sub" style="margin-top:18px;text-align:center">
+            ¿Ya tienes cuenta? <a asp-action="Login">Inicia sesión</a>
+        </p>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

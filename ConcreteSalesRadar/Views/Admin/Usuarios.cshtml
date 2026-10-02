@@ -1,0 +1,60 @@
+@model List<Usuario>
+@{
+    ViewData["Title"] = "Usuarios";
+}
+<div class="app-main">
+    <div class="container-xl">
+        <h1 class="page-title">Usuarios</h1>
+        <p class="page-sub">Mantenimiento de cuentas registradas.</p>
+
+        <div class="app-tabs">
+            <a class="active" asp-action="Usuarios">Usuarios</a>
+            <a asp-action="Membresias">Membresías</a>
+        </div>
+
+        @if (TempData["Exito"] != null)
+        {
+            <div class="alert alert-success">@TempData["Exito"]</div>
+        }
+
+        <div class="card">
+            <div class="tablewrap">
+                <table class="data" style="min-width:1000px">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th><th>Compañía</th><th>Correo</th><th>Teléfono</th>
+                            <th>Rol</th><th>Membresía</th><th>Verificado</th><th>Estado</th><th>Registro</th><th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var u in Model)
+                        {
+                            <tr>
+                                <td><b>@u.NombreCompleto</b></td>
+                                <td>@u.Compania</td>
+                                <td>@u.Correo</td>
+                                <td>@u.Telefono</td>
+                                <td>@(u.Rol?.Nombre ?? "-")</td>
+                                <td>@(u.Membresia?.Nombre ?? "-")</td>
+                                <td>@if (u.CorreoConfirmado) { <span class="pill on">Sí</span> } else { <span class="pill off">No</span> }</td>
+                                <td>@if (u.Activo) { <span class="pill on">Activo</span> } else { <span class="pill off">Inactivo</span> }</td>
+                                <td>@u.FechaRegistro.ToString("yyyy-MM-dd")</td>
+                                <td class="actions-cell">
+                                    <a class="btn btn-ghost btn-sm" asp-action="EditarUsuario" asp-route-id="@u.Id">Editar</a>
+                                    <form asp-action="EliminarUsuario" asp-route-id="@u.Id" method="post" onsubmit="return confirm('¿Eliminar este usuario?');" style="margin:0">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-danger btn-sm">X</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                @if (!Model.Any())
+                {
+                    <div class="empty">No hay usuarios registrados.</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

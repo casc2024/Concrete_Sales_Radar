@@ -1,0 +1,24 @@
+## .NET
+bin/
+obj/
+out/
+*.user
+*.suo
+.vs/
+.vscode/
+
+## Rider / Resharper
+.idea/
+*.DotSettings.user
+
+## Build artifacts
+[Dd]ebug/
+[Rr]elease/
+*.dll
+*.pdb
+
+## Secrets locales (no subir credenciales reales)
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.Local.json
+*.env

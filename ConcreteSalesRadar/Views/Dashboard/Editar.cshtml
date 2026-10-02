@@ -1,0 +1,113 @@
+@model Proyecto
+@{
+    var esNuevo = Model.Id == 0;
+    ViewData["Title"] = esNuevo ? "Agregar obra" : "Editar obra";
+    var tipos = DashboardViewModel.TiposObra;
+}
+
+<div class="app-main">
+    <div class="container-xl">
+        <h1 class="page-title">@(esNuevo ? "Agregar obra" : "Editar obra")</h1>
+        <p class="page-sub">Completa la información de la oportunidad comercial.</p>
+
+        <div class="card" style="max-width:860px">
+            <form asp-action="Guardar" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label asp-for="Direccion">Dirección de la obra</label>
+                        <input asp-for="Direccion" class="form-control" />
+                        <span asp-validation-for="Direccion"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="NombreProyecto">Proyecto / Empresa</label>
+                        <input asp-for="NombreProyecto" class="form-control" />
+                        <span asp-validation-for="NombreProyecto"></span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label asp-for="Tipo">Tipo</label>
+                        <select asp-for="Tipo" class="form-control">
+                            @foreach (var t in tipos)
+                            {
+                                <option value="@t" selected="@(Model.Tipo == t)">@t</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="FechaInicio">Fecha de inicio</label>
+                        <input asp-for="FechaInicio" type="date" class="form-control" value="@(Model.FechaInicio?.ToString("yyyy-MM-dd"))" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label asp-for="Presupuesto">Presupuesto ($)</label>
+                        <input asp-for="Presupuesto" type="number" step="0.01" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Yardas">Yardas estimadas</label>
+                        <input asp-for="Yardas" type="number" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label asp-for="EmpresaContacto">Empresa de contacto</label>
+                        <input asp-for="EmpresaContacto" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="NombreContacto">Nombre de contacto</label>
+                        <input asp-for="NombreContacto" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label asp-for="Email">Email</label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Telefono">Teléfono directo</label>
+                        <input asp-for="Telefono" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label asp-for="TelefonoEmpresa">Teléfono empresa</label>
+                        <input asp-for="TelefonoEmpresa" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Prioridad">Prioridad (0-100)</label>
+                        <input asp-for="Prioridad" type="number" min="0" max="100" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Fuente">Fuente</label>
+                    <input asp-for="Fuente" class="form-control" placeholder="TDLR, city permit, GC website..." />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Nota">Nota</label>
+                    <input asp-for="Nota" class="form-control" placeholder="Foundation, paving, tilt-wall, multifamily, etc." />
+                </div>
+
+                <div style="display:flex;gap:10px;margin-top:8px">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <a class="btn btn-ghost" asp-action="Index">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

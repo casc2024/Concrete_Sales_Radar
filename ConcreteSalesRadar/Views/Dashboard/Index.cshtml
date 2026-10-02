@@ -1,0 +1,161 @@
+@using ConcreteSalesRadar.Helpers
+@model DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="app-main">
+    <div class="container-xl">
+        <h1 class="page-title">Buscador de obras</h1>
+        <p class="page-sub">Prospección de obras y clientes potenciales para venta de Ready-Mix Concrete.</p>
+
+        @if (TempData["Exito"] != null)
+        {
+            <div class="alert alert-success">@TempData["Exito"]</div>
+        }
+
+        <!-- Búsqueda -->
+        <div class="card">
+            <h3 class="card-title">Buscar oportunidades</h3>
+            <form asp-action="Index" method="get" id="filtros">
+                <div class="search-grid">
+                    <div>
+                        <label>Zona / Ciudad / ZIP</label>
+                        <input class="form-control" name="Zona" value="@Model.Zona" placeholder="Ej. Ponder, TX / 76259" />
+                    </div>
+                    <div>
+                        <label>Presupuesto mínimo</label>
+                        <select class="form-control" name="PresupuestoMin">
+                            @{
+                                var montos = new (decimal v, string t)[] { (0, "Sin mínimo"), (1000000, "$1M+"), (5000000, "$5M+"), (10000000, "$10M+"), (25000000, "$25M+"), (50000000, "$50M+") };
+                            }
+                            @foreach (var m in montos)
+                            {
+                                <option value="@m.v" selected="@(Model.PresupuestoMin == m.v)">@m.t</option>
+                            }
+                        </select>
+                    </div>
+                    <div>
+                        <label>Tipo de obra</label>
+                        <select class="form-control" name="Tipo">
+                            <option value="">Todas</option>
+                            @foreach (var t in DashboardViewModel.TiposObra)
+                            {
+                                <option value="@t" selected="@(Model.Tipo == t)">@t</option>
+                            }
+                        </select>
+                    </div>
+                    <div>
+                        <label>Antigüedad</label>
+                        <select class="form-control" name="Antiguedad">
+                            <option value="">Cualquiera</option>
+                            <option value="new" selected="@(Model.Antiguedad == "new")">0-3 meses</option>
+                            <option value="active" selected="@(Model.Antiguedad == "active")">3-12 meses</option>
+                            <option value="mature" selected="@(Model.Antiguedad == "mature")">12+ meses</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>&nbsp;</label>
+                        <button type="submit" class="btn btn-primary btn-block">Buscar obras</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- KPIs -->
+        <div class="kpis">
+            <div class="kpi"><strong>@Formato.Numero(Model.TotalObras)</strong><span>Obras encontradas</span></div>
+            <div class="kpi"><strong>@Formato.Dinero(Model.PresupuestoTotal)</strong><span>Presupuesto visible</span></div>
+            <div class="kpi"><strong>@Formato.Numero(Model.YardasTotal)</strong><span>Yardas potenciales</span></div>
+            <div class="kpi"><strong>@Model.Calientes</strong><span>Oportunidades calientes</span></div>
+            <div class="kpi"><strong>@Model.ConContacto</strong><span>Con contacto</span></div>
+        </div>
+
+        <!-- Pipeline -->
+        <div class="grid2">
+            <div class="card">
+                <h3 class="card-title">Pipeline por tipo de obra</h3>
+                @if (Model.PorTipo.Any())
+                {
+                    foreach (var t in Model.PorTipo)
+                    {
+                        <p style="margin:6px 0"><b>@t.Tipo</b> <span class="muted">(@t.Cantidad)</span></p>
+                    }
+                }
+                else
+                {
+                    <span class="muted">Sin datos</span>
+                }
+            </div>
+            <div class="card">
+                <h3 class="card-title">Prioridad comercial</h3>
+                <p style="margin:6px 0"><b>Alta:</b> @Model.PrioridadAlta</p>
+                <p style="margin:6px 0"><b>Media:</b> @Model.PrioridadMedia</p>
+                <p style="margin:6px 0"><b>Baja:</b> @Model.PrioridadBaja</p>
+            </div>
+        </div>
+
+        <!-- Tabla -->
+        <div class="card">
+            <form asp-action="Index" method="get" class="toolbar">
+                <input type="hidden" name="Zona" value="@Model.Zona" />
+                <input type="hidden" name="Tipo" value="@Model.Tipo" />
+                <input type="hidden" name="PresupuestoMin" value="@Model.PresupuestoMin" />
+                <input type="hidden" name="Antiguedad" value="@Model.Antiguedad" />
+                <input class="form-control" name="Busqueda" value="@Model.Busqueda" placeholder="Buscar empresa, proyecto, contacto..." />
+                <select class="form-control" name="Contacto" onchange="this.form.submit()">
+                    <option value="">Contacto: todos</option>
+                    <option value="yes" selected="@(Model.Contacto == "yes")">Con teléfono/email</option>
+                    <option value="no" selected="@(Model.Contacto == "no")">Sin contacto</option>
+                </select>
+                <button type="submit" class="btn btn-ghost">Filtrar</button>
+                <span></span>
+                <a class="btn btn-primary" asp-action="Crear">+ Agregar obra</a>
+            </form>
+
+            <div class="tablewrap">
+                <table class="data">
+                    <thead>
+                        <tr>
+                            <th>Prioridad</th><th>Dirección</th><th>Proyecto / Empresa</th><th>Tipo</th>
+                            <th>Antigüedad</th><th>Presupuesto</th><th>Yardas</th><th>Empresa contacto</th>
+                            <th>Nombre</th><th>Email</th><th>Tel. directo</th><th>Tel. empresa</th><th>Fuente / Nota</th><th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var p in Model.Proyectos)
+                        {
+                            var age = Formato.Antiguedad(p.FechaInicio);
+                            <tr>
+                                <td><span class="badge @Formato.Calor(p.Prioridad)">@p.Prioridad / 100</span></td>
+                                <td>@(p.Direccion ?? "-")</td>
+                                <td><b>@p.NombreProyecto</b></td>
+                                <td>@(p.Tipo ?? "-")</td>
+                                <td><span class="badge @age.Clase">@age.Label</span></td>
+                                <td>@Formato.Dinero(p.Presupuesto)</td>
+                                <td><b>@Formato.Numero(p.Yardas)</b> yd³</td>
+                                <td>@(p.EmpresaContacto ?? "-")</td>
+                                <td>@(p.NombreContacto ?? "-")</td>
+                                <td>@if (!string.IsNullOrWhiteSpace(p.Email)) { <a href="mailto:@p.Email">@p.Email</a> } else { <text>-</text> }</td>
+                                <td>@if (!string.IsNullOrWhiteSpace(p.Telefono)) { <a href="tel:@p.Telefono">@p.Telefono</a> } else { <text>-</text> }</td>
+                                <td>@if (!string.IsNullOrWhiteSpace(p.TelefonoEmpresa)) { <a href="tel:@p.TelefonoEmpresa">@p.TelefonoEmpresa</a> } else { <text>-</text> }</td>
+                                <td>@(($"{p.Fuente}{(string.IsNullOrWhiteSpace(p.Nota) ? "" : " · " + p.Nota)}").Trim(' ', '·'))</td>
+                                <td class="actions-cell">
+                                    <a class="btn btn-ghost btn-sm" asp-action="Editar" asp-route-id="@p.Id">Editar</a>
+                                    <form asp-action="Eliminar" asp-route-id="@p.Id" method="post" onsubmit="return confirm('¿Eliminar esta obra?');" style="margin:0">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-danger btn-sm">X</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                @if (!Model.Proyectos.Any())
+                {
+                    <div class="empty">No hay obras que coincidan con los filtros.</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

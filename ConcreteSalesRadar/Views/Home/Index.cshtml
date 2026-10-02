@@ -1,0 +1,155 @@
+@model List<Membresia>
+@{
+    ViewData["Title"] = "Encuentra obras. Vende más concreto";
+}
+
+<!-- HERO -->
+<header class="hero">
+    <div class="container-xl">
+        <div class="hero-grid">
+            <div>
+                <h1>Encuentra obras de construcción. <span class="accent">Vende más concreto.</span></h1>
+                <p class="lead">
+                    Busca proyectos de construcción activos y próximos por ubicación, obtén estimaciones
+                    de demanda de concreto y conecta directamente con contratistas, desarrolladores y
+                    tomadores de decisiones.
+                </p>
+                <div class="hero-checks">
+                    <span><span class="dot">✓</span> Datos reales de proyectos</span>
+                    <span><span class="dot">✓</span> Información de contacto</span>
+                    <span><span class="dot">✓</span> Presupuesto y yardas estimadas</span>
+                    <span><span class="dot">✓</span> Gana más negocios</span>
+                </div>
+                <div class="hero-cta">
+                    <a class="btn btn-primary" asp-controller="Cuenta" asp-action="Registro">Comenzar prueba gratis</a>
+                    <a class="btn btn-outline" href="#how">▶ Ver cómo funciona</a>
+                </div>
+                <div class="hero-note">Prueba gratuita de 14 días · Sin tarjeta de crédito</div>
+            </div>
+            <div class="hero-img">
+                <div>
+                    <div class="truck">🚛</div>
+                    <h3 style="margin:10px 0 4px">North Texas Ready-Mix</h3>
+                    <p style="opacity:.85;margin:0">Prospección por zona + radio + dashboard</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- AUDIENCE -->
+<div class="audience">
+    <div class="container-xl">
+        <div class="audience-grid">
+            <div class="audience-item"><div class="ico">🚛</div><div>Productoras de Ready-Mix</div></div>
+            <div class="audience-item"><div class="ico">👷</div><div>Contratistas de concreto</div></div>
+            <div class="audience-item"><div class="ico">🏢</div><div>Desarrolladores y GC</div></div>
+            <div class="audience-item"><div class="ico">⛽</div><div>Empresas de bombeo</div></div>
+            <div class="audience-item"><div class="ico">⛰️</div><div>Cemento y agregados</div></div>
+            <div class="audience-item"><div class="ico">📈</div><div>Equipos de ventas</div></div>
+        </div>
+    </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+    <div class="container-xl">
+        <div class="section-head">
+            <h2>Cómo funciona</h2>
+            <p>De la búsqueda a nuevas oportunidades en minutos.</p>
+        </div>
+        <div class="how-grid">
+            <div>
+                <div class="step"><div class="num">1</div><div><h4>Ingresa una ubicación o ZIP</h4><p>Elige tu zona y radio (5–75 millas).</p></div></div>
+                <div class="step"><div class="num">2</div><div><h4>Encuentra obras activas</h4><p>Proyectos comerciales, residenciales e industriales.</p></div></div>
+                <div class="step"><div class="num">3</div><div><h4>Revisa los datos clave</h4><p>Presupuesto, yardas estimadas y línea de tiempo.</p></div></div>
+                <div class="step"><div class="num">4</div><div><h4>Obtén la información de contacto</h4><p>Conecta con contratistas y desarrolladores.</p></div></div>
+                <div class="step"><div class="num">5</div><div><h4>Agrega a tu pipeline</h4><p>Da seguimiento y gestiona tus oportunidades.</p></div></div>
+            </div>
+            <div class="mock">
+                <div class="mock-head">◎ Concrete Sales Radar — Dashboard</div>
+                <div class="mock-body">
+                    <div class="kpis" style="margin:0">
+                        <div class="kpi"><strong>124</strong><span>Obras encontradas</span></div>
+                        <div class="kpi"><strong>$2.4B</strong><span>Valor total</span></div>
+                        <div class="kpi"><strong>285K</strong><span>Yardas estimadas</span></div>
+                    </div>
+                    <p class="muted" style="margin-top:14px;font-size:13px">
+                        Busca por ubicación y radio, filtra por tipo de obra y presupuesto, y exporta
+                        tus leads con contacto directo.
+                    </p>
+                    <a class="btn btn-primary btn-sm" asp-controller="Cuenta" asp-action="Registro">Probar el dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="pricing">
+    <div class="container-xl">
+        <div class="section-head">
+            <h2>Precios simples y transparentes</h2>
+            <p>Elige el plan para tu equipo. Todos incluyen datos reales de proyectos e información de contacto.</p>
+        </div>
+        <div id="features" class="price-grid">
+            @foreach (var plan in Model)
+            {
+                <div class="price-card @(plan.EsPopular ? "popular" : "")">
+                    @if (plan.EsPopular)
+                    {
+                        <div class="price-tag">MÁS POPULAR</div>
+                    }
+                    <h3>@plan.Nombre</h3>
+                    @if (plan.PrecioMensual > 0)
+                    {
+                        <div class="price-amount">$@plan.PrecioMensual.ToString("0") <small>/ mes</small></div>
+                    }
+                    else
+                    {
+                        <div class="price-contact">Contactar ventas</div>
+                    }
+                    <ul class="feature-list">
+                        @foreach (var c in (plan.Caracteristicas ?? "").Split('\n', StringSplitOptions.RemoveEmptyEntries))
+                        {
+                            <li>@c.Trim()</li>
+                        }
+                    </ul>
+                    @if (plan.PrecioMensual > 0)
+                    {
+                        <a class="btn btn-primary btn-block" asp-controller="Cuenta" asp-action="Registro" asp-route-plan="@plan.Id">Comenzar prueba gratis</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-outline btn-block" asp-controller="Cuenta" asp-action="Registro" asp-route-plan="@plan.Id">Contactar ventas</a>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- VALUE PROPS -->
+<section>
+    <div class="container-xl">
+        <div class="values">
+            <div class="value-item"><div class="ico">📈</div><h4>Encuentra oportunidades primero</h4><p>Adelántate a tus competidores.</p></div>
+            <div class="value-item"><div class="ico">🎯</div><h4>Ahorra tiempo</h4><p>Toda la información clave en un solo lugar.</p></div>
+            <div class="value-item"><div class="ico">💲</div><h4>Aumenta las ventas</h4><p>Más proyectos. Más concreto.</p></div>
+            <div class="value-item"><div class="ico">🤝</div><h4>Datos confiables</h4><p>De fuentes oficiales de permisos.</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-band">
+    <div class="container-xl">
+        <div class="inner">
+            <div>
+                <h3>¿Listo para encontrar más oportunidades de concreto?</h3>
+                <p>Inicia tu prueba gratuita de 14 días hoy. Sin tarjeta de crédito.</p>
+            </div>
+            <a class="btn btn-white" asp-controller="Cuenta" asp-action="Registro">Comenzar prueba gratis →</a>
+        </div>
+    </div>
+</div>

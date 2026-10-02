@@ -1,0 +1,22 @@
+@{
+    ViewData["Title"] = "Administración";
+}
+<div class="app-main">
+    <div class="container-xl">
+        <h1 class="page-title">Panel de administración</h1>
+        <p class="page-sub">Mantenimiento de usuarios y membresías.</p>
+
+        <div class="grid2">
+            <div class="card">
+                <h3 class="card-title">👥 Usuarios</h3>
+                <p class="muted">Alta, edición, roles, membresías y estado de las cuentas.</p>
+                <a class="btn btn-primary" asp-action="Usuarios">Gestionar usuarios</a>
+            </div>
+            <div class="card">
+                <h3 class="card-title">💳 Membresías</h3>
+                <p class="muted">Crea y edita los planes que se muestran en la página de precios.</p>
+                <a class="btn btn-primary" asp-action="Membresias">Gestionar membresías</a>
+            </div>
+        </div>
+    </div>
+</div>

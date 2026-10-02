@@ -1,0 +1,48 @@
+@model VerificarCodigoViewModel
+@{
+    ViewData["Title"] = "Verificar correo";
+}
+
+<div class="auth-wrap">
+    <div class="auth-card">
+        <h1>Verifica tu correo</h1>
+        <p class="sub">Ingresa el código de 6 dígitos que enviamos a <b>@Model.Correo</b>.</p>
+
+        @if (TempData["Info"] != null)
+        {
+            <div class="alert alert-info">@TempData["Info"]</div>
+        }
+        @if (TempData["CodigoDev"] != null)
+        {
+            <div class="code-dev">
+                Modo de prueba (SMTP no configurado). Tu código es: <b>@TempData["CodigoDev"]</b>
+            </div>
+        }
+
+        <form asp-action="Verificar" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="UsuarioId" />
+            <input type="hidden" asp-for="Correo" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Codigo"></label>
+                <input asp-for="Codigo" class="form-control" maxlength="6" inputmode="numeric"
+                       style="font-size:22px;letter-spacing:8px;text-align:center" autofocus />
+                <span asp-validation-for="Codigo"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Verificar</button>
+        </form>
+
+        <form asp-action="ReenviarCodigo" method="post" style="margin-top:14px;text-align:center">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="usuarioId" value="@Model.UsuarioId" />
+            <button type="submit" class="btn btn-ghost btn-sm">Reenviar código</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

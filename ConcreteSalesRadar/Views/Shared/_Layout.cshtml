@@ -1,0 +1,66 @@
+@using System.Security.Claims
+@{
+    var esAdmin = User.IsInRole(Roles.Administrador);
+    var autenticado = User.Identity?.IsAuthenticated ?? false;
+    var nombre = User.FindFirstValue(ClaimTypes.Name);
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Concrete Sales Radar</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-grid.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <nav class="topnav">
+        <a class="brand" asp-controller="Home" asp-action="Index">
+            <span class="logo">◎</span>
+            <span class="name"><b>CONCRETE</b><span>SALES RADAR</span></span>
+        </a>
+        <div class="navlinks">
+            <a asp-controller="Home" asp-action="Index">Inicio</a>
+            <a href="/#features">Características</a>
+            <a href="/#pricing">Precios</a>
+            @if (autenticado)
+            {
+                <a asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+            }
+            @if (esAdmin)
+            {
+                <a asp-controller="Admin" asp-action="Index">Admin</a>
+            }
+        </div>
+        <div class="navactions">
+            @if (autenticado)
+            {
+                <span class="muted" style="font-size:13px">Hola, @nombre</span>
+                <form asp-controller="Cuenta" asp-action="Logout" method="post" style="margin:0">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-ghost btn-sm">Salir</button>
+                </form>
+            }
+            else
+            {
+                <a class="btn btn-outline btn-sm" asp-controller="Cuenta" asp-action="Login">Iniciar sesión</a>
+                <a class="btn btn-primary btn-sm" asp-controller="Cuenta" asp-action="Registro">Prueba gratis</a>
+            }
+        </div>
+    </nav>
+
+    @RenderBody()
+
+    <footer class="site">
+        <div class="container-xl" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px">
+            <div>© @DateTime.Now.Year Concrete Sales Radar — Prospección de obras para venta de concreto.</div>
+            <div><a asp-controller="Home" asp-action="Privacy">Privacidad</a></div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,58 @@
+@model List<Membresia>
+@{
+    ViewData["Title"] = "Membresías";
+}
+<div class="app-main">
+    <div class="container-xl">
+        <h1 class="page-title">Membresías</h1>
+        <p class="page-sub">Planes mostrados en la página de precios.</p>
+
+        <div class="app-tabs">
+            <a asp-action="Usuarios">Usuarios</a>
+            <a class="active" asp-action="Membresias">Membresías</a>
+        </div>
+
+        @if (TempData["Exito"] != null)
+        {
+            <div class="alert alert-success">@TempData["Exito"]</div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-error">@TempData["Error"]</div>
+        }
+
+        <div style="margin-bottom:14px">
+            <a class="btn btn-primary" asp-action="CrearMembresia">+ Nueva membresía</a>
+        </div>
+
+        <div class="card">
+            <div class="tablewrap">
+                <table class="data" style="min-width:800px">
+                    <thead>
+                        <tr><th>Orden</th><th>Nombre</th><th>Precio/mes</th><th>Máx. usuarios</th><th>Popular</th><th>Activa</th><th>Acciones</th></tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var m in Model)
+                        {
+                            <tr>
+                                <td>@m.Orden</td>
+                                <td><b>@m.Nombre</b></td>
+                                <td>@(m.PrecioMensual > 0 ? $"${m.PrecioMensual:0}" : "Contactar ventas")</td>
+                                <td>@m.MaxUsuarios</td>
+                                <td>@if (m.EsPopular) { <span class="pill on">Sí</span> } else { <span class="muted">—</span> }</td>
+                                <td>@if (m.Activa) { <span class="pill on">Sí</span> } else { <span class="pill off">No</span> }</td>
+                                <td class="actions-cell">
+                                    <a class="btn btn-ghost btn-sm" asp-action="EditarMembresia" asp-route-id="@m.Id">Editar</a>
+                                    <form asp-action="EliminarMembresia" asp-route-id="@m.Id" method="post" onsubmit="return confirm('¿Eliminar este plan?');" style="margin:0">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-danger btn-sm">X</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
