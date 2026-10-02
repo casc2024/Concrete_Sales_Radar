@@ -771,4 +771,16 @@
   <data name="Val_Codigo_Fmt" xml:space="preserve">
     <value>The code must have 6 digits.</value>
   </data>
+  <data name="Page_Prev" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="Page_Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="Page_Info" xml:space="preserve">
+    <value>Page {0} of {1}</value>
+  </data>
+  <data name="Page_Records" xml:space="preserve">
+    <value>{0} records</value>
+  </data>
 </root>

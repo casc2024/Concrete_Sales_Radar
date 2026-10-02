@@ -160,6 +160,63 @@
                     <div class="empty">@L["Dash_Empty"]</div>
                 }
             </div>
+
+            @if (Model.TotalRegistros > 0)
+            {
+                var desde = (Model.Pagina - 1) * DashboardViewModel.TamanoPagina + 1;
+                var hasta = Math.Min(Model.Pagina * DashboardViewModel.TamanoPagina, Model.TotalRegistros);
+                var inicio = Math.Max(1, Model.Pagina - 2);
+                var fin = Math.Min(Model.TotalPaginas, Model.Pagina + 2);
+                <div class="pager">
+                    <span class="pager-info">
+                        @L["Page_Info", Model.Pagina, Model.TotalPaginas]
+                        <span class="muted">· @desde–@hasta / @Model.TotalRegistros</span>
+                    </span>
+                    <div class="pager-links">
+                        @if (Model.Pagina > 1)
+                        {
+                            <a class="page-link" asp-action="Index"
+                               asp-route-Zona="@Model.Zona" asp-route-Tipo="@Model.Tipo"
+                               asp-route-PresupuestoMin="@Model.PresupuestoMin" asp-route-Antiguedad="@Model.Antiguedad"
+                               asp-route-Busqueda="@Model.Busqueda" asp-route-Contacto="@Model.Contacto"
+                               asp-route-pagina="@(Model.Pagina - 1)">‹ @L["Page_Prev"]</a>
+                        }
+                        else
+                        {
+                            <span class="page-link disabled">‹ @L["Page_Prev"]</span>
+                        }
+
+                        @for (var i = inicio; i <= fin; i++)
+                        {
+                            if (i == Model.Pagina)
+                            {
+                                <span class="page-link active">@i</span>
+                            }
+                            else
+                            {
+                                <a class="page-link" asp-action="Index"
+                                   asp-route-Zona="@Model.Zona" asp-route-Tipo="@Model.Tipo"
+                                   asp-route-PresupuestoMin="@Model.PresupuestoMin" asp-route-Antiguedad="@Model.Antiguedad"
+                                   asp-route-Busqueda="@Model.Busqueda" asp-route-Contacto="@Model.Contacto"
+                                   asp-route-pagina="@i">@i</a>
+                            }
+                        }
+
+                        @if (Model.Pagina < Model.TotalPaginas)
+                        {
+                            <a class="page-link" asp-action="Index"
+                               asp-route-Zona="@Model.Zona" asp-route-Tipo="@Model.Tipo"
+                               asp-route-PresupuestoMin="@Model.PresupuestoMin" asp-route-Antiguedad="@Model.Antiguedad"
+                               asp-route-Busqueda="@Model.Busqueda" asp-route-Contacto="@Model.Contacto"
+                               asp-route-pagina="@(Model.Pagina + 1)">@L["Page_Next"] ›</a>
+                        }
+                        else
+                        {
+                            <span class="page-link disabled">@L["Page_Next"] ›</span>
+                        }
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </div>

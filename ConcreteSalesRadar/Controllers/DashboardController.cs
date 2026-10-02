@@ -53,7 +53,7 @@ public class DashboardController : Controller
 
         var lista = q.OrderByDescending(p => p.Prioridad).ToList();
 
-        filtro.Proyectos = lista;
+        // KPIs y agregados sobre TODO el conjunto filtrado.
         filtro.TotalObras = lista.Count;
         filtro.PresupuestoTotal = lista.Sum(p => p.Presupuesto);
         filtro.YardasTotal = lista.Sum(p => p.Yardas);
@@ -65,6 +65,15 @@ public class DashboardController : Controller
         filtro.PrioridadAlta = lista.Count(p => p.Prioridad >= 75);
         filtro.PrioridadMedia = lista.Count(p => p.Prioridad is >= 50 and < 75);
         filtro.PrioridadBaja = lista.Count(p => p.Prioridad < 50);
+
+        // Paginación (10 por página) solo para la tabla.
+        filtro.TotalRegistros = lista.Count;
+        filtro.TotalPaginas = Math.Max(1, (int)Math.Ceiling(lista.Count / (double)DashboardViewModel.TamanoPagina));
+        filtro.Pagina = Math.Clamp(filtro.Pagina <= 0 ? 1 : filtro.Pagina, 1, filtro.TotalPaginas);
+        filtro.Proyectos = lista
+            .Skip((filtro.Pagina - 1) * DashboardViewModel.TamanoPagina)
+            .Take(DashboardViewModel.TamanoPagina)
+            .ToList();
 
         return View(filtro);
     }

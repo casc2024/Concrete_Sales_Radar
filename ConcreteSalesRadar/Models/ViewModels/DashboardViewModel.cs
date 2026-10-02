@@ -15,6 +15,12 @@ public class DashboardViewModel
 
     public List<Proyecto> Proyectos { get; set; } = new();
 
+    // Paginación (10 registros por página)
+    public int Pagina { get; set; } = 1;
+    public const int TamanoPagina = 10;
+    public int TotalRegistros { get; set; }
+    public int TotalPaginas { get; set; }
+
     // KPIs
     public int TotalObras { get; set; }
     public decimal PresupuestoTotal { get; set; }

@@ -227,6 +227,15 @@ table.data tr:hover td { background: #fafcff; }
 .badge.mature { background: #f3e8ff; color: #7e22ce; }
 
 .empty { padding: 34px; text-align: center; color: var(--muted); }
+
+/* paginador */
+.pager { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 14px; }
+.pager-info { font-size: 13px; color: var(--ink); font-weight: 600; }
+.pager-links { display: flex; gap: 6px; flex-wrap: wrap; }
+.page-link { display: inline-flex; align-items: center; justify-content: center; min-width: 34px; padding: 7px 11px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--ink); font-size: 13px; font-weight: 700; text-decoration: none; }
+.page-link:hover { background: var(--soft); color: var(--primary); text-decoration: none; }
+.page-link.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.page-link.disabled { color: #cbd5e1; background: #f8fafc; cursor: default; pointer-events: none; }
 .actions-cell { display: flex; gap: 6px; }
 .muted { color: var(--muted); }
 
