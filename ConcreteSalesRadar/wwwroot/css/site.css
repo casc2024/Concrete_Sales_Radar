@@ -32,11 +32,15 @@ a:hover { text-decoration: underline; }
 
 /* ---------- NAVBAR ---------- */
 .topnav {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 20px; border-bottom: 1px solid var(--line);
+    display: flex; align-items: center; gap: 16px;
+    padding: 12px 20px; border-bottom: 1px solid var(--line);
     background: #fff; position: sticky; top: 0; z-index: 50;
 }
-.brand { display: flex; align-items: center; gap: 10px; font-weight: 800; }
+.nav-toggle { display: none; }
+.hamburger { display: none; cursor: pointer; margin-left: auto; padding: 8px; }
+.hamburger span { display: block; width: 24px; height: 2px; background: var(--navy); border-radius: 2px; margin: 5px 0; transition: .2s; }
+.nav-collapse { display: flex; align-items: center; gap: 24px; flex: 1; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 800; flex-shrink: 0; }
 .brand .logo {
     width: 40px; height: 40px; border-radius: 50%;
     background: linear-gradient(135deg, var(--primary), var(--navy));
@@ -48,7 +52,7 @@ a:hover { text-decoration: underline; }
 .navlinks { display: flex; gap: 26px; align-items: center; }
 .navlinks a { color: var(--ink); font-weight: 600; font-size: 14px; }
 .navlinks a:hover { color: var(--primary); text-decoration: none; }
-.navactions { display: flex; gap: 12px; align-items: center; }
+.navactions { display: flex; gap: 12px; align-items: center; margin-left: auto; }
 .lang-switch { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
 .lang-switch form { margin: 0; }
 .lang-btn { background: #fff; color: var(--muted); border: 0; border-right: 1px solid var(--line); padding: 6px 9px; font-size: 11px; font-weight: 800; cursor: pointer; }
@@ -260,9 +264,46 @@ table.data tr:hover td { background: #fafcff; }
     .kpis { grid-template-columns: repeat(2,1fr); }
     .search-grid, .toolbar { grid-template-columns: 1fr 1fr; }
     .grid2 { grid-template-columns: 1fr; }
-    .navlinks { display: none; }
 }
-@media (max-width: 560px) {
+
+/* ---- Navbar colapsable (móvil / tablet) ---- */
+@media (max-width: 900px) {
+    .hamburger { display: block; }
+    .nav-collapse {
+        display: none; position: absolute; top: 100%; left: 0; right: 0;
+        flex-direction: column; align-items: stretch; gap: 0;
+        background: #fff; border-bottom: 1px solid var(--line);
+        box-shadow: 0 12px 24px rgba(15,39,68,.08); padding: 8px 16px 16px;
+    }
+    .nav-toggle:checked ~ .nav-collapse { display: flex; }
+    .navlinks { flex-direction: column; gap: 0; align-items: stretch; width: 100%; }
+    .navlinks a { padding: 13px 4px; border-bottom: 1px solid var(--line); font-size: 15px; }
+    .navactions { margin-left: 0; margin-top: 12px; flex-wrap: wrap; gap: 10px; }
+    .navactions .hello { width: 100%; }
+}
+
+@media (max-width: 640px) {
+    html { font-size: 14.5px; }
+    .container-xl { padding: 0 16px; }
     .price-grid, .values, .audience-grid, .form-row { grid-template-columns: 1fr; }
-    .hero h1 { font-size: 32px; }
+    .search-grid, .toolbar { grid-template-columns: 1fr; }
+    .kpis { grid-template-columns: 1fr 1fr; }
+    .hero h1 { font-size: 30px; }
+    .hero-img { min-height: 220px; }
+    section { padding: 40px 0; }
+    .section-head h2 { font-size: 26px; }
+    .hero-cta, .cta-band .inner { flex-direction: column; align-items: stretch; }
+    .hero-cta .btn, .cta-band .btn { width: 100%; }
+    .auth-card { padding: 22px; }
+    .page-title { font-size: 22px; }
+    .pager { justify-content: center; }
 }
+
+@media (max-width: 420px) {
+    .kpis { grid-template-columns: 1fr; }
+    .brand .name b { font-size: 15px; }
+    .brand .logo { width: 34px; height: 34px; }
+}
+
+/* Desplazamiento horizontal suave en tablas anchas (grillas de datos) */
+.tablewrap { -webkit-overflow-scrolling: touch; }
