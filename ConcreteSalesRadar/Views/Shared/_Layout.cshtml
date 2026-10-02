@@ -7,6 +7,14 @@
     var culturaActual = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
     var returnUrl = $"{Context.Request.Path}{Context.Request.QueryString}";
     var idiomas = new[] { ("es", "ES"), ("en", "EN"), ("pt", "PT") };
+
+    var cc = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    var ca = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+    var actUsuarios = cc == "Admin" && (ca == "Usuarios" || ca == "EditarUsuario");
+    var actMembresias = cc == "Admin" && (ca is "Membresias" or "EditarMembresia" or "CrearMembresia");
+    var actPanel = cc == "Admin" && ca == "Index";
+    var actDashboard = cc == "Dashboard";
+    var actInicio = cc == "Home";
 }
 <!DOCTYPE html>
 <html lang="@culturaActual">
@@ -17,29 +25,23 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-grid.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
-<body>
+<body class="@(autenticado ? (esAdmin ? "mode-admin" : "mode-user") : "mode-public")">
+
+@if (!autenticado)
+{
+    <!-- ============ PÚBLICO (marketing) ============ -->
     <nav class="topnav">
         <a class="brand" asp-controller="Home" asp-action="Index">
             <span class="logo">◎</span>
             <span class="name"><b>CONCRETE</b><span>SALES RADAR</span></span>
         </a>
         <input type="checkbox" id="nav-toggle" class="nav-toggle" />
-        <label for="nav-toggle" class="hamburger" aria-label="@L["Lang_Language"]">
-            <span></span><span></span><span></span>
-        </label>
+        <label for="nav-toggle" class="hamburger" aria-label="Menu"><span></span><span></span><span></span></label>
         <div class="nav-collapse">
             <div class="navlinks">
                 <a asp-controller="Home" asp-action="Index">@L["Nav_Home"]</a>
                 <a href="/#features">@L["Nav_Features"]</a>
                 <a href="/#pricing">@L["Nav_Pricing"]</a>
-                @if (autenticado)
-                {
-                    <a asp-controller="Dashboard" asp-action="Index">@L["Nav_Dashboard"]</a>
-                }
-                @if (esAdmin)
-                {
-                    <a asp-controller="Admin" asp-action="Index">@L["Nav_Admin"]</a>
-                }
             </div>
             <div class="navactions">
                 <div class="lang-switch" title="@L["Lang_Language"]">
@@ -52,19 +54,8 @@
                         </form>
                     }
                 </div>
-                @if (autenticado)
-                {
-                    <span class="muted hello" style="font-size:13px">@L["Nav_Hello"], @nombre</span>
-                    <form asp-controller="Cuenta" asp-action="Logout" method="post" style="margin:0">
-                        @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-ghost btn-sm">@L["Nav_Logout"]</button>
-                    </form>
-                }
-                else
-                {
-                    <a class="btn btn-outline btn-sm" asp-controller="Cuenta" asp-action="Login">@L["Nav_Login"]</a>
-                    <a class="btn btn-primary btn-sm" asp-controller="Cuenta" asp-action="Registro">@L["Nav_FreeTrial"]</a>
-                }
+                <a class="btn btn-outline btn-sm" asp-controller="Cuenta" asp-action="Login">@L["Nav_Login"]</a>
+                <a class="btn btn-primary btn-sm" asp-controller="Cuenta" asp-action="Registro">@L["Nav_FreeTrial"]</a>
             </div>
         </div>
     </nav>
@@ -77,6 +68,90 @@
             <div><a asp-controller="Home" asp-action="Privacy">@L["Footer_Privacy"]</a></div>
         </div>
     </footer>
+}
+else if (esAdmin)
+{
+    <!-- ============ ADMIN (sidebar izquierdo) ============ -->
+    <div class="layout-admin">
+        <input type="checkbox" id="sb-toggle" class="sb-toggle" />
+        <aside class="sidebar">
+            <a class="brand sidebar-brand" asp-controller="Dashboard" asp-action="Index">
+                <span class="logo">◎</span>
+                <span class="name"><b>CONCRETE</b><span>SALES RADAR</span></span>
+            </a>
+            <nav class="sidebar-nav">
+                <a class="@(actDashboard ? "active" : "")" asp-controller="Dashboard" asp-action="Index">📊 @L["Nav_Dashboard"]</a>
+                <div class="sidebar-section">@L["Nav_Admin"]</div>
+                <a class="@(actPanel ? "active" : "")" asp-controller="Admin" asp-action="Index">🧭 @L["Adm_Title"]</a>
+                <a class="@(actUsuarios ? "active" : "")" asp-controller="Admin" asp-action="Usuarios">👥 @L["Adm_UsersCard"]</a>
+                <a class="@(actMembresias ? "active" : "")" asp-controller="Admin" asp-action="Membresias">💳 @L["Adm_PlansCard"]</a>
+                <div class="sidebar-section">&nbsp;</div>
+                <a class="@(actInicio ? "active" : "")" asp-controller="Home" asp-action="Index">🌐 @L["Nav_Home"]</a>
+            </nav>
+            <div class="sidebar-foot">
+                <div class="lang-switch" title="@L["Lang_Language"]">
+                    @foreach (var (code, label) in idiomas)
+                    {
+                        <form asp-controller="Home" asp-action="CambiarIdioma" method="post">
+                            <input type="hidden" name="cultura" value="@code" />
+                            <input type="hidden" name="returnUrl" value="@returnUrl" />
+                            <button type="submit" class="lang-btn @(culturaActual == code ? "active" : "")">@label</button>
+                        </form>
+                    }
+                </div>
+                <div class="sidebar-user">@L["Nav_Hello"], <b>@nombre</b></div>
+                <form asp-controller="Cuenta" asp-action="Logout" method="post" style="margin:0">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-ghost btn-sm btn-block">@L["Nav_Logout"]</button>
+                </form>
+            </div>
+        </aside>
+        <label for="sb-toggle" class="sb-backdrop"></label>
+        <div class="admin-content">
+            <header class="admin-topbar">
+                <label for="sb-toggle" class="sb-hamburger" aria-label="Menu"><span></span><span></span><span></span></label>
+                <a class="brand brand-sm" asp-controller="Dashboard" asp-action="Index">
+                    <span class="logo">◎</span>
+                    <span class="name"><b>CONCRETE</b><span>SALES RADAR</span></span>
+                </a>
+                <div class="spacer"></div>
+                <span class="muted hello">@L["Nav_Hello"], @nombre</span>
+            </header>
+            <div class="admin-main">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <!-- ============ USUARIO (sin menú superior) ============ -->
+    <nav class="topnav">
+        <a class="brand" asp-controller="Dashboard" asp-action="Index">
+            <span class="logo">◎</span>
+            <span class="name"><b>CONCRETE</b><span>SALES RADAR</span></span>
+        </a>
+        <div class="navactions" style="margin-left:auto">
+            <div class="lang-switch" title="@L["Lang_Language"]">
+                @foreach (var (code, label) in idiomas)
+                {
+                    <form asp-controller="Home" asp-action="CambiarIdioma" method="post">
+                        <input type="hidden" name="cultura" value="@code" />
+                        <input type="hidden" name="returnUrl" value="@returnUrl" />
+                        <button type="submit" class="lang-btn @(culturaActual == code ? "active" : "")">@label</button>
+                    </form>
+                }
+            </div>
+            <span class="muted hello" style="font-size:13px">@L["Nav_Hello"], @nombre</span>
+            <form asp-controller="Cuenta" asp-action="Logout" method="post" style="margin:0">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-ghost btn-sm">@L["Nav_Logout"]</button>
+            </form>
+        </div>
+    </nav>
+
+    @RenderBody()
+}
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
