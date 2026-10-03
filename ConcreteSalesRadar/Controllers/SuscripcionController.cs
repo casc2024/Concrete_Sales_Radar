@@ -17,14 +17,16 @@ public class SuscripcionController : Controller
 {
     private readonly AppDbContext _db;
     private readonly IStripeService _stripe;
+    private readonly IEmailService _email;
     private readonly IStringLocalizer<SharedResource> _loc;
     private readonly ILogger<SuscripcionController> _logger;
 
-    public SuscripcionController(AppDbContext db, IStripeService stripe,
+    public SuscripcionController(AppDbContext db, IStripeService stripe, IEmailService email,
         IStringLocalizer<SharedResource> loc, ILogger<SuscripcionController> logger)
     {
         _db = db;
         _stripe = stripe;
+        _email = email;
         _loc = loc;
         _logger = logger;
     }
@@ -171,6 +173,33 @@ public class SuscripcionController : Controller
         if (pagoExistente is null) _db.Pagos.Add(pago);
 
         await _db.SaveChangesAsync();
+
+        await EnviarConfirmacionPagoAsync(usuario, membresia, pago);
+    }
+
+    private async Task EnviarConfirmacionPagoAsync(Usuario usuario, Membresia membresia, Pago pago)
+    {
+        try
+        {
+            var vigencia = pago.PeriodoFin?.ToString("yyyy-MM-dd") ?? "-";
+            var monto = $"${pago.Monto:0.00} {pago.Moneda.ToUpperInvariant()}";
+            var contenido = $@"
+<p>{_loc["Email_Hello"].Value} <b>{usuario.Nombre}</b>,</p>
+<p>{_loc["Email_Pago_Msg"].Value}</p>
+<table style='width:100%;border-collapse:collapse;margin:16px 0'>
+  <tr><td style='padding:8px 0;color:#64748b'>{_loc["Email_Pago_Plan"].Value}</td><td style='padding:8px 0;text-align:right'><b>{membresia.Nombre}</b></td></tr>
+  <tr><td style='padding:8px 0;color:#64748b'>{_loc["Email_Pago_Monto"].Value}</td><td style='padding:8px 0;text-align:right'><b>{monto}</b></td></tr>
+  <tr><td style='padding:8px 0;color:#64748b'>{_loc["Email_Pago_Vigencia"].Value}</td><td style='padding:8px 0;text-align:right'><b>{vigencia}</b></td></tr>
+</table>
+<p style='color:#1d4ed8;font-weight:bold'>{_loc["Email_Pago_Gracias"].Value}</p>";
+            await _email.EnviarAsync(usuario.Correo, _loc["Email_Pago_Subject"].Value,
+                PlantillasCorreo.Envolver(contenido));
+        }
+        catch (Exception ex)
+        {
+            // No bloquear la activación si falla el envío del correo.
+            _logger.LogError(ex, "Error al enviar el correo de confirmación de pago a {Correo}", usuario.Correo);
+        }
     }
 
     private int UsuarioActualId()

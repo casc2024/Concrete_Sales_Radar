@@ -873,4 +873,31 @@
   <data name="Sub_TestMode" xml:space="preserve">
     <value>Modo de teste do Stripe: use o cartão 4242 4242 4242 4242, qualquer data futura e CVC.</value>
   </data>
+  <data name="Email_Welcome_Subject" xml:space="preserve">
+    <value>Bem-vindo ao Concrete Sales Radar</value>
+  </data>
+  <data name="Email_Welcome_Msg" xml:space="preserve">
+    <value>Obrigado por se cadastrar no Concrete Sales Radar. Sua conta foi criada com sucesso.</value>
+  </data>
+  <data name="Email_Welcome_Cta" xml:space="preserve">
+    <value>Verifique seu e-mail e entre para começar a prospectar obras e vender mais concreto.</value>
+  </data>
+  <data name="Email_Pago_Subject" xml:space="preserve">
+    <value>Confirmação de pagamento — Concrete Sales Radar</value>
+  </data>
+  <data name="Email_Pago_Msg" xml:space="preserve">
+    <value>Recebemos seu pagamento com sucesso. Sua assinatura já está ativa.</value>
+  </data>
+  <data name="Email_Pago_Plan" xml:space="preserve">
+    <value>Plano</value>
+  </data>
+  <data name="Email_Pago_Monto" xml:space="preserve">
+    <value>Valor</value>
+  </data>
+  <data name="Email_Pago_Vigencia" xml:space="preserve">
+    <value>Válida até</value>
+  </data>
+  <data name="Email_Pago_Gracias" xml:space="preserve">
+    <value>Obrigado pela sua compra!</value>
+  </data>
 </root>

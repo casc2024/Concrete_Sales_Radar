@@ -77,6 +77,7 @@ public class CuentaController : Controller
 
         var codigo = await GenerarCodigoAsync(usuario, TipoCodigo.ConfirmacionCorreo);
         await EnviarCodigoAsync(usuario, codigo, _loc["Email_SubjectConfirm"]);
+        await EnviarBienvenidaAsync(usuario);
 
         TempData["Info"] = _loc["Msg_CodeSent"].Value;
         if (!_email.EstaConfigurado)
@@ -236,20 +237,22 @@ public class CuentaController : Controller
 
     private Task EnviarCodigoAsync(Usuario usuario, string codigo, string asunto)
     {
-        var html = $@"
-<div style='font-family:Arial,Helvetica,sans-serif;max-width:520px;margin:auto;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden'>
-  <div style='background:linear-gradient(135deg,#153d2f,#2d7257);color:#fff;padding:22px 26px'>
-    <h2 style='margin:0'>Concrete Sales Radar</h2>
-  </div>
-  <div style='padding:26px'>
-    <p>{_loc["Email_Hello"].Value} <b>{usuario.Nombre}</b>,</p>
-    <p>{_loc["Email_Intro"].Value}</p>
-    <div style='font-size:34px;font-weight:bold;letter-spacing:8px;color:#153d2f;text-align:center;
-                background:#e9f1ed;border-radius:10px;padding:18px;margin:18px 0'>{codigo}</div>
-    <p style='color:#64748b;font-size:14px'>{_loc["Email_Expire"].Value}</p>
-  </div>
-</div>";
-        return _email.EnviarAsync(usuario.Correo, asunto, html);
+        var contenido = $@"
+<p>{_loc["Email_Hello"].Value} <b>{usuario.Nombre}</b>,</p>
+<p>{_loc["Email_Intro"].Value}</p>
+{PlantillasCorreo.Codigo(codigo)}
+<p style='color:#64748b;font-size:14px'>{_loc["Email_Expire"].Value}</p>";
+        return _email.EnviarAsync(usuario.Correo, asunto, PlantillasCorreo.Envolver(contenido));
+    }
+
+    private Task EnviarBienvenidaAsync(Usuario usuario)
+    {
+        var contenido = $@"
+<p>{_loc["Email_Hello"].Value} <b>{usuario.Nombre}</b>,</p>
+<p>{_loc["Email_Welcome_Msg"].Value}</p>
+<p style='color:#64748b;font-size:14px'>{_loc["Email_Welcome_Cta"].Value}</p>";
+        return _email.EnviarAsync(usuario.Correo, _loc["Email_Welcome_Subject"].Value,
+            PlantillasCorreo.Envolver(contenido));
     }
 
     private async Task IniciarSesionAsync(Usuario usuario, bool recordarme)

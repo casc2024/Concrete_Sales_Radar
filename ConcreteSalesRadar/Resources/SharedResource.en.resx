@@ -873,4 +873,31 @@
   <data name="Sub_TestMode" xml:space="preserve">
     <value>Stripe test mode: use card 4242 4242 4242 4242, any future date and CVC.</value>
   </data>
+  <data name="Email_Welcome_Subject" xml:space="preserve">
+    <value>Welcome to Concrete Sales Radar</value>
+  </data>
+  <data name="Email_Welcome_Msg" xml:space="preserve">
+    <value>Thanks for signing up for Concrete Sales Radar. Your account was created successfully.</value>
+  </data>
+  <data name="Email_Welcome_Cta" xml:space="preserve">
+    <value>Verify your email and sign in to start prospecting projects and selling more concrete.</value>
+  </data>
+  <data name="Email_Pago_Subject" xml:space="preserve">
+    <value>Payment confirmation — Concrete Sales Radar</value>
+  </data>
+  <data name="Email_Pago_Msg" xml:space="preserve">
+    <value>We received your payment successfully. Your membership is now active.</value>
+  </data>
+  <data name="Email_Pago_Plan" xml:space="preserve">
+    <value>Plan</value>
+  </data>
+  <data name="Email_Pago_Monto" xml:space="preserve">
+    <value>Amount</value>
+  </data>
+  <data name="Email_Pago_Vigencia" xml:space="preserve">
+    <value>Valid until</value>
+  </data>
+  <data name="Email_Pago_Gracias" xml:space="preserve">
+    <value>Thank you for your purchase!</value>
+  </data>
 </root>
