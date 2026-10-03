@@ -11,6 +11,7 @@
         <div class="app-tabs">
             <a class="active" asp-action="Usuarios">@L["Adm_TabUsers"]</a>
             <a asp-action="Membresias">@L["Adm_TabPlans"]</a>
+            <a asp-action="Pagos">@L["Adm_PaymentsTab"]</a>
         </div>
 
         @if (TempData["Exito"] != null)
@@ -57,7 +58,7 @@
                     <thead>
                         <tr>
                             <th>@L["Adm_Col_Name"]</th><th>@L["F_Apellido"]</th><th>@L["Adm_Col_Company"]</th><th>@L["Adm_Col_Email"]</th>
-                            <th>@L["Adm_Col_Role"]</th><th>@L["Adm_Col_Plan"]</th><th>@L["AdmU_Col_Purchase"]</th><th>@L["AdmU_Col_Validity"]</th>
+                            <th>@L["Adm_Col_Role"]</th><th>@L["Adm_Col_Plan"]</th><th>@L["Adm_Col_Paid"]</th><th>@L["AdmU_Col_Purchase"]</th><th>@L["AdmU_Col_Validity"]</th>
                             <th>@L["Adm_Col_Verified"]</th><th>@L["Adm_Col_Status"]</th><th>@L["Adm_Col_Registered"]</th><th>@L["Col_Actions"]</th>
                         </tr>
                     </thead>
@@ -71,6 +72,7 @@
                                 <td>@u.Correo</td>
                                 <td>@(u.Rol?.Nombre ?? "-")</td>
                                 <td>@(u.Membresia?.Nombre ?? "-")</td>
+                                <td>@if (u.MembresiaPagada) { <span class="pill on">@L["Adm_Yes"]</span> } else { <span class="pill off">@L["Adm_No"]</span> }</td>
                                 <td>@(u.MembresiaInicio?.ToString("yyyy-MM-dd") ?? "-")</td>
                                 <td>
                                     @if (u.MembresiaFin is null)

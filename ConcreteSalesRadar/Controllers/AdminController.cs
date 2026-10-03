@@ -82,6 +82,7 @@ public class AdminController : Controller
         usuario.MembresiaId = modelo.MembresiaId;
         usuario.Activo = modelo.Activo;
         usuario.CorreoConfirmado = modelo.CorreoConfirmado;
+        usuario.MembresiaPagada = modelo.MembresiaPagada;
 
         // Fechas de membresía: las columnas son timestamptz, así que se guardan en UTC.
         usuario.MembresiaInicio = ComoUtc(modelo.MembresiaInicio);
@@ -157,6 +158,20 @@ public class AdminController : Controller
         await _db.SaveChangesAsync();
         TempData["Exito"] = _loc["Msg_PlanSaved"].Value;
         return RedirectToAction(nameof(Membresias));
+    }
+
+    // ================= PAGOS =================
+
+    [HttpGet]
+    public async Task<IActionResult> Pagos()
+    {
+        var pagos = await _db.Pagos
+            .Include(p => p.Usuario)
+            .Include(p => p.Membresia)
+            .OrderByDescending(p => p.Fecha)
+            .Take(200)
+            .ToListAsync();
+        return View(pagos);
     }
 
     [HttpPost]

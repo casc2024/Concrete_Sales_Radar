@@ -12,6 +12,7 @@
     var ca = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
     var actUsuarios = cc == "Admin" && (ca == "Usuarios" || ca == "EditarUsuario");
     var actMembresias = cc == "Admin" && (ca is "Membresias" or "EditarMembresia" or "CrearMembresia");
+    var actPagos = cc == "Admin" && ca == "Pagos";
     var actPanel = cc == "Admin" && ca == "Index";
     var actDashboard = cc == "Dashboard";
     var actSuscripcion = cc == "Suscripcion";
@@ -87,6 +88,7 @@ else if (esAdmin)
                 <a class="@(actPanel ? "active" : "")" asp-controller="Admin" asp-action="Index">🧭 @L["Adm_Title"]</a>
                 <a class="@(actUsuarios ? "active" : "")" asp-controller="Admin" asp-action="Usuarios">👥 @L["Adm_UsersCard"]</a>
                 <a class="@(actMembresias ? "active" : "")" asp-controller="Admin" asp-action="Membresias">💳 @L["Adm_PlansCard"]</a>
+                <a class="@(actPagos ? "active" : "")" asp-controller="Admin" asp-action="Pagos">🧾 @L["Nav_Payments"]</a>
                 <div class="sidebar-section">&nbsp;</div>
                 <a class="@(actInicio ? "active" : "")" asp-controller="Home" asp-action="Index">🌐 @L["Nav_Home"]</a>
             </nav>

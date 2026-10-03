@@ -915,4 +915,64 @@
   <data name="Sub_Confirm_Cancel" xml:space="preserve">
     <value>¿Cancelar tu suscripción al final del período?</value>
   </data>
+  <data name="Sub_Reactivate_Btn" xml:space="preserve">
+    <value>Reactivar suscripción</value>
+  </data>
+  <data name="Sub_Reactivated" xml:space="preserve">
+    <value>Tu suscripción se reactivó; seguirá renovándose cada mes.</value>
+  </data>
+  <data name="Nav_Payments" xml:space="preserve">
+    <value>Pagos</value>
+  </data>
+  <data name="Adm_PaymentsTitle" xml:space="preserve">
+    <value>Pagos</value>
+  </data>
+  <data name="Adm_PaymentsSub" xml:space="preserve">
+    <value>Historial de pagos de membresías vía Stripe.</value>
+  </data>
+  <data name="Adm_PaymentsTab" xml:space="preserve">
+    <value>Pagos</value>
+  </data>
+  <data name="Pay_Date" xml:space="preserve">
+    <value>Fecha</value>
+  </data>
+  <data name="Pay_User" xml:space="preserve">
+    <value>Usuario</value>
+  </data>
+  <data name="Pay_Plan" xml:space="preserve">
+    <value>Plan</value>
+  </data>
+  <data name="Pay_Amount" xml:space="preserve">
+    <value>Monto</value>
+  </data>
+  <data name="Pay_Status" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="Pay_Ref" xml:space="preserve">
+    <value>Referencia Stripe</value>
+  </data>
+  <data name="Pay_Paid" xml:space="preserve">
+    <value>Pagado</value>
+  </data>
+  <data name="Pay_Pending" xml:space="preserve">
+    <value>Pendiente</value>
+  </data>
+  <data name="Pay_Canceled" xml:space="preserve">
+    <value>Cancelado</value>
+  </data>
+  <data name="Adm_NoPayments" xml:space="preserve">
+    <value>No hay pagos registrados.</value>
+  </data>
+  <data name="Adm_Col_Paid" xml:space="preserve">
+    <value>Pagada</value>
+  </data>
+  <data name="Adm_StripeCustomer" xml:space="preserve">
+    <value>ID de cliente Stripe</value>
+  </data>
+  <data name="Adm_StripeSub" xml:space="preserve">
+    <value>ID de suscripción Stripe</value>
+  </data>
+  <data name="Adm_PaidFlag" xml:space="preserve">
+    <value>Membresía pagada</value>
+  </data>
 </root>

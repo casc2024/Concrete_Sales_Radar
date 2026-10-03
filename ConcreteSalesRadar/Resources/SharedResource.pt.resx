@@ -915,4 +915,64 @@
   <data name="Sub_Confirm_Cancel" xml:space="preserve">
     <value>Cancelar sua assinatura ao final do período?</value>
   </data>
+  <data name="Sub_Reactivate_Btn" xml:space="preserve">
+    <value>Reativar assinatura</value>
+  </data>
+  <data name="Sub_Reactivated" xml:space="preserve">
+    <value>Sua assinatura foi reativada; continuará renovando mensalmente.</value>
+  </data>
+  <data name="Nav_Payments" xml:space="preserve">
+    <value>Pagamentos</value>
+  </data>
+  <data name="Adm_PaymentsTitle" xml:space="preserve">
+    <value>Pagamentos</value>
+  </data>
+  <data name="Adm_PaymentsSub" xml:space="preserve">
+    <value>Histórico de pagamentos de assinaturas via Stripe.</value>
+  </data>
+  <data name="Adm_PaymentsTab" xml:space="preserve">
+    <value>Pagamentos</value>
+  </data>
+  <data name="Pay_Date" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="Pay_User" xml:space="preserve">
+    <value>Usuário</value>
+  </data>
+  <data name="Pay_Plan" xml:space="preserve">
+    <value>Plano</value>
+  </data>
+  <data name="Pay_Amount" xml:space="preserve">
+    <value>Valor</value>
+  </data>
+  <data name="Pay_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Pay_Ref" xml:space="preserve">
+    <value>Referência Stripe</value>
+  </data>
+  <data name="Pay_Paid" xml:space="preserve">
+    <value>Pago</value>
+  </data>
+  <data name="Pay_Pending" xml:space="preserve">
+    <value>Pendente</value>
+  </data>
+  <data name="Pay_Canceled" xml:space="preserve">
+    <value>Cancelado</value>
+  </data>
+  <data name="Adm_NoPayments" xml:space="preserve">
+    <value>Nenhum pagamento registrado.</value>
+  </data>
+  <data name="Adm_Col_Paid" xml:space="preserve">
+    <value>Paga</value>
+  </data>
+  <data name="Adm_StripeCustomer" xml:space="preserve">
+    <value>ID do cliente Stripe</value>
+  </data>
+  <data name="Adm_StripeSub" xml:space="preserve">
+    <value>ID da assinatura Stripe</value>
+  </data>
+  <data name="Adm_PaidFlag" xml:space="preserve">
+    <value>Assinatura paga</value>
+  </data>
 </root>

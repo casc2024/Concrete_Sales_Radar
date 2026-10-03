@@ -28,6 +28,9 @@ public interface IStripeService
 
     /// <summary>Programa la cancelación de la suscripción al final del período actual.</summary>
     Task CancelarSuscripcionAsync(string subscriptionId);
+
+    /// <summary>Revierte una cancelación programada: la suscripción sigue renovándose.</summary>
+    Task ReactivarSuscripcionAsync(string subscriptionId);
 }
 
 public class StripeService : IStripeService
@@ -99,5 +102,11 @@ public class StripeService : IStripeService
         var service = new SubscriptionService();
         // Cancela al final del período: el usuario mantiene acceso hasta que termine.
         await service.UpdateAsync(subscriptionId, new SubscriptionUpdateOptions { CancelAtPeriodEnd = true });
+    }
+
+    public async Task ReactivarSuscripcionAsync(string subscriptionId)
+    {
+        var service = new SubscriptionService();
+        await service.UpdateAsync(subscriptionId, new SubscriptionUpdateOptions { CancelAtPeriodEnd = false });
     }
 }

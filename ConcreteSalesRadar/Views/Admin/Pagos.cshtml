@@ -1,0 +1,64 @@
+@model List<Pago>
+@{
+    ViewData["Title"] = L["Adm_PaymentsTitle"].Value;
+    string EstadoTexto(EstadoPago e) => e switch
+    {
+        EstadoPago.Pagado => L["Pay_Paid"].Value,
+        EstadoPago.Cancelado => L["Pay_Canceled"].Value,
+        _ => L["Pay_Pending"].Value
+    };
+}
+<div class="app-main">
+    <div class="container-xl">
+        <h1 class="page-title">@L["Adm_PaymentsTitle"]</h1>
+        <p class="page-sub">@L["Adm_PaymentsSub"]</p>
+
+        <div class="app-tabs">
+            <a asp-action="Usuarios">@L["Adm_TabUsers"]</a>
+            <a asp-action="Membresias">@L["Adm_TabPlans"]</a>
+            <a class="active" asp-action="Pagos">@L["Adm_PaymentsTab"]</a>
+        </div>
+
+        <div class="card">
+            <div class="tablewrap">
+                <table class="data" style="min-width:1000px">
+                    <thead>
+                        <tr>
+                            <th>@L["Pay_Date"]</th><th>@L["Pay_User"]</th><th>@L["Pay_Plan"]</th>
+                            <th>@L["Pay_Amount"]</th><th>@L["Pay_Status"]</th><th>@L["Pay_Ref"]</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var p in Model)
+                        {
+                            <tr>
+                                <td>@p.Fecha.ToString("yyyy-MM-dd HH:mm")</td>
+                                <td>
+                                    <b>@(p.Usuario?.NombreCompleto ?? "-")</b><br />
+                                    <span class="muted">@(p.Usuario?.Correo)</span>
+                                </td>
+                                <td>@(p.Membresia?.Nombre ?? "-")</td>
+                                <td><b>$@p.Monto.ToString("0.00")</b> @p.Moneda.ToUpperInvariant()</td>
+                                <td>
+                                    @if (p.Estado == EstadoPago.Pagado)
+                                    {
+                                        <span class="pill on">@EstadoTexto(p.Estado)</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="pill off">@EstadoTexto(p.Estado)</span>
+                                    }
+                                </td>
+                                <td><code style="font-size:11px">@p.StripeSessionId</code></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                @if (!Model.Any())
+                {
+                    <div class="empty">@L["Adm_NoPayments"]</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

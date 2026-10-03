@@ -53,6 +53,10 @@
                     @if (u.CancelacionProgramada)
                     {
                         <div class="alert alert-info" style="margin:8px 0">@L["Sub_WillCancel"]</div>
+                        <form asp-action="Reactivar" method="post" style="margin-top:8px">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-primary btn-sm">↩️ @L["Sub_Reactivate_Btn"]</button>
+                        </form>
                     }
                     else
                     {

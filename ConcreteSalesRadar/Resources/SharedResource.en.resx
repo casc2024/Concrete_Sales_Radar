@@ -915,4 +915,64 @@
   <data name="Sub_Confirm_Cancel" xml:space="preserve">
     <value>Cancel your subscription at the end of the period?</value>
   </data>
+  <data name="Sub_Reactivate_Btn" xml:space="preserve">
+    <value>Reactivate subscription</value>
+  </data>
+  <data name="Sub_Reactivated" xml:space="preserve">
+    <value>Your subscription was reactivated; it will keep renewing monthly.</value>
+  </data>
+  <data name="Nav_Payments" xml:space="preserve">
+    <value>Payments</value>
+  </data>
+  <data name="Adm_PaymentsTitle" xml:space="preserve">
+    <value>Payments</value>
+  </data>
+  <data name="Adm_PaymentsSub" xml:space="preserve">
+    <value>Membership payment history via Stripe.</value>
+  </data>
+  <data name="Adm_PaymentsTab" xml:space="preserve">
+    <value>Payments</value>
+  </data>
+  <data name="Pay_Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Pay_User" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="Pay_Plan" xml:space="preserve">
+    <value>Plan</value>
+  </data>
+  <data name="Pay_Amount" xml:space="preserve">
+    <value>Amount</value>
+  </data>
+  <data name="Pay_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Pay_Ref" xml:space="preserve">
+    <value>Stripe reference</value>
+  </data>
+  <data name="Pay_Paid" xml:space="preserve">
+    <value>Paid</value>
+  </data>
+  <data name="Pay_Pending" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="Pay_Canceled" xml:space="preserve">
+    <value>Canceled</value>
+  </data>
+  <data name="Adm_NoPayments" xml:space="preserve">
+    <value>No payments recorded.</value>
+  </data>
+  <data name="Adm_Col_Paid" xml:space="preserve">
+    <value>Paid</value>
+  </data>
+  <data name="Adm_StripeCustomer" xml:space="preserve">
+    <value>Stripe customer ID</value>
+  </data>
+  <data name="Adm_StripeSub" xml:space="preserve">
+    <value>Stripe subscription ID</value>
+  </data>
+  <data name="Adm_PaidFlag" xml:space="preserve">
+    <value>Membership paid</value>
+  </data>
 </root>

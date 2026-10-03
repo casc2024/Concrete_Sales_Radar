@@ -128,6 +128,29 @@ public class SuscripcionController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Reactivar()
+    {
+        var usuario = await _db.Usuarios.FindAsync(UsuarioActualId());
+        if (usuario?.StripeSubscriptionId is { } subId && usuario.CancelacionProgramada && _stripe.EstaConfigurado)
+        {
+            try
+            {
+                await _stripe.ReactivarSuscripcionAsync(subId);
+                usuario.CancelacionProgramada = false;
+                await _db.SaveChangesAsync();
+                TempData["Exito"] = _loc["Sub_Reactivated"].Value;
+            }
+            catch (StripeException ex)
+            {
+                _logger.LogError(ex, "Error al reactivar la suscripción {Id}", subId);
+                TempData["Error"] = ex.Message;
+            }
+        }
+        return RedirectToAction(nameof(Index));
+    }
+
     // ---------------- Webhook de Stripe ----------------
 
     [AllowAnonymous]
