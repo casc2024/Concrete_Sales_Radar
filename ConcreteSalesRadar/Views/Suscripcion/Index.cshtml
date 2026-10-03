@@ -1,0 +1,110 @@
+@model SuscripcionViewModel
+@{
+    ViewData["Title"] = L["Sub_Title"].Value;
+    var u = Model.Usuario;
+}
+
+<div class="app-main">
+    <div class="container-xl">
+        <h1 class="page-title">@L["Sub_Title"]</h1>
+        <p class="page-sub">@L["Sub_Sub"]</p>
+
+        @if (TempData["Exito"] != null)
+        {
+            <div class="alert alert-success">@TempData["Exito"]</div>
+        }
+        @if (TempData["Info"] != null)
+        {
+            <div class="alert alert-info">@TempData["Info"]</div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-error">@TempData["Error"]</div>
+        }
+        @if (!Model.StripeConfigurado)
+        {
+            <div class="code-dev">@L["Sub_NotConfigured"]</div>
+        }
+
+        <!-- Plan actual -->
+        <div class="card">
+            <h3 class="card-title">@L["Sub_CurrentPlan"]</h3>
+            @if (u.MembresiaId != null)
+            {
+                <p style="margin:4px 0;font-size:18px"><b>@(u.Membresia?.Nombre)</b></p>
+                <p style="margin:6px 0">
+                    @if (u.MembresiaPagada)
+                    {
+                        <span class="pill on">@L["Sub_Paid"]</span>
+                        @if (u.MembresiaFin != null)
+                        {
+                            <span class="muted" style="margin-left:8px">@string.Format(L["Sub_ValidUntil"].Value, u.MembresiaFin.Value.ToString("yyyy-MM-dd"))</span>
+                        }
+                    }
+                    else
+                    {
+                        <span class="pill off">@L["Sub_Pending"]</span>
+                    }
+                </p>
+            }
+            else
+            {
+                <p class="muted">@L["Sub_NoPlan"]</p>
+            }
+        </div>
+
+        <!-- Elegir / pagar plan -->
+        <h3 class="card-title" style="margin:6px 0 14px">@L["Sub_ChoosePlan"]</h3>
+        <div class="price-grid">
+            @foreach (var plan in Model.Planes)
+            {
+                var esActual = u.MembresiaId == plan.Id && u.MembresiaPagada;
+                <div class="price-card @(plan.EsPopular ? "popular" : "")">
+                    @if (plan.EsPopular)
+                    {
+                        <div class="price-tag">@L["Pricing_Popular"]</div>
+                    }
+                    <h3>@plan.Nombre</h3>
+                    @if (plan.PrecioMensual > 0)
+                    {
+                        <div class="price-amount">$@plan.PrecioMensual.ToString("0") <small>@L["Pricing_PerMonth"]</small></div>
+                    }
+                    else
+                    {
+                        <div class="price-contact">@L["Pricing_Contact"]</div>
+                    }
+                    <ul class="feature-list">
+                        @foreach (var c in (plan.Caracteristicas ?? "").Split('\n', StringSplitOptions.RemoveEmptyEntries))
+                        {
+                            <li>@c.Trim()</li>
+                        }
+                    </ul>
+
+                    @if (esActual)
+                    {
+                        <span class="btn btn-ghost btn-block" style="cursor:default">✓ @L["Sub_CurrentLabel"]</span>
+                    }
+                    else if (plan.PrecioMensual > 0)
+                    {
+                        <form asp-action="Checkout" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="membresiaId" value="@plan.Id" />
+                            <button type="submit" class="btn btn-primary btn-block" @(Model.StripeConfigurado ? "" : "disabled")>
+                                💳 @L["Sub_Pay"]
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <span class="btn btn-outline btn-block" style="cursor:default">@L["Pricing_Contact"]</span>
+                    }
+                </div>
+            }
+        </div>
+
+        @if (Model.StripeConfigurado)
+        {
+            <p class="muted" style="margin-top:14px;font-size:12.5px">@L["Sub_TestMode"]</p>
+        }
+    </div>
+</div>

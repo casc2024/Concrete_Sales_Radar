@@ -816,4 +816,61 @@
   <data name="Adm_MembEnd" xml:space="preserve">
     <value>Vigência (data fim)</value>
   </data>
+  <data name="Nav_Membership" xml:space="preserve">
+    <value>Minha assinatura</value>
+  </data>
+  <data name="Sub_Title" xml:space="preserve">
+    <value>Minha assinatura</value>
+  </data>
+  <data name="Sub_Sub" xml:space="preserve">
+    <value>Gerencie e pague seu plano com segurança via Stripe.</value>
+  </data>
+  <data name="Sub_CurrentPlan" xml:space="preserve">
+    <value>Seu plano atual</value>
+  </data>
+  <data name="Sub_Paid" xml:space="preserve">
+    <value>Paga</value>
+  </data>
+  <data name="Sub_Pending" xml:space="preserve">
+    <value>Pagamento pendente</value>
+  </data>
+  <data name="Sub_ValidUntil" xml:space="preserve">
+    <value>Válida até {0}</value>
+  </data>
+  <data name="Sub_NoPlan" xml:space="preserve">
+    <value>Você não tem um plano selecionado.</value>
+  </data>
+  <data name="Sub_ChoosePlan" xml:space="preserve">
+    <value>Escolha ou altere seu plano</value>
+  </data>
+  <data name="Sub_Pay" xml:space="preserve">
+    <value>Pagar com Stripe</value>
+  </data>
+  <data name="Sub_CurrentLabel" xml:space="preserve">
+    <value>Plano atual</value>
+  </data>
+  <data name="Sub_ContactPlan" xml:space="preserve">
+    <value>Este plano é mediante contato com vendas.</value>
+  </data>
+  <data name="Sub_NotConfigured" xml:space="preserve">
+    <value>Os pagamentos via Stripe não estão configurados.</value>
+  </data>
+  <data name="Sub_Success_Title" xml:space="preserve">
+    <value>Pagamento bem-sucedido!</value>
+  </data>
+  <data name="Sub_Success_Msg" xml:space="preserve">
+    <value>Sua assinatura foi ativada com sucesso.</value>
+  </data>
+  <data name="Sub_Cancel_Title" xml:space="preserve">
+    <value>Pagamento cancelado</value>
+  </data>
+  <data name="Sub_Cancel_Msg" xml:space="preserve">
+    <value>Nenhuma cobrança foi feita. Você pode tentar novamente quando quiser.</value>
+  </data>
+  <data name="Sub_Back" xml:space="preserve">
+    <value>Voltar à minha assinatura</value>
+  </data>
+  <data name="Sub_TestMode" xml:space="preserve">
+    <value>Modo de teste do Stripe: use o cartão 4242 4242 4242 4242, qualquer data futura e CVC.</value>
+  </data>
 </root>

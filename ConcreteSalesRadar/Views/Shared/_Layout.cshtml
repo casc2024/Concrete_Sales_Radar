@@ -14,6 +14,7 @@
     var actMembresias = cc == "Admin" && (ca is "Membresias" or "EditarMembresia" or "CrearMembresia");
     var actPanel = cc == "Admin" && ca == "Index";
     var actDashboard = cc == "Dashboard";
+    var actSuscripcion = cc == "Suscripcion";
     var actInicio = cc == "Home";
 }
 <!DOCTYPE html>
@@ -81,6 +82,7 @@ else if (esAdmin)
             </a>
             <nav class="sidebar-nav">
                 <a class="@(actDashboard ? "active" : "")" asp-controller="Dashboard" asp-action="Index">📊 @L["Nav_Dashboard"]</a>
+                <a class="@(actSuscripcion ? "active" : "")" asp-controller="Suscripcion" asp-action="Index">💳 @L["Nav_Membership"]</a>
                 <div class="sidebar-section">@L["Nav_Admin"]</div>
                 <a class="@(actPanel ? "active" : "")" asp-controller="Admin" asp-action="Index">🧭 @L["Adm_Title"]</a>
                 <a class="@(actUsuarios ? "active" : "")" asp-controller="Admin" asp-action="Usuarios">👥 @L["Adm_UsersCard"]</a>
@@ -142,6 +144,7 @@ else
                     </form>
                 }
             </div>
+            <a class="btn btn-outline btn-sm" asp-controller="Suscripcion" asp-action="Index">@L["Nav_Membership"]</a>
             <span class="muted hello" style="font-size:13px">@L["Nav_Hello"], @nombre</span>
             <form asp-controller="Cuenta" asp-action="Logout" method="post" style="margin:0">
                 @Html.AntiForgeryToken()

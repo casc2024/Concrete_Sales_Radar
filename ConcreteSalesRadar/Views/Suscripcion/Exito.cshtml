@@ -1,0 +1,22 @@
+@{
+    ViewData["Title"] = L["Sub_Success_Title"].Value;
+}
+<div class="auth-wrap">
+    <div class="auth-card" style="text-align:center">
+        <div style="font-size:48px">✅</div>
+        <h1>@L["Sub_Success_Title"]</h1>
+        @if (TempData["Exito"] != null)
+        {
+            <p class="sub">@TempData["Exito"]</p>
+        }
+        else if (TempData["Info"] != null)
+        {
+            <div class="alert alert-info">@TempData["Info"]</div>
+        }
+        else if (TempData["Error"] != null)
+        {
+            <div class="alert alert-error">@TempData["Error"]</div>
+        }
+        <a class="btn btn-primary" asp-action="Index">@L["Sub_Back"]</a>
+    </div>
+</div>

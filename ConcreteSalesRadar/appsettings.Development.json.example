@@ -20,5 +20,11 @@
     "From": "no-reply@tudominio.com",
     "FromName": "Concrete Sales Radar",
     "UseStartTls": true
+  },
+  "Stripe": {
+    "SecretKey": "sk_test_TU_CLAVE_SECRETA",
+    "PublishableKey": "pk_test_TU_CLAVE_PUBLICA",
+    "WebhookSecret": "whsec_TU_SIGNING_SECRET",
+    "Moneda": "usd"
   }
 }

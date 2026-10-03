@@ -54,6 +54,7 @@ builder.Services.AddAuthorization();
 
 // --- Servicios ---
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IStripeService, StripeService>();
 
 var app = builder.Build();
 

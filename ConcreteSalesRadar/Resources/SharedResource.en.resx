@@ -816,4 +816,61 @@
   <data name="Adm_MembEnd" xml:space="preserve">
     <value>Validity (end date)</value>
   </data>
+  <data name="Nav_Membership" xml:space="preserve">
+    <value>My membership</value>
+  </data>
+  <data name="Sub_Title" xml:space="preserve">
+    <value>My membership</value>
+  </data>
+  <data name="Sub_Sub" xml:space="preserve">
+    <value>Manage and pay for your plan securely with Stripe.</value>
+  </data>
+  <data name="Sub_CurrentPlan" xml:space="preserve">
+    <value>Your current plan</value>
+  </data>
+  <data name="Sub_Paid" xml:space="preserve">
+    <value>Paid</value>
+  </data>
+  <data name="Sub_Pending" xml:space="preserve">
+    <value>Payment pending</value>
+  </data>
+  <data name="Sub_ValidUntil" xml:space="preserve">
+    <value>Valid until {0}</value>
+  </data>
+  <data name="Sub_NoPlan" xml:space="preserve">
+    <value>You have no plan selected.</value>
+  </data>
+  <data name="Sub_ChoosePlan" xml:space="preserve">
+    <value>Choose or change your plan</value>
+  </data>
+  <data name="Sub_Pay" xml:space="preserve">
+    <value>Pay with Stripe</value>
+  </data>
+  <data name="Sub_CurrentLabel" xml:space="preserve">
+    <value>Current plan</value>
+  </data>
+  <data name="Sub_ContactPlan" xml:space="preserve">
+    <value>This plan is by contacting sales.</value>
+  </data>
+  <data name="Sub_NotConfigured" xml:space="preserve">
+    <value>Stripe payments are not configured.</value>
+  </data>
+  <data name="Sub_Success_Title" xml:space="preserve">
+    <value>Payment successful!</value>
+  </data>
+  <data name="Sub_Success_Msg" xml:space="preserve">
+    <value>Your membership was activated successfully.</value>
+  </data>
+  <data name="Sub_Cancel_Title" xml:space="preserve">
+    <value>Payment canceled</value>
+  </data>
+  <data name="Sub_Cancel_Msg" xml:space="preserve">
+    <value>No charge was made. You can try again whenever you want.</value>
+  </data>
+  <data name="Sub_Back" xml:space="preserve">
+    <value>Back to my membership</value>
+  </data>
+  <data name="Sub_TestMode" xml:space="preserve">
+    <value>Stripe test mode: use card 4242 4242 4242 4242, any future date and CVC.</value>
+  </data>
 </root>

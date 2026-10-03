@@ -76,6 +76,32 @@ Configura la sección `Email` en `appsettings.json` o por variables de entorno:
 Si **no** se configura SMTP, la app funciona en *modo prueba*: no envía correos pero muestra el
 código de verificación en pantalla, para poder probar el flujo completo.
 
+## Pagos de membresía con Stripe
+
+Las membresías se pagan con **Stripe Checkout**. En `/Suscripcion` ("Mi membresía") el usuario
+ve su plan y paga el plan elegido; al confirmarse el pago se activa la membresía con 1 mes de
+vigencia y se registra en la tabla `pagos`. La activación es idempotente y ocurre tanto en el
+retorno de éxito como vía webhook.
+
+Configura la sección `Stripe` (en `appsettings.Development.json` local o por variables de entorno):
+
+```json
+"Stripe": {
+  "SecretKey": "sk_test_...",
+  "PublishableKey": "pk_test_...",
+  "WebhookSecret": "whsec_...",
+  "Moneda": "usd"
+}
+```
+
+- Las claves se obtienen en el panel de Stripe (modo de prueba). Sin claves, la app funciona
+  pero los botones de pago quedan deshabilitados con un aviso.
+- **Webhook** (opcional pero recomendado en producción): crea un endpoint en Stripe apuntando a
+  `https://TU-DOMINIO/Suscripcion/Webhook` con el evento `checkout.session.completed` y copia el
+  signing secret en `Stripe:WebhookSecret`. En local puedes usar `stripe listen --forward-to
+  localhost:5080/Suscripcion/Webhook`.
+- Tarjeta de prueba: `4242 4242 4242 4242`, cualquier fecha futura y CVC.
+
 ## Despliegue en Railway
 
 El proyecto incluye `Dockerfile` y `railway.json` (builder Dockerfile).

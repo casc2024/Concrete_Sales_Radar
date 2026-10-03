@@ -55,7 +55,15 @@ public class Usuario
     public DateTime? MembresiaInicio { get; set; }
     public DateTime? MembresiaFin { get; set; }
 
+    /// <summary>True cuando la membresía actual fue pagada vía Stripe.</summary>
+    public bool MembresiaPagada { get; set; }
+
+    /// <summary>Id del cliente en Stripe (reutilizado entre pagos).</summary>
+    [StringLength(100)]
+    public string? StripeCustomerId { get; set; }
+
     public ICollection<CodigoVerificacion> Codigos { get; set; } = new List<CodigoVerificacion>();
+    public ICollection<Pago> Pagos { get; set; } = new List<Pago>();
     public ICollection<Proyecto> Proyectos { get; set; } = new List<Proyecto>();
 
     public string NombreCompleto => $"{Nombre} {Apellido}".Trim();

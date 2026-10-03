@@ -12,6 +12,7 @@ public class AppDbContext : DbContext
     public DbSet<Membresia> Membresias => Set<Membresia>();
     public DbSet<CodigoVerificacion> CodigosVerificacion => Set<CodigoVerificacion>();
     public DbSet<Proyecto> Proyectos => Set<Proyecto>();
+    public DbSet<Pago> Pagos => Set<Pago>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -51,6 +52,21 @@ public class AppDbContext : DbContext
                 .HasForeignKey(c => c.UsuarioId)
                 .OnDelete(DeleteBehavior.Cascade);
             e.HasIndex(c => new { c.UsuarioId, c.Tipo });
+        });
+
+        modelBuilder.Entity<Pago>(e =>
+        {
+            e.ToTable("pagos");
+            e.Property(p => p.Monto).HasColumnType("numeric(12,2)");
+            e.HasIndex(p => p.StripeSessionId).IsUnique();
+            e.HasOne(p => p.Usuario)
+                .WithMany(u => u.Pagos)
+                .HasForeignKey(p => p.UsuarioId)
+                .OnDelete(DeleteBehavior.Cascade);
+            e.HasOne(p => p.Membresia)
+                .WithMany()
+                .HasForeignKey(p => p.MembresiaId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<Proyecto>(e =>
