@@ -76,12 +76,17 @@ Configura la sección `Email` en `appsettings.json` o por variables de entorno:
 Si **no** se configura SMTP, la app funciona en *modo prueba*: no envía correos pero muestra el
 código de verificación en pantalla, para poder probar el flujo completo.
 
-## Pagos de membresía con Stripe
+## Pagos de membresía con Stripe (suscripción)
 
-Las membresías se pagan con **Stripe Checkout**. En `/Suscripcion` ("Mi membresía") el usuario
-ve su plan y paga el plan elegido; al confirmarse el pago se activa la membresía con 1 mes de
-vigencia y se registra en la tabla `pagos`. La activación es idempotente y ocurre tanto en el
-retorno de éxito como vía webhook.
+Las membresías se cobran como **suscripción mensual recurrente** con **Stripe Checkout**. En
+`/Suscripcion` ("Mi membresía") el usuario elige un plan y se suscribe; al confirmarse el pago se
+activa la membresía y se registra en la tabla `pagos`. El usuario puede **cancelar** (al final del
+período). La activación es **idempotente** y ocurre tanto en el retorno de éxito como vía **webhook**
+(fuente de verdad en producción), que maneja:
+
+- `checkout.session.completed` → alta de la suscripción.
+- `invoice.paid` → renovación mensual (extiende vigencia y registra el cobro).
+- `customer.subscription.deleted` → fin de la suscripción (la membresía deja de estar pagada).
 
 Configura la sección `Stripe` (en `appsettings.Development.json` local o por variables de entorno):
 

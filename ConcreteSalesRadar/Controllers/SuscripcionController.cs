@@ -83,7 +83,7 @@ public class SuscripcionController : Controller
         try
         {
             var session = await _stripe.ObtenerSesionAsync(session_id);
-            if (session.PaymentStatus == "paid")
+            if (session.Status == "complete" || session.PaymentStatus == "paid")
             {
                 await ActivarDesdeSesionAsync(session);
                 TempData["Exito"] = _loc["Sub_Success_Msg"].Value;
@@ -105,6 +105,29 @@ public class SuscripcionController : Controller
     [HttpGet]
     public IActionResult Cancelado() => View();
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Cancelar()
+    {
+        var usuario = await _db.Usuarios.FindAsync(UsuarioActualId());
+        if (usuario?.StripeSubscriptionId is { } subId && _stripe.EstaConfigurado)
+        {
+            try
+            {
+                await _stripe.CancelarSuscripcionAsync(subId);
+                usuario.CancelacionProgramada = true;
+                await _db.SaveChangesAsync();
+                TempData["Info"] = _loc["Sub_CancelScheduled"].Value;
+            }
+            catch (StripeException ex)
+            {
+                _logger.LogError(ex, "Error al cancelar la suscripción {Id}", subId);
+                TempData["Error"] = ex.Message;
+            }
+        }
+        return RedirectToAction(nameof(Index));
+    }
+
     // ---------------- Webhook de Stripe ----------------
 
     [AllowAnonymous]
@@ -118,13 +141,28 @@ public class SuscripcionController : Controller
 
         try
         {
+            // throwOnApiVersionMismatch: false evita fallar si la versión de API de la
+            // cuenta difiere de la que trae Stripe.net; los campos que usamos son estables.
             var stripeEvent = EventUtility.ConstructEvent(
-                json, Request.Headers["Stripe-Signature"], _stripe.WebhookSecret);
+                json, Request.Headers["Stripe-Signature"], _stripe.WebhookSecret,
+                tolerance: 300, throwOnApiVersionMismatch: false);
 
-            if (stripeEvent.Type == "checkout.session.completed" &&
-                stripeEvent.Data.Object is Session session)
+            switch (stripeEvent.Type)
             {
-                await ActivarDesdeSesionAsync(session);
+                // Alta inicial de la suscripción.
+                case "checkout.session.completed" when stripeEvent.Data.Object is Session session:
+                    await ActivarDesdeSesionAsync(session);
+                    break;
+
+                // Renovación mensual: extiende la vigencia y registra el cobro.
+                case "invoice.paid" when stripeEvent.Data.Object is Invoice invoice:
+                    await RenovarDesdeFacturaAsync(invoice);
+                    break;
+
+                // La suscripción terminó (cancelada o impago): se marca como no pagada.
+                case "customer.subscription.deleted" when stripeEvent.Data.Object is Subscription sub:
+                    await FinalizarSuscripcionAsync(sub);
+                    break;
             }
             return Ok();
         }
@@ -158,8 +196,11 @@ public class SuscripcionController : Controller
         usuario.MembresiaPagada = true;
         usuario.MembresiaInicio = ahora;
         usuario.MembresiaFin = fin;
+        usuario.CancelacionProgramada = false;
         if (!string.IsNullOrEmpty(session.CustomerId))
             usuario.StripeCustomerId = session.CustomerId;
+        if (!string.IsNullOrEmpty(session.SubscriptionId))
+            usuario.StripeSubscriptionId = session.SubscriptionId;
 
         var pago = pagoExistente ?? new Pago { StripeSessionId = session.Id };
         pago.UsuarioId = usuario.Id;
@@ -200,6 +241,56 @@ public class SuscripcionController : Controller
             // No bloquear la activación si falla el envío del correo.
             _logger.LogError(ex, "Error al enviar el correo de confirmación de pago a {Correo}", usuario.Correo);
         }
+    }
+
+    /// <summary>Renovación mensual: extiende la vigencia y registra el cobro (idempotente).</summary>
+    private async Task RenovarDesdeFacturaAsync(Invoice invoice)
+    {
+        if (invoice.BillingReason != "subscription_cycle") return; // el alta inicial la maneja checkout.session.completed
+
+        // La API reciente de Stripe ya no expone invoice.subscription directamente; se
+        // identifica al usuario por el cliente de Stripe (invoice.customer).
+        if (string.IsNullOrEmpty(invoice.CustomerId)) return;
+        var usuario = await _db.Usuarios.Include(u => u.Membresia)
+            .FirstOrDefaultAsync(u => u.StripeCustomerId == invoice.CustomerId);
+        if (usuario?.MembresiaId is null || usuario.Membresia is null) return;
+
+        if (await _db.Pagos.AnyAsync(p => p.StripeSessionId == invoice.Id)) return; // idempotencia
+
+        var ahora = DateTime.UtcNow;
+        var fin = ahora.AddMonths(1);
+        usuario.MembresiaPagada = true;
+        usuario.MembresiaFin = fin;
+
+        var pago = new Pago
+        {
+            StripeSessionId = invoice.Id!,
+            UsuarioId = usuario.Id,
+            MembresiaId = usuario.MembresiaId.Value,
+            Monto = invoice.AmountPaid / 100m,
+            Moneda = invoice.Currency ?? "usd",
+            Estado = EstadoPago.Pagado,
+            Fecha = ahora,
+            PeriodoInicio = ahora,
+            PeriodoFin = fin
+        };
+        _db.Pagos.Add(pago);
+        await _db.SaveChangesAsync();
+
+        await EnviarConfirmacionPagoAsync(usuario, usuario.Membresia, pago);
+    }
+
+    /// <summary>La suscripción terminó (cancelación efectiva o impago): la membresía deja de estar pagada.</summary>
+    private async Task FinalizarSuscripcionAsync(Subscription sub)
+    {
+        var usuario = await _db.Usuarios.FirstOrDefaultAsync(u => u.StripeSubscriptionId == sub.Id);
+        if (usuario is null) return;
+
+        usuario.MembresiaPagada = false;
+        usuario.CancelacionProgramada = false;
+        usuario.StripeSubscriptionId = null;
+        usuario.MembresiaFin = DateTime.UtcNow;
+        await _db.SaveChangesAsync();
     }
 
     private int UsuarioActualId()

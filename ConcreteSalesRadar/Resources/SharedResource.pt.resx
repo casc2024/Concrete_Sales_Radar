@@ -900,4 +900,19 @@
   <data name="Email_Pago_Gracias" xml:space="preserve">
     <value>Obrigado pela sua compra!</value>
   </data>
+  <data name="Sub_Active" xml:space="preserve">
+    <value>Assinatura ativa (renovação mensal)</value>
+  </data>
+  <data name="Sub_Cancel_Btn" xml:space="preserve">
+    <value>Cancelar assinatura</value>
+  </data>
+  <data name="Sub_CancelScheduled" xml:space="preserve">
+    <value>Sua assinatura será cancelada ao final do período atual.</value>
+  </data>
+  <data name="Sub_WillCancel" xml:space="preserve">
+    <value>Será cancelada ao final do período.</value>
+  </data>
+  <data name="Sub_Confirm_Cancel" xml:space="preserve">
+    <value>Cancelar sua assinatura ao final do período?</value>
+  </data>
 </root>

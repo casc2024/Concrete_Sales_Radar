@@ -62,6 +62,13 @@ public class Usuario
     [StringLength(100)]
     public string? StripeCustomerId { get; set; }
 
+    /// <summary>Id de la suscripción recurrente activa en Stripe.</summary>
+    [StringLength(100)]
+    public string? StripeSubscriptionId { get; set; }
+
+    /// <summary>True si la suscripción está marcada para cancelarse al final del período.</summary>
+    public bool CancelacionProgramada { get; set; }
+
     public ICollection<CodigoVerificacion> Codigos { get; set; } = new List<CodigoVerificacion>();
     public ICollection<Pago> Pagos { get; set; } = new List<Pago>();
     public ICollection<Proyecto> Proyectos { get; set; } = new List<Proyecto>();

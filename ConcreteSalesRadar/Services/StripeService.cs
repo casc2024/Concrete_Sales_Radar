@@ -20,11 +20,14 @@ public interface IStripeService
     string? PublishableKey { get; }
     string? WebhookSecret { get; }
 
-    /// <summary>Crea una Checkout Session de pago y devuelve la URL de Stripe.</summary>
+    /// <summary>Crea una Checkout Session de suscripción mensual y devuelve la sesión.</summary>
     Task<Session> CrearCheckoutSessionAsync(Usuario usuario, Membresia membresia, string successUrl, string cancelUrl);
 
     /// <summary>Recupera una Checkout Session por su id.</summary>
     Task<Session> ObtenerSesionAsync(string sessionId);
+
+    /// <summary>Programa la cancelación de la suscripción al final del período actual.</summary>
+    Task CancelarSuscripcionAsync(string subscriptionId);
 }
 
 public class StripeService : IStripeService
@@ -44,9 +47,15 @@ public class StripeService : IStripeService
 
     public async Task<Session> CrearCheckoutSessionAsync(Usuario usuario, Membresia membresia, string successUrl, string cancelUrl)
     {
+        var metadata = new Dictionary<string, string>
+        {
+            ["usuarioId"] = usuario.Id.ToString(),
+            ["membresiaId"] = membresia.Id.ToString()
+        };
+
         var opciones = new SessionCreateOptions
         {
-            Mode = "payment",
+            Mode = "subscription",
             CustomerEmail = usuario.StripeCustomerId is null ? usuario.Correo : null,
             Customer = usuario.StripeCustomerId,
             ClientReferenceId = usuario.Id.ToString(),
@@ -59,6 +68,7 @@ public class StripeService : IStripeService
                     {
                         Currency = _settings.Moneda,
                         UnitAmount = (long)(membresia.PrecioMensual * 100m),
+                        Recurring = new SessionLineItemPriceDataRecurringOptions { Interval = "month" },
                         ProductData = new SessionLineItemPriceDataProductDataOptions
                         {
                             Name = $"Concrete Sales Radar — {membresia.Nombre}",
@@ -69,11 +79,9 @@ public class StripeService : IStripeService
             },
             SuccessUrl = successUrl,
             CancelUrl = cancelUrl,
-            Metadata = new Dictionary<string, string>
-            {
-                ["usuarioId"] = usuario.Id.ToString(),
-                ["membresiaId"] = membresia.Id.ToString()
-            }
+            Metadata = metadata,
+            // La metadata también viaja a la suscripción, para identificarla en los webhooks de renovación.
+            SubscriptionData = new SessionSubscriptionDataOptions { Metadata = metadata }
         };
 
         var service = new SessionService();
@@ -84,5 +92,12 @@ public class StripeService : IStripeService
     {
         var service = new SessionService();
         return await service.GetAsync(sessionId);
+    }
+
+    public async Task CancelarSuscripcionAsync(string subscriptionId)
+    {
+        var service = new SubscriptionService();
+        // Cancela al final del período: el usuario mantiene acceso hasta que termine.
+        await service.UpdateAsync(subscriptionId, new SubscriptionUpdateOptions { CancelAtPeriodEnd = true });
     }
 }

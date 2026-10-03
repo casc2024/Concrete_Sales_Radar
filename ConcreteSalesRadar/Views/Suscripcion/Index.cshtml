@@ -46,6 +46,22 @@
                         <span class="pill off">@L["Sub_Pending"]</span>
                     }
                 </p>
+
+                @if (!string.IsNullOrEmpty(u.StripeSubscriptionId) && u.MembresiaPagada)
+                {
+                    <p class="muted" style="margin:6px 0">🔄 @L["Sub_Active"]</p>
+                    @if (u.CancelacionProgramada)
+                    {
+                        <div class="alert alert-info" style="margin:8px 0">@L["Sub_WillCancel"]</div>
+                    }
+                    else
+                    {
+                        <form asp-action="Cancelar" method="post" onsubmit="return confirm('@L["Sub_Confirm_Cancel"]');" style="margin-top:8px">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-ghost btn-sm">@L["Sub_Cancel_Btn"]</button>
+                        </form>
+                    }
+                }
             }
             else
             {
