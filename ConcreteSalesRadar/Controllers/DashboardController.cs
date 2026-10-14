@@ -50,6 +50,23 @@ public class DashboardController : Controller
             filtro.CamposVisibles = CamposProyecto.Conjunto(csv);
         }
 
+        // Búsqueda por ubicación (área / ciudad / ZIP / sitio): empareja contra la dirección.
+        // Se tokeniza para que "Farmers Branch", "75234" o "Dallas, TX" funcionen por separado
+        // (deben aparecer TODOS los términos en la dirección).
+        if (!string.IsNullOrWhiteSpace(filtro.Zona))
+        {
+            var tokens = filtro.Zona.ToLowerInvariant()
+                .Split(new[] { ',', '/', ';', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries)
+                .Where(t => t.Length >= 2)
+                .ToArray();
+            if (tokens.Length > 0)
+                q = q.Where(p =>
+                {
+                    var dir = (p.Direccion ?? string.Empty).ToLowerInvariant();
+                    return tokens.All(t => dir.Contains(t));
+                });
+        }
+
         if (!string.IsNullOrWhiteSpace(filtro.Busqueda))
         {
             var b = filtro.Busqueda.Trim().ToLowerInvariant();

@@ -5,7 +5,7 @@ namespace ConcreteSalesRadar.Models.ViewModels;
 public class DashboardViewModel
 {
     // Filtros
-    public string? Zona { get; set; } = "Ponder, TX";
+    public string? Zona { get; set; }
     public int Radio { get; set; } = 50;
     public decimal PresupuestoMin { get; set; }
     public string? Tipo { get; set; }
