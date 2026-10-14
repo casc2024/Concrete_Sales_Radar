@@ -136,7 +136,6 @@
                             @if (Model.Ver("email")) { <th>@L["Col_Email"]</th> }
                             @if (Model.Ver("telefono")) { <th>@L["Col_PhoneDirect"]</th> }
                             @if (Model.Ver("telefonoEmpresa")) { <th>@L["Col_PhoneCompany"]</th> }
-                            @if (Model.Ver("fuente")) { <th>@L["Col_Source"]</th> }
                             <th>Vistas</th>
                             <th>@L["Col_Actions"]</th>
                         </tr>
@@ -158,7 +157,6 @@
                                 @if (Model.Ver("email")) { <td>@if (!string.IsNullOrWhiteSpace(p.Email)) { <a href="mailto:@p.Email">@p.Email</a> } else { <text>-</text> }</td> }
                                 @if (Model.Ver("telefono")) { <td>@if (!string.IsNullOrWhiteSpace(p.Telefono)) { <a href="tel:@p.Telefono">@p.Telefono</a> } else { <text>-</text> }</td> }
                                 @if (Model.Ver("telefonoEmpresa")) { <td>@if (!string.IsNullOrWhiteSpace(p.TelefonoEmpresa)) { <a href="tel:@p.TelefonoEmpresa">@p.TelefonoEmpresa</a> } else { <text>-</text> }</td> }
-                                @if (Model.Ver("fuente")) { <td>@(($"{p.Fuente}{(string.IsNullOrWhiteSpace(p.Nota) ? "" : " · " + p.Nota)}").Trim(' ', '·'))</td> }
                                 <td><b>@p.NumeroVistas</b></td>
                                 <td class="actions-cell">
                                     <a class="btn btn-primary btn-sm" asp-action="Detalle" asp-route-id="@p.Id">Ver</a>
