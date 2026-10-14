@@ -15,6 +15,13 @@ public class DashboardViewModel
 
     public List<Proyecto> Proyectos { get; set; } = new();
 
+    /// <summary>Campos de la grilla que este usuario puede ver, según su membresía.</summary>
+    public HashSet<string> CamposVisibles { get; set; } =
+        new(CamposProyecto.Claves, StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>True si el campo debe mostrarse para el usuario actual.</summary>
+    public bool Ver(string clave) => CamposVisibles.Contains(clave);
+
     // Paginación (10 registros por página)
     public int Pagina { get; set; } = 1;
     public const int TamanoPagina = 10;

@@ -67,6 +67,10 @@ namespace ConcreteSalesRadar.Data.Migrations
                     b.Property<bool>("Activa")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("CamposVisibles")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
                     b.Property<string>("Caracteristicas")
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
@@ -91,6 +95,14 @@ namespace ConcreteSalesRadar.Data.Migrations
 
                     b.Property<decimal>("PrecioMensual")
                         .HasColumnType("numeric(12,2)");
+
+                    b.Property<string>("StripePriceId")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("StripeProductId")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -156,6 +168,13 @@ namespace ConcreteSalesRadar.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ClaveExterna")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<int>("ConfidenceScore")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Direccion")
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
@@ -168,6 +187,11 @@ namespace ConcreteSalesRadar.Data.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
+                    b.Property<string>("EstadoVerificacion")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("character varying(60)");
+
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("timestamp with time zone");
 
@@ -177,6 +201,9 @@ namespace ConcreteSalesRadar.Data.Migrations
                     b.Property<string>("Fuente")
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
+
+                    b.Property<bool>("GeneradoPorIa")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("NombreContacto")
                         .HasMaxLength(120)
@@ -209,13 +236,21 @@ namespace ConcreteSalesRadar.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
+                    b.Property<DateTime>("UltimaVerificacion")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<int?>("UsuarioId")
                         .HasColumnType("integer");
 
                     b.Property<int>("Yardas")
                         .HasColumnType("integer");
 
+                    b.Property<bool>("YardasReportadas")
+                        .HasColumnType("boolean");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ClaveExterna");
 
                     b.HasIndex("UsuarioId");
 

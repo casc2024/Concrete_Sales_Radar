@@ -654,6 +654,18 @@
   <data name="Adm_Plan_Active" xml:space="preserve">
     <value>Activa</value>
   </data>
+  <data name="Adm_Plan_Fields" xml:space="preserve">
+    <value>Campos visibles para este plan</value>
+  </data>
+  <data name="Adm_Plan_FieldsHint" xml:space="preserve">
+    <value>Marca los campos que verán en la grilla los clientes con este plan. Sin marcar = oculto.</value>
+  </data>
+  <data name="Adm_Plan_StripePrice" xml:space="preserve">
+    <value>Price ID de Stripe (automático)</value>
+  </data>
+  <data name="Adm_Plan_StripeHint" xml:space="preserve">
+    <value>El sistema lo crea y actualiza solo en Stripe al guardar. Si cambias el monto, se genera un precio nuevo y se archiva el anterior.</value>
+  </data>
   <data name="Confirm_DeleteProject" xml:space="preserve">
     <value>¿Eliminar esta obra?</value>
   </data>
@@ -707,6 +719,9 @@
   </data>
   <data name="Msg_PlanInUse" xml:space="preserve">
     <value>No se puede eliminar: hay usuarios con este plan. Desactívalo en su lugar.</value>
+  </data>
+  <data name="Msg_PlanStripeError" xml:space="preserve">
+    <value>El plan se guardó, pero no se pudo sincronizar con Stripe. Revisa las claves de Stripe e inténtalo de nuevo.</value>
   </data>
   <data name="Email_SubjectConfirm" xml:space="preserve">
     <value>Confirma tu cuenta en Concrete Sales Radar</value>

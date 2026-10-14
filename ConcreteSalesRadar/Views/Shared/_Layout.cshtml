@@ -89,6 +89,7 @@ else if (esAdmin)
                 <a class="@(actUsuarios ? "active" : "")" asp-controller="Admin" asp-action="Usuarios">👥 @L["Adm_UsersCard"]</a>
                 <a class="@(actMembresias ? "active" : "")" asp-controller="Admin" asp-action="Membresias">💳 @L["Adm_PlansCard"]</a>
                 <a class="@(actPagos ? "active" : "")" asp-controller="Admin" asp-action="Pagos">🧾 @L["Nav_Payments"]</a>
+                <a href="/hangfire" target="_blank" rel="noopener">⚙️ Hangfire</a>
                 <div class="sidebar-section">&nbsp;</div>
                 <a class="@(actInicio ? "active" : "")" asp-controller="Home" asp-action="Index">🌐 @L["Nav_Home"]</a>
             </nav>

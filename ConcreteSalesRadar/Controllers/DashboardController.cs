@@ -28,6 +28,28 @@ public class DashboardController : Controller
 
         IEnumerable<Proyecto> q = proyectos;
 
+        var esAdmin = User.IsInRole(Roles.Administrador);
+
+        // Regla de negocio (exhibición obligatoria): a un CLIENTE no se le muestra ningún
+        // proyecto sin Fuente, Estado de verificación y Última verificación. El administrador
+        // sí ve todo para poder completarlo/gestionarlo.
+        if (!esAdmin)
+            q = q.Where(p => !string.IsNullOrWhiteSpace(p.Fuente)
+                && !string.IsNullOrWhiteSpace(p.EstadoVerificacion)
+                && p.UltimaVerificacion.Year > 1);
+
+        // Campos visibles según la membresía del usuario (el admin ve todos).
+        if (esAdmin)
+            filtro.CamposVisibles = new HashSet<string>(CamposProyecto.Claves, StringComparer.OrdinalIgnoreCase);
+        else
+        {
+            var uid = int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var id) ? id : 0;
+            var csv = await _db.Usuarios.Where(u => u.Id == uid)
+                .Select(u => u.Membresia != null ? u.Membresia.CamposVisibles : null)
+                .FirstOrDefaultAsync();
+            filtro.CamposVisibles = CamposProyecto.Conjunto(csv);
+        }
+
         if (!string.IsNullOrWhiteSpace(filtro.Busqueda))
         {
             var b = filtro.Busqueda.Trim().ToLowerInvariant();

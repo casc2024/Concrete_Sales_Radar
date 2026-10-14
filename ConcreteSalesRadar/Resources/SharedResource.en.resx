@@ -654,6 +654,18 @@
   <data name="Adm_Plan_Active" xml:space="preserve">
     <value>Active</value>
   </data>
+  <data name="Adm_Plan_Fields" xml:space="preserve">
+    <value>Fields visible for this plan</value>
+  </data>
+  <data name="Adm_Plan_FieldsHint" xml:space="preserve">
+    <value>Check the grid fields customers on this plan can see. Unchecked = hidden.</value>
+  </data>
+  <data name="Adm_Plan_StripePrice" xml:space="preserve">
+    <value>Stripe Price ID (automatic)</value>
+  </data>
+  <data name="Adm_Plan_StripeHint" xml:space="preserve">
+    <value>The system creates and updates it in Stripe automatically on save. If you change the amount, a new price is created and the previous one is archived.</value>
+  </data>
   <data name="Confirm_DeleteProject" xml:space="preserve">
     <value>Delete this project?</value>
   </data>
@@ -707,6 +719,9 @@
   </data>
   <data name="Msg_PlanInUse" xml:space="preserve">
     <value>Cannot delete: there are users with this plan. Deactivate it instead.</value>
+  </data>
+  <data name="Msg_PlanStripeError" xml:space="preserve">
+    <value>The plan was saved, but it could not be synced with Stripe. Check your Stripe keys and try again.</value>
   </data>
   <data name="Email_SubjectConfirm" xml:space="preserve">
     <value>Confirm your account on Concrete Sales Radar</value>

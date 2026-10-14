@@ -1,6 +1,7 @@
 using ConcreteSalesRadar.Data;
 using ConcreteSalesRadar.Models.Entities;
 using ConcreteSalesRadar.Models.ViewModels;
+using ConcreteSalesRadar.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,12 +16,17 @@ public class AdminController : Controller
 {
     private readonly AppDbContext _db;
     private readonly IStringLocalizer<SharedResource> _loc;
+    private readonly IStripeService _stripe;
+    private readonly ILogger<AdminController> _logger;
     private readonly PasswordHasher<Usuario> _hasher = new();
 
-    public AdminController(AppDbContext db, IStringLocalizer<SharedResource> loc)
+    public AdminController(AppDbContext db, IStringLocalizer<SharedResource> loc,
+        IStripeService stripe, ILogger<AdminController> logger)
     {
         _db = db;
         _loc = loc;
+        _stripe = stripe;
+        _logger = logger;
     }
 
     public IActionResult Index() => View();
@@ -132,30 +138,59 @@ public class AdminController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> GuardarMembresia(Membresia modelo)
+    public async Task<IActionResult> GuardarMembresia(Membresia modelo, string[]? camposVisiblesSel)
     {
         if (!ModelState.IsValid)
             return View("EditarMembresia", modelo);
 
+        // Solo claves válidas; CSV. Vacío = muestra todos (lo interpreta CamposProyecto.Conjunto).
+        var campos = string.Join(",", (camposVisiblesSel ?? Array.Empty<string>())
+            .Where(c => CamposProyecto.Claves.Contains(c, StringComparer.OrdinalIgnoreCase)));
+
+        Membresia plan;
         if (modelo.Id == 0)
         {
-            _db.Membresias.Add(modelo);
+            plan = modelo;
+            plan.CamposVisibles = campos;
+            _db.Membresias.Add(plan);
         }
         else
         {
-            var plan = await _db.Membresias.FindAsync(modelo.Id);
-            if (plan is null) return NotFound();
-            plan.Nombre = modelo.Nombre;
-            plan.Descripcion = modelo.Descripcion;
-            plan.PrecioMensual = modelo.PrecioMensual;
-            plan.MaxUsuarios = modelo.MaxUsuarios;
-            plan.Caracteristicas = modelo.Caracteristicas;
-            plan.EsPopular = modelo.EsPopular;
-            plan.Activa = modelo.Activa;
-            plan.Orden = modelo.Orden;
+            var existente = await _db.Membresias.FindAsync(modelo.Id);
+            if (existente is null) return NotFound();
+            existente.Nombre = modelo.Nombre;
+            existente.Descripcion = modelo.Descripcion;
+            existente.PrecioMensual = modelo.PrecioMensual;
+            existente.MaxUsuarios = modelo.MaxUsuarios;
+            existente.Caracteristicas = modelo.Caracteristicas;
+            existente.EsPopular = modelo.EsPopular;
+            existente.Activa = modelo.Activa;
+            existente.Orden = modelo.Orden;
+            existente.CamposVisibles = campos;
+            plan = existente;
         }
 
         await _db.SaveChangesAsync();
+
+        // Sincroniza el producto/precio en Stripe y guarda los ids (prod_xxx / price_xxx)
+        // que hacen el match al cobrar. Si Stripe falla, el plan igual queda guardado.
+        if (_stripe.EstaConfigurado)
+        {
+            try
+            {
+                var (productId, priceId) = await _stripe.SincronizarPlanAsync(plan);
+                plan.StripeProductId = productId;
+                plan.StripePriceId = priceId;
+                await _db.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al sincronizar el plan {Id} con Stripe", plan.Id);
+                TempData["Error"] = _loc["Msg_PlanStripeError"].Value;
+                return RedirectToAction(nameof(Membresias));
+            }
+        }
+
         TempData["Exito"] = _loc["Msg_PlanSaved"].Value;
         return RedirectToAction(nameof(Membresias));
     }

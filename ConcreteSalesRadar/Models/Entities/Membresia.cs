@@ -34,5 +34,27 @@ public class Membresia
     /// <summary>Orden de aparición en la página de precios.</summary>
     public int Orden { get; set; }
 
+    /// <summary>
+    /// Campos de la grilla de proyectos que ESTE plan deja ver, como CSV de claves
+    /// (ver <see cref="CamposProyecto"/>). Vacío = muestra todos los campos.
+    /// </summary>
+    [StringLength(500)]
+    public string? CamposVisibles { get; set; }
+
+    /// <summary>
+    /// Id del producto en Stripe (prod_xxx). Lo mantiene el sistema automáticamente:
+    /// se crea/actualiza al guardar el plan. No se edita a mano.
+    /// </summary>
+    [StringLength(100)]
+    public string? StripeProductId { get; set; }
+
+    /// <summary>
+    /// Id del precio recurrente en Stripe (price_xxx) con el que se hace el match
+    /// al cobrar la suscripción. Lo mantiene el sistema automáticamente: como un precio
+    /// de Stripe es inmutable, si cambia el monto se crea uno nuevo y se guarda aquí.
+    /// </summary>
+    [StringLength(100)]
+    public string? StripePriceId { get; set; }
+
     public ICollection<Usuario> Usuarios { get; set; } = new List<Usuario>();
 }

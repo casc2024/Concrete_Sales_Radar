@@ -76,6 +76,8 @@ public class AppDbContext : DbContext
             // FechaInicio es una fecha de calendario (sin zona horaria); el resto de
             // fechas son "momentos" en UTC y usan timestamptz por convención de Npgsql.
             e.Property(p => p.FechaInicio).HasColumnType("timestamp without time zone");
+            // Deduplicación de leads del job automático por su clave en la fuente externa.
+            e.HasIndex(p => p.ClaveExterna);
             e.HasOne(p => p.Usuario)
                 .WithMany(u => u.Proyectos)
                 .HasForeignKey(p => p.UsuarioId)
