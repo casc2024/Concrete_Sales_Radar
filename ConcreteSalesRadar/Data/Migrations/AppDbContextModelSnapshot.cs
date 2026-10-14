@@ -218,6 +218,9 @@ namespace ConcreteSalesRadar.Data.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
+                    b.Property<int>("NumeroVistas")
+                        .HasColumnType("integer");
+
                     b.Property<decimal>("Presupuesto")
                         .HasColumnType("numeric(14,2)");
 
@@ -369,6 +372,33 @@ namespace ConcreteSalesRadar.Data.Migrations
                     b.ToTable("usuarios", (string)null);
                 });
 
+            modelBuilder.Entity("ConcreteSalesRadar.Models.Entities.VistaProyecto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("FechaVista")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ProyectoId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.HasIndex("ProyectoId", "UsuarioId")
+                        .IsUnique();
+
+                    b.ToTable("vistas_proyecto", (string)null);
+                });
+
             modelBuilder.Entity("ConcreteSalesRadar.Models.Entities.CodigoVerificacion", b =>
                 {
                     b.HasOne("ConcreteSalesRadar.Models.Entities.Usuario", "Usuario")
@@ -427,9 +457,33 @@ namespace ConcreteSalesRadar.Data.Migrations
                     b.Navigation("Rol");
                 });
 
+            modelBuilder.Entity("ConcreteSalesRadar.Models.Entities.VistaProyecto", b =>
+                {
+                    b.HasOne("ConcreteSalesRadar.Models.Entities.Proyecto", "Proyecto")
+                        .WithMany("Vistas")
+                        .HasForeignKey("ProyectoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ConcreteSalesRadar.Models.Entities.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Proyecto");
+
+                    b.Navigation("Usuario");
+                });
+
             modelBuilder.Entity("ConcreteSalesRadar.Models.Entities.Membresia", b =>
                 {
                     b.Navigation("Usuarios");
+                });
+
+            modelBuilder.Entity("ConcreteSalesRadar.Models.Entities.Proyecto", b =>
+                {
+                    b.Navigation("Vistas");
                 });
 
             modelBuilder.Entity("ConcreteSalesRadar.Models.Entities.Rol", b =>

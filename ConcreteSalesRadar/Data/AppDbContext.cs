@@ -13,6 +13,7 @@ public class AppDbContext : DbContext
     public DbSet<CodigoVerificacion> CodigosVerificacion => Set<CodigoVerificacion>();
     public DbSet<Proyecto> Proyectos => Set<Proyecto>();
     public DbSet<Pago> Pagos => Set<Pago>();
+    public DbSet<VistaProyecto> VistasProyecto => Set<VistaProyecto>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -82,6 +83,21 @@ public class AppDbContext : DbContext
                 .WithMany(u => u.Proyectos)
                 .HasForeignKey(p => p.UsuarioId)
                 .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        modelBuilder.Entity<VistaProyecto>(e =>
+        {
+            e.ToTable("vistas_proyecto");
+            // Un usuario = 1 vista por proyecto (aunque abra el detalle N veces).
+            e.HasIndex(v => new { v.ProyectoId, v.UsuarioId }).IsUnique();
+            e.HasOne(v => v.Proyecto)
+                .WithMany(p => p.Vistas)
+                .HasForeignKey(v => v.ProyectoId)
+                .OnDelete(DeleteBehavior.Cascade);
+            e.HasOne(v => v.Usuario)
+                .WithMany()
+                .HasForeignKey(v => v.UsuarioId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }

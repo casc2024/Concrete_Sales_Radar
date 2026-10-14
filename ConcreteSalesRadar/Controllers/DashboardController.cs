@@ -117,12 +117,66 @@ public class DashboardController : Controller
         return View(filtro);
     }
 
-    // ---------------- CRUD ----------------
+    // ---------------- Detalle (solo consulta) + conteo de vistas ----------------
 
     [HttpGet]
+    public async Task<IActionResult> Detalle(int id)
+    {
+        var proyecto = await _db.Proyectos.FindAsync(id);
+        if (proyecto is null) return NotFound();
+
+        var esAdmin = User.IsInRole(Roles.Administrador);
+
+        // Misma regla de exhibición: un cliente no ve proyectos incompletos.
+        if (!esAdmin && (string.IsNullOrWhiteSpace(proyecto.Fuente)
+            || string.IsNullOrWhiteSpace(proyecto.EstadoVerificacion)
+            || proyecto.UltimaVerificacion.Year <= 1))
+            return NotFound();
+
+        // Registrar la vista: ÚNICA por usuario (abrir N veces = 1 vista). El índice único
+        // (ProyectoId, UsuarioId) lo garantiza; el contador solo sube en la primera vez.
+        if (UsuarioActualId() is int usuarioId)
+        {
+            var yaVista = await _db.VistasProyecto
+                .AnyAsync(v => v.ProyectoId == id && v.UsuarioId == usuarioId);
+            if (!yaVista)
+            {
+                _db.VistasProyecto.Add(new VistaProyecto
+                {
+                    ProyectoId = id,
+                    UsuarioId = usuarioId,
+                    FechaVista = DateTime.UtcNow
+                });
+                proyecto.NumeroVistas += 1;
+                try { await _db.SaveChangesAsync(); }
+                catch (DbUpdateException) { /* carrera: otra pestaña la registró primero */ }
+            }
+        }
+
+        // Campos visibles según la membresía del usuario (el admin ve todos).
+        HashSet<string> campos;
+        if (esAdmin)
+            campos = new HashSet<string>(CamposProyecto.Claves, StringComparer.OrdinalIgnoreCase);
+        else
+        {
+            var uid = UsuarioActualId() ?? 0;
+            var csv = await _db.Usuarios.Where(u => u.Id == uid)
+                .Select(u => u.Membresia != null ? u.Membresia.CamposVisibles : null)
+                .FirstOrDefaultAsync();
+            campos = CamposProyecto.Conjunto(csv);
+        }
+
+        return View(new ProyectoDetalleViewModel { Proyecto = proyecto, CamposVisibles = campos });
+    }
+
+    // ---------------- Gestión (solo administrador) ----------------
+
+    [HttpGet]
+    [Authorize(Roles = Roles.Administrador)]
     public IActionResult Crear() => View("Editar", new Proyecto { Prioridad = 75 });
 
     [HttpGet]
+    [Authorize(Roles = Roles.Administrador)]
     public async Task<IActionResult> Editar(int id)
     {
         var proyecto = await _db.Proyectos.FindAsync(id);
@@ -131,6 +185,7 @@ public class DashboardController : Controller
     }
 
     [HttpPost]
+    [Authorize(Roles = Roles.Administrador)]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Guardar(Proyecto modelo)
     {
@@ -170,6 +225,7 @@ public class DashboardController : Controller
     }
 
     [HttpPost]
+    [Authorize(Roles = Roles.Administrador)]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Eliminar(int id)
     {

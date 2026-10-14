@@ -87,6 +87,14 @@ public class Proyecto
     /// </summary>
     public bool YardasReportadas { get; set; }
 
+    /// <summary>
+    /// Cantidad de usuarios DISTINTOS que han visto el detalle de este proyecto. Se incrementa
+    /// solo la primera vez que cada usuario lo abre (un usuario = 1 vista aunque entre N veces).
+    /// </summary>
+    public int NumeroVistas { get; set; }
+
+    public ICollection<VistaProyecto> Vistas { get; set; } = new List<VistaProyecto>();
+
     // Propietario del registro
     public int? UsuarioId { get; set; }
     public Usuario? Usuario { get; set; }

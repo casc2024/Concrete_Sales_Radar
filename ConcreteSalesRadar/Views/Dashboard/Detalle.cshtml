@@ -1,0 +1,65 @@
+@using ConcreteSalesRadar.Helpers
+@model ProyectoDetalleViewModel
+@{
+    var p = Model.Proyecto;
+    ViewData["Title"] = p.NombreProyecto;
+    var age = Formato.Antiguedad(p.FechaInicio);
+    string AgeLabel(int? m) => m is null ? L["Age_NA"].Value
+        : m < 0 ? L["Age_Upcoming"].Value
+        : $"{m} {(m == 1 ? L["Age_Month"].Value : L["Age_Months"].Value)}";
+}
+
+<div class="app-main">
+    <div class="container-xl">
+        <a class="btn btn-ghost btn-sm" asp-action="Index">‹ @L["Btn_Cancel"]</a>
+
+        <h1 class="page-title" style="margin-top:12px">@p.NombreProyecto</h1>
+
+        <div class="card" style="max-width:820px">
+            <table class="data">
+                <tbody>
+                    @if (Model.Ver("direccion")) { <tr><th style="width:230px">@L["Col_Address"]</th><td>@(p.Direccion ?? "-")</td></tr> }
+                    @if (Model.Ver("tipo")) { <tr><th>@L["Col_Type"]</th><td>@(p.Tipo ?? "-")</td></tr> }
+                    @if (Model.Ver("antiguedad")) { <tr><th>@L["Col_Age"]</th><td><span class="badge @age.Clase">@AgeLabel(age.Meses)</span></td></tr> }
+                    @if (Model.Ver("presupuesto")) { <tr><th>@L["Col_Budget"]</th><td>@Formato.Dinero(p.Presupuesto)</td></tr> }
+                    @if (Model.Ver("yardas"))
+                    {
+                        <tr>
+                            <th>@L["Col_Yards"]</th>
+                            <td><b>@Formato.Numero(p.Yardas)</b> yd³ <span class="muted">· @(p.YardasReportadas ? "reportadas" : "estimadas")</span></td>
+                        </tr>
+                    }
+                    @if (Model.Ver("empresa")) { <tr><th>@L["Col_ContactCompany"]</th><td>@(p.EmpresaContacto ?? "-")</td></tr> }
+                    @if (Model.Ver("nombre")) { <tr><th>@L["Col_Name"]</th><td>@(p.NombreContacto ?? "-")</td></tr> }
+                    @if (Model.Ver("email"))
+                    {
+                        <tr><th>@L["Col_Email"]</th><td>@if (!string.IsNullOrWhiteSpace(p.Email)) { <a href="mailto:@p.Email">@p.Email</a> } else { <text>-</text> }</td></tr>
+                    }
+                    @if (Model.Ver("telefono"))
+                    {
+                        <tr><th>@L["Col_PhoneDirect"]</th><td>@if (!string.IsNullOrWhiteSpace(p.Telefono)) { <a href="tel:@p.Telefono">@p.Telefono</a> } else { <text>-</text> }</td></tr>
+                    }
+                    @if (Model.Ver("telefonoEmpresa"))
+                    {
+                        <tr><th>@L["Col_PhoneCompany"]</th><td>@if (!string.IsNullOrWhiteSpace(p.TelefonoEmpresa)) { <a href="tel:@p.TelefonoEmpresa">@p.TelefonoEmpresa</a> } else { <text>-</text> }</td></tr>
+                    }
+                    @if (Model.Ver("prioridad")) { <tr><th>@L["Col_Priority"]</th><td><span class="badge @Formato.Calor(p.Prioridad)">@p.Prioridad / 100</span></td></tr> }
+                    @if (!string.IsNullOrWhiteSpace(p.Nota)) { <tr><th>Nota</th><td>@p.Nota</td></tr> }
+
+                    <tr><th>Estado de verificación</th><td>@p.EstadoVerificacion</td></tr>
+                    <tr><th>Confidence Score</th><td><b>@p.ConfidenceScore</b> / 100</td></tr>
+                    <tr><th>Última verificación</th><td>@p.UltimaVerificacion.ToString("dd/MM/yyyy")</td></tr>
+                    @if (Model.Ver("fuente")) { <tr><th>@L["Col_Source"]</th><td>@p.Fuente</td></tr> }
+                    <tr><th>Vistas</th><td><b>@p.NumeroVistas</b></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p class="muted" style="max-width:820px;margin-top:14px;font-size:.85rem">
+            Concrete Sales Radar provides construction intelligence and sales leads compiled from
+            public and licensed third-party sources. Project status, budgets, contacts, schedules,
+            and concrete volume estimates may change and should be independently verified before
+            bidding or committing resources.
+        </p>
+    </div>
+</div>

@@ -114,7 +114,10 @@
                 </select>
                 <button type="submit" class="btn btn-ghost">@L["Dash_Filter"]</button>
                 <span></span>
-                <a class="btn btn-primary" asp-action="Crear">@L["Dash_AddProject"]</a>
+                @if (User.IsInRole("Administrador"))
+                {
+                    <a class="btn btn-primary" asp-action="Crear">@L["Dash_AddProject"]</a>
+                }
             </form>
 
             <div class="tablewrap">
@@ -134,6 +137,7 @@
                             @if (Model.Ver("telefono")) { <th>@L["Col_PhoneDirect"]</th> }
                             @if (Model.Ver("telefonoEmpresa")) { <th>@L["Col_PhoneCompany"]</th> }
                             @if (Model.Ver("fuente")) { <th>@L["Col_Source"]</th> }
+                            <th>Vistas</th>
                             <th>@L["Col_Actions"]</th>
                         </tr>
                     </thead>
@@ -155,12 +159,9 @@
                                 @if (Model.Ver("telefono")) { <td>@if (!string.IsNullOrWhiteSpace(p.Telefono)) { <a href="tel:@p.Telefono">@p.Telefono</a> } else { <text>-</text> }</td> }
                                 @if (Model.Ver("telefonoEmpresa")) { <td>@if (!string.IsNullOrWhiteSpace(p.TelefonoEmpresa)) { <a href="tel:@p.TelefonoEmpresa">@p.TelefonoEmpresa</a> } else { <text>-</text> }</td> }
                                 @if (Model.Ver("fuente")) { <td>@(($"{p.Fuente}{(string.IsNullOrWhiteSpace(p.Nota) ? "" : " · " + p.Nota)}").Trim(' ', '·'))</td> }
+                                <td><b>@p.NumeroVistas</b></td>
                                 <td class="actions-cell">
-                                    <a class="btn btn-ghost btn-sm" asp-action="Editar" asp-route-id="@p.Id">@L["Act_Edit"]</a>
-                                    <form asp-action="Eliminar" asp-route-id="@p.Id" method="post" onsubmit="return confirm('@L["Confirm_DeleteProject"]');" style="margin:0">
-                                        @Html.AntiForgeryToken()
-                                        <button type="submit" class="btn btn-danger btn-sm">X</button>
-                                    </form>
+                                    <a class="btn btn-primary btn-sm" asp-action="Detalle" asp-route-id="@p.Id">Ver</a>
                                 </td>
                             </tr>
                         }
