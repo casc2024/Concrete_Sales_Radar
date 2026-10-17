@@ -40,6 +40,54 @@
     </div>
 </div>
 
+<!-- Búsqueda (justo arriba de la grilla) -->
+<div class="card">
+    <h3 class="card-title">@L["Dash_SearchTitle"]</h3>
+    <form asp-action="Index" method="get" id="filtros">
+        <div class="search-grid">
+            <div>
+                <label>@L["Dash_Zone"]</label>
+                <input class="form-control" name="Zona" value="@Model.Zona" placeholder="Ciudad, área, ZIP o dirección (ej. Dallas · 75234 · W 7th St)" />
+            </div>
+            <div>
+                <label>@L["Dash_BudgetMin"]</label>
+                <select class="form-control" name="PresupuestoMin">
+                    @{
+                        var montos = new (decimal v, string t)[] { (0, L["Dash_NoMin"].Value), (1000000, "$1M+"), (5000000, "$5M+"), (10000000, "$10M+"), (25000000, "$25M+"), (50000000, "$50M+") };
+                    }
+                    @foreach (var m in montos)
+                    {
+                        <option value="@m.v" selected="@(Model.PresupuestoMin == m.v)">@m.t</option>
+                    }
+                </select>
+            </div>
+            <div>
+                <label>@L["Dash_Type"]</label>
+                <select class="form-control" name="Tipo">
+                    <option value="">@L["Dash_All"]</option>
+                    @foreach (var t in DashboardViewModel.TiposObra)
+                    {
+                        <option value="@t" selected="@(Model.Tipo == t)">@t</option>
+                    }
+                </select>
+            </div>
+            <div>
+                <label>@L["Dash_Age"]</label>
+                <select class="form-control" name="Antiguedad">
+                    <option value="">@L["Dash_AnyAge"]</option>
+                    <option value="new" selected="@(Model.Antiguedad == "new")">@L["Dash_Age1"]</option>
+                    <option value="active" selected="@(Model.Antiguedad == "active")">@L["Dash_Age2"]</option>
+                    <option value="mature" selected="@(Model.Antiguedad == "mature")">@L["Dash_Age3"]</option>
+                </select>
+            </div>
+            <div>
+                <label>&nbsp;</label>
+                <button type="submit" class="btn btn-primary btn-block">@L["Dash_SearchBtn"]</button>
+            </div>
+        </div>
+    </form>
+</div>
+
 <!-- Tabla -->
 <div class="card">
     <div class="tablewrap">
