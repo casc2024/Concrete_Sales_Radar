@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using ClosedXML.Excel;
 using ConcreteSalesRadar.Data;
 using ConcreteSalesRadar.Models.Entities;
 using ConcreteSalesRadar.Models.ViewModels;
@@ -24,73 +25,7 @@ public class DashboardController : Controller
     [HttpGet]
     public async Task<IActionResult> Index(DashboardViewModel filtro)
     {
-        var proyectos = await _db.Proyectos.AsNoTracking().ToListAsync();
-
-        IEnumerable<Proyecto> q = proyectos;
-
-        var esAdmin = User.IsInRole(Roles.Administrador);
-
-        // Regla de negocio (exhibición obligatoria): a un CLIENTE no se le muestra ningún
-        // proyecto sin Fuente, Estado de verificación y Última verificación. El administrador
-        // sí ve todo para poder completarlo/gestionarlo.
-        if (!esAdmin)
-            q = q.Where(p => !string.IsNullOrWhiteSpace(p.Fuente)
-                && !string.IsNullOrWhiteSpace(p.EstadoVerificacion)
-                && p.UltimaVerificacion.Year > 1);
-
-        // Campos visibles según la membresía del usuario (el admin ve todos).
-        if (esAdmin)
-            filtro.CamposVisibles = new HashSet<string>(CamposProyecto.Claves, StringComparer.OrdinalIgnoreCase);
-        else
-        {
-            var uid = int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var id) ? id : 0;
-            var csv = await _db.Usuarios.Where(u => u.Id == uid)
-                .Select(u => u.Membresia != null ? u.Membresia.CamposVisibles : null)
-                .FirstOrDefaultAsync();
-            filtro.CamposVisibles = CamposProyecto.Conjunto(csv);
-        }
-
-        // Búsqueda por ubicación (área / ciudad / ZIP / sitio): empareja contra la dirección.
-        // Se tokeniza para que "Farmers Branch", "75234" o "Dallas, TX" funcionen por separado
-        // (deben aparecer TODOS los términos en la dirección).
-        if (!string.IsNullOrWhiteSpace(filtro.Zona))
-        {
-            var tokens = filtro.Zona.ToLowerInvariant()
-                .Split(new[] { ',', '/', ';', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries)
-                .Where(t => t.Length >= 2)
-                .ToArray();
-            if (tokens.Length > 0)
-                q = q.Where(p =>
-                {
-                    var dir = (p.Direccion ?? string.Empty).ToLowerInvariant();
-                    return tokens.All(t => dir.Contains(t));
-                });
-        }
-
-        if (!string.IsNullOrWhiteSpace(filtro.Busqueda))
-        {
-            var b = filtro.Busqueda.Trim().ToLowerInvariant();
-            q = q.Where(p => string.Join(' ',
-                p.Direccion, p.NombreProyecto, p.EmpresaContacto, p.NombreContacto,
-                p.Email, p.Telefono, p.TelefonoEmpresa, p.Nota).ToLowerInvariant().Contains(b));
-        }
-
-        if (!string.IsNullOrWhiteSpace(filtro.Tipo))
-            q = q.Where(p => p.Tipo == filtro.Tipo);
-
-        if (filtro.PresupuestoMin > 0)
-            q = q.Where(p => p.Presupuesto >= filtro.PresupuestoMin);
-
-        if (!string.IsNullOrWhiteSpace(filtro.Antiguedad))
-            q = q.Where(p => BucketAntiguedad(p.FechaInicio) == filtro.Antiguedad);
-
-        if (!string.IsNullOrWhiteSpace(filtro.Contacto))
-        {
-            var quiereContacto = filtro.Contacto == "yes";
-            q = q.Where(p => TieneContacto(p) == quiereContacto);
-        }
-
-        var lista = q.OrderByDescending(p => p.Prioridad).ToList();
+        var lista = await ObtenerProyectosFiltradosAsync(filtro);
 
         // KPIs y agregados sobre TODO el conjunto filtrado.
         filtro.TotalObras = lista.Count;
@@ -114,7 +49,83 @@ public class DashboardController : Controller
             .Take(DashboardViewModel.TamanoPagina)
             .ToList();
 
+        // Búsqueda/paginación por AJAX: se devuelve solo el fragmento de resultados
+        // (KPIs + pipeline + tabla), sin el layout completo ni el resto de la página —
+        // evita el "salto arriba" de una navegación normal y reduce el payload transferido.
+        if (string.Equals(Request.Headers["X-Requested-With"], "XMLHttpRequest", StringComparison.Ordinal))
+            return PartialView("_ResultadosDashboard", filtro);
+
         return View(filtro);
+    }
+
+    /// <summary>Exporta a Excel TODOS los campos de la tabla, respetando los filtros activos.
+    /// Solo administrador (no está sujeto al límite de campos por membresía).</summary>
+    [HttpGet]
+    [Authorize(Roles = Roles.Administrador)]
+    public async Task<IActionResult> ExportarExcel(DashboardViewModel filtro)
+    {
+        var lista = await ObtenerProyectosFiltradosAsync(filtro);
+
+        using var libro = new XLWorkbook();
+        var hoja = libro.Worksheets.Add("Proyectos");
+
+        string[] encabezados =
+        {
+            "Id", "Prioridad (Oportunidad)", "Confidence Score", "Dirección", "Proyecto", "Tipo",
+            "Fecha Inicio", "Presupuesto", "Yardas", "Yardas Reportadas", "Empresa Contacto",
+            "Nombre Contacto", "Email", "Teléfono Directo", "Teléfono Empresa", "Fuente",
+            "Estado de Verificación", "Última Verificación", "Nota", "Clave Externa",
+            "Generado por IA", "Número de Vistas", "Usuario Id", "Fecha Creación"
+        };
+        for (var i = 0; i < encabezados.Length; i++) hoja.Cell(1, i + 1).Value = encabezados[i];
+
+        var fila = 2;
+        foreach (var p in lista)
+        {
+            var c = 1;
+            hoja.Cell(fila, c++).Value = p.Id;
+            hoja.Cell(fila, c++).Value = p.Prioridad;
+            hoja.Cell(fila, c++).Value = p.ConfidenceScore;
+            hoja.Cell(fila, c++).Value = p.Direccion ?? "";
+            hoja.Cell(fila, c++).Value = p.NombreProyecto;
+            hoja.Cell(fila, c++).Value = p.Tipo ?? "";
+            if (p.FechaInicio.HasValue) hoja.Cell(fila, c).Value = p.FechaInicio.Value; else hoja.Cell(fila, c).Value = "";
+            c++;
+            hoja.Cell(fila, c++).Value = p.Presupuesto;
+            hoja.Cell(fila, c++).Value = p.Yardas;
+            hoja.Cell(fila, c++).Value = p.YardasReportadas ? "Sí" : "No (estimada)";
+            hoja.Cell(fila, c++).Value = p.EmpresaContacto ?? "";
+            hoja.Cell(fila, c++).Value = p.NombreContacto ?? "";
+            hoja.Cell(fila, c++).Value = p.Email ?? "";
+            hoja.Cell(fila, c++).Value = p.Telefono ?? "";
+            hoja.Cell(fila, c++).Value = p.TelefonoEmpresa ?? "";
+            hoja.Cell(fila, c++).Value = p.Fuente ?? "";
+            hoja.Cell(fila, c++).Value = p.EstadoVerificacion;
+            hoja.Cell(fila, c++).Value = p.UltimaVerificacion;
+            hoja.Cell(fila, c++).Value = p.Nota ?? "";
+            hoja.Cell(fila, c++).Value = p.ClaveExterna ?? "";
+            hoja.Cell(fila, c++).Value = p.GeneradoPorIa ? "Sí" : "No";
+            hoja.Cell(fila, c++).Value = p.NumeroVistas;
+            if (p.UsuarioId.HasValue) hoja.Cell(fila, c).Value = p.UsuarioId.Value; else hoja.Cell(fila, c).Value = "";
+            c++;
+            hoja.Cell(fila, c++).Value = p.FechaCreacion;
+            fila++;
+        }
+
+        var encabezadoRango = hoja.Range(1, 1, 1, encabezados.Length);
+        encabezadoRango.Style.Font.Bold = true;
+        encabezadoRango.Style.Fill.BackgroundColor = XLColor.FromArgb(0x21, 0x2E, 0x4A);
+        encabezadoRango.Style.Font.FontColor = XLColor.White;
+        hoja.SheetView.FreezeRows(1);
+        hoja.Columns().AdjustToContents();
+
+        using var stream = new MemoryStream();
+        libro.SaveAs(stream);
+        stream.Position = 0;
+
+        var nombreArchivo = $"proyectos_{DateTime.UtcNow:yyyyMMdd_HHmm}.xlsx";
+        return File(stream.ToArray(),
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", nombreArchivo);
     }
 
     // ---------------- Detalle (solo consulta) + conteo de vistas ----------------
@@ -240,6 +251,82 @@ public class DashboardController : Controller
     }
 
     // ---------------- Helpers ----------------
+
+    /// <summary>
+    /// Aplica las reglas de exhibición, de membresía (campos visibles) y todos los filtros de
+    /// búsqueda sobre los proyectos; devuelve la lista completa filtrada y ordenada (sin
+    /// paginar). Compartido por Index (pagina) y ExportarExcel (exporta todo el resultado).
+    /// </summary>
+    private async Task<List<Proyecto>> ObtenerProyectosFiltradosAsync(DashboardViewModel filtro)
+    {
+        var proyectos = await _db.Proyectos.AsNoTracking().ToListAsync();
+
+        IEnumerable<Proyecto> q = proyectos;
+
+        var esAdmin = User.IsInRole(Roles.Administrador);
+
+        // Regla de negocio (exhibición obligatoria): a un CLIENTE no se le muestra ningún
+        // proyecto sin Fuente, Estado de verificación y Última verificación. El administrador
+        // sí ve todo para poder completarlo/gestionarlo.
+        if (!esAdmin)
+            q = q.Where(p => !string.IsNullOrWhiteSpace(p.Fuente)
+                && !string.IsNullOrWhiteSpace(p.EstadoVerificacion)
+                && p.UltimaVerificacion.Year > 1);
+
+        // Campos visibles según la membresía del usuario (el admin ve todos).
+        if (esAdmin)
+            filtro.CamposVisibles = new HashSet<string>(CamposProyecto.Claves, StringComparer.OrdinalIgnoreCase);
+        else
+        {
+            var uid = int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var id) ? id : 0;
+            var csv = await _db.Usuarios.Where(u => u.Id == uid)
+                .Select(u => u.Membresia != null ? u.Membresia.CamposVisibles : null)
+                .FirstOrDefaultAsync();
+            filtro.CamposVisibles = CamposProyecto.Conjunto(csv);
+        }
+
+        // Búsqueda por ubicación (área / ciudad / ZIP / sitio): empareja contra la dirección.
+        // Se tokeniza para que "Farmers Branch", "75234" o "Dallas, TX" funcionen por separado
+        // (deben aparecer TODOS los términos en la dirección).
+        if (!string.IsNullOrWhiteSpace(filtro.Zona))
+        {
+            var tokens = filtro.Zona.ToLowerInvariant()
+                .Split(new[] { ',', '/', ';', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries)
+                .Where(t => t.Length >= 2)
+                .ToArray();
+            if (tokens.Length > 0)
+                q = q.Where(p =>
+                {
+                    var dir = (p.Direccion ?? string.Empty).ToLowerInvariant();
+                    return tokens.All(t => dir.Contains(t));
+                });
+        }
+
+        if (!string.IsNullOrWhiteSpace(filtro.Busqueda))
+        {
+            var b = filtro.Busqueda.Trim().ToLowerInvariant();
+            q = q.Where(p => string.Join(' ',
+                p.Direccion, p.NombreProyecto, p.EmpresaContacto, p.NombreContacto,
+                p.Email, p.Telefono, p.TelefonoEmpresa, p.Nota).ToLowerInvariant().Contains(b));
+        }
+
+        if (!string.IsNullOrWhiteSpace(filtro.Tipo))
+            q = q.Where(p => p.Tipo == filtro.Tipo);
+
+        if (filtro.PresupuestoMin > 0)
+            q = q.Where(p => p.Presupuesto >= filtro.PresupuestoMin);
+
+        if (!string.IsNullOrWhiteSpace(filtro.Antiguedad))
+            q = q.Where(p => BucketAntiguedad(p.FechaInicio) == filtro.Antiguedad);
+
+        if (!string.IsNullOrWhiteSpace(filtro.Contacto))
+        {
+            var quiereContacto = filtro.Contacto == "yes";
+            q = q.Where(p => TieneContacto(p) == quiereContacto);
+        }
+
+        return q.OrderByDescending(p => p.Prioridad).ToList();
+    }
 
     private int? UsuarioActualId()
     {

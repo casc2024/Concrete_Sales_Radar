@@ -1,0 +1,152 @@
+@using ConcreteSalesRadar.Helpers
+@model DashboardViewModel
+@{
+    string AgeLabel(int? meses) =>
+        meses is null ? L["Age_NA"].Value
+        : meses < 0 ? L["Age_Upcoming"].Value
+        : $"{meses} {(meses == 1 ? L["Age_Month"].Value : L["Age_Months"].Value)}";
+}
+
+<!-- KPIs -->
+<div class="kpis">
+    <div class="kpi"><strong>@Formato.Numero(Model.TotalObras)</strong><span>@L["Dash_KPI_Projects"]</span></div>
+    <div class="kpi"><strong>@Formato.Dinero(Model.PresupuestoTotal)</strong><span>@L["Dash_KPI_Budget"]</span></div>
+    <div class="kpi"><strong>@Formato.Numero(Model.YardasTotal)</strong><span>@L["Dash_KPI_Yards"]</span></div>
+    <div class="kpi"><strong>@Model.Calientes</strong><span>@L["Dash_KPI_Hot"]</span></div>
+    <div class="kpi"><strong>@Model.ConContacto</strong><span>@L["Dash_KPI_Contact"]</span></div>
+</div>
+
+<!-- Pipeline -->
+<div class="grid2">
+    <div class="card">
+        <h3 class="card-title">@L["Dash_PipelineType"]</h3>
+        @if (Model.PorTipo.Any())
+        {
+            foreach (var t in Model.PorTipo)
+            {
+                <p style="margin:6px 0"><b>@t.Tipo</b> <span class="muted">(@t.Cantidad)</span></p>
+            }
+        }
+        else
+        {
+            <span class="muted">@L["Dash_NoData"]</span>
+        }
+    </div>
+    <div class="card">
+        <h3 class="card-title">@L["Dash_Priority"]</h3>
+        <p style="margin:6px 0"><b>@L["Dash_PrioHigh"]:</b> @Model.PrioridadAlta</p>
+        <p style="margin:6px 0"><b>@L["Dash_PrioMid"]:</b> @Model.PrioridadMedia</p>
+        <p style="margin:6px 0"><b>@L["Dash_PrioLow"]:</b> @Model.PrioridadBaja</p>
+    </div>
+</div>
+
+<!-- Tabla -->
+<div class="card">
+    <div class="tablewrap">
+        <table class="data">
+            <thead>
+                <tr>
+                    @if (Model.Ver("prioridad")) { <th>@L["Col_Priority"]</th> }
+                    @if (Model.Ver("direccion")) { <th>@L["Col_Address"]</th> }
+                    @if (Model.Ver("proyecto")) { <th>@L["Col_Project"]</th> }
+                    @if (Model.Ver("tipo")) { <th>@L["Col_Type"]</th> }
+                    @if (Model.Ver("antiguedad")) { <th>@L["Col_Age"]</th> }
+                    @if (Model.Ver("presupuesto")) { <th>@L["Col_Budget"]</th> }
+                    @if (Model.Ver("yardas")) { <th>@L["Col_Yards"]</th> }
+                    @if (Model.Ver("empresa")) { <th>@L["Col_ContactCompany"]</th> }
+                    @if (Model.Ver("nombre")) { <th>@L["Col_Name"]</th> }
+                    @if (Model.Ver("email")) { <th>@L["Col_Email"]</th> }
+                    @if (Model.Ver("telefono")) { <th>@L["Col_PhoneDirect"]</th> }
+                    @if (Model.Ver("telefonoEmpresa")) { <th>@L["Col_PhoneCompany"]</th> }
+                    <th>Vistas</th>
+                    <th>@L["Col_Actions"]</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in Model.Proyectos)
+                {
+                    var age = Formato.Antiguedad(p.FechaInicio);
+                    <tr>
+                        @if (Model.Ver("prioridad")) { <td><span class="badge @Formato.Calor(p.Prioridad)">@p.Prioridad / 100</span></td> }
+                        @if (Model.Ver("direccion")) { <td>@(p.Direccion ?? "-")</td> }
+                        @if (Model.Ver("proyecto")) { <td><b>@p.NombreProyecto</b></td> }
+                        @if (Model.Ver("tipo")) { <td>@(p.Tipo ?? "-")</td> }
+                        @if (Model.Ver("antiguedad")) { <td><span class="badge @age.Clase">@AgeLabel(age.Meses)</span></td> }
+                        @if (Model.Ver("presupuesto")) { <td>@Formato.Dinero(p.Presupuesto)</td> }
+                        @if (Model.Ver("yardas")) { <td><b>@Formato.Numero(p.Yardas)</b> yd³</td> }
+                        @if (Model.Ver("empresa")) { <td>@(p.EmpresaContacto ?? "-")</td> }
+                        @if (Model.Ver("nombre")) { <td>@(p.NombreContacto ?? "-")</td> }
+                        @if (Model.Ver("email")) { <td>@if (!string.IsNullOrWhiteSpace(p.Email)) { <a href="mailto:@p.Email">@p.Email</a> } else { <text>-</text> }</td> }
+                        @if (Model.Ver("telefono")) { <td>@if (!string.IsNullOrWhiteSpace(p.Telefono)) { <a href="tel:@p.Telefono">@p.Telefono</a> } else { <text>-</text> }</td> }
+                        @if (Model.Ver("telefonoEmpresa")) { <td>@if (!string.IsNullOrWhiteSpace(p.TelefonoEmpresa)) { <a href="tel:@p.TelefonoEmpresa">@p.TelefonoEmpresa</a> } else { <text>-</text> }</td> }
+                        <td><b>@p.NumeroVistas</b></td>
+                        <td class="actions-cell">
+                            <a class="btn btn-primary btn-sm" asp-action="Detalle" asp-route-id="@p.Id">Ver</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @if (!Model.Proyectos.Any())
+        {
+            <div class="empty">@L["Dash_Empty"]</div>
+        }
+    </div>
+
+    @if (Model.TotalRegistros > 0)
+    {
+        var desde = (Model.Pagina - 1) * DashboardViewModel.TamanoPagina + 1;
+        var hasta = Math.Min(Model.Pagina * DashboardViewModel.TamanoPagina, Model.TotalRegistros);
+        var inicio = Math.Max(1, Model.Pagina - 2);
+        var fin = Math.Min(Model.TotalPaginas, Model.Pagina + 2);
+        <div class="pager">
+            <span class="pager-info">
+                @L["Page_Info", Model.Pagina, Model.TotalPaginas]
+                <span class="muted">· @desde–@hasta / @Model.TotalRegistros</span>
+            </span>
+            <div class="pager-links">
+                @if (Model.Pagina > 1)
+                {
+                    <a class="page-link" asp-action="Index"
+                       asp-route-Zona="@Model.Zona" asp-route-Tipo="@Model.Tipo"
+                       asp-route-PresupuestoMin="@Model.PresupuestoMin" asp-route-Antiguedad="@Model.Antiguedad"
+                       asp-route-Busqueda="@Model.Busqueda" asp-route-Contacto="@Model.Contacto"
+                       asp-route-pagina="@(Model.Pagina - 1)">‹ @L["Page_Prev"]</a>
+                }
+                else
+                {
+                    <span class="page-link disabled">‹ @L["Page_Prev"]</span>
+                }
+
+                @for (var i = inicio; i <= fin; i++)
+                {
+                    if (i == Model.Pagina)
+                    {
+                        <span class="page-link active">@i</span>
+                    }
+                    else
+                    {
+                        <a class="page-link" asp-action="Index"
+                           asp-route-Zona="@Model.Zona" asp-route-Tipo="@Model.Tipo"
+                           asp-route-PresupuestoMin="@Model.PresupuestoMin" asp-route-Antiguedad="@Model.Antiguedad"
+                           asp-route-Busqueda="@Model.Busqueda" asp-route-Contacto="@Model.Contacto"
+                           asp-route-pagina="@i">@i</a>
+                    }
+                }
+
+                @if (Model.Pagina < Model.TotalPaginas)
+                {
+                    <a class="page-link" asp-action="Index"
+                       asp-route-Zona="@Model.Zona" asp-route-Tipo="@Model.Tipo"
+                       asp-route-PresupuestoMin="@Model.PresupuestoMin" asp-route-Antiguedad="@Model.Antiguedad"
+                       asp-route-Busqueda="@Model.Busqueda" asp-route-Contacto="@Model.Contacto"
+                       asp-route-pagina="@(Model.Pagina + 1)">@L["Page_Next"] ›</a>
+                }
+                else
+                {
+                    <span class="page-link disabled">@L["Page_Next"] ›</span>
+                }
+            </div>
+        </div>
+    }
+</div>
