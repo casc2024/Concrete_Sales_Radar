@@ -327,6 +327,9 @@
   <data name="Dash_SearchBtn" xml:space="preserve">
     <value>Buscar obras</value>
   </data>
+  <data name="Dash_ExportExcel" xml:space="preserve">
+    <value>Exportar para Excel</value>
+  </data>
   <data name="Dash_KPI_Projects" xml:space="preserve">
     <value>Obras encontradas</value>
   </data>

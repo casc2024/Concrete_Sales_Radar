@@ -84,6 +84,24 @@
                 <label>&nbsp;</label>
                 <button type="submit" class="btn btn-primary btn-block">@L["Dash_SearchBtn"]</button>
             </div>
+            @if (User.IsInRole("Administrador"))
+            {
+                <div>
+                    <label>&nbsp;</label>
+                    <a class="btn btn-ghost btn-block" style="display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap"
+                       asp-controller="Dashboard" asp-action="ExportarExcel"
+                       asp-route-Zona="@Model.Zona" asp-route-Tipo="@Model.Tipo"
+                       asp-route-PresupuestoMin="@Model.PresupuestoMin" asp-route-Antiguedad="@Model.Antiguedad"
+                       title="Exportar a Excel">
+                        <svg width="18" height="18" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <rect x="2" y="4" width="44" height="40" rx="5" fill="#1D6F42"></rect>
+                            <rect x="7" y="9" width="34" height="30" rx="2" fill="#ffffff"></rect>
+                            <path d="M14 15 L20.5 24 L14 33 H18.3 L22.5 26.7 L26.7 33 H31 L24.5 24 L31 15 H26.7 L22.5 21.3 L18.3 15 Z" fill="#1D6F42"></path>
+                        </svg>
+                        <span>@L["Dash_ExportExcel"]</span>
+                    </a>
+                </div>
+            }
         </div>
     </form>
 </div>
