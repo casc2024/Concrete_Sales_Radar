@@ -105,6 +105,8 @@ builder.Services.AddScoped<IFuenteProyectos>(sp =>
             ("Datos Abiertos (Socrata)", new FuenteDatosAbiertos(http, opts.Value, sp.GetRequiredService<ILogger<FuenteDatosAbiertos>>())),
             ("ArcGIS", new FuenteArcGis(http, opts.Value, sp.GetRequiredService<ILogger<FuenteArcGis>>())),
             ("SAM.gov", new FuenteSamGov(http, opts.Value, sp.GetRequiredService<ILogger<FuenteSamGov>>())),
+            ("USASpending (adjudicados)", new FuenteUsaSpending(http, opts.Value, sp.GetRequiredService<ILogger<FuenteUsaSpending>>())),
+            ("TxDOT", new FuenteTxDot(http, opts.Value, sp.GetRequiredService<ILogger<FuenteTxDot>>())),
             ("Red amplia (auto)", new FuenteSocrataAuto(http, opts.Value, sp.GetRequiredService<ILogger<FuenteSocrataAuto>>())),
         };
         return new FuenteCompuesta(sub, sp.GetRequiredService<ILogger<FuenteCompuesta>>());
@@ -113,6 +115,10 @@ builder.Services.AddScoped<IFuenteProyectos>(sp =>
         return new FuenteTdlrTabs(http, opts.Value, sp.GetRequiredService<ILogger<FuenteTdlrTabs>>());
     if (proveedor.Equals("SamGov", StringComparison.OrdinalIgnoreCase))
         return new FuenteSamGov(http, opts.Value, sp.GetRequiredService<ILogger<FuenteSamGov>>());
+    if (proveedor.Equals("UsaSpendingAwards", StringComparison.OrdinalIgnoreCase))
+        return new FuenteUsaSpending(http, opts.Value, sp.GetRequiredService<ILogger<FuenteUsaSpending>>());
+    if (proveedor.Equals("TxDot", StringComparison.OrdinalIgnoreCase))
+        return new FuenteTxDot(http, opts.Value, sp.GetRequiredService<ILogger<FuenteTxDot>>());
     if (proveedor.Equals("DatosAbiertos", StringComparison.OrdinalIgnoreCase))
         return new FuenteDatosAbiertos(http, opts.Value, sp.GetRequiredService<ILogger<FuenteDatosAbiertos>>());
     if (proveedor.Equals("ArcGis", StringComparison.OrdinalIgnoreCase))
@@ -130,7 +136,9 @@ builder.Services.AddScoped<IEnriquecedorProyectosIa>(sp =>
         prov.Equals("DatosAbiertos", StringComparison.OrdinalIgnoreCase) ||
         prov.Equals("ArcGis", StringComparison.OrdinalIgnoreCase) ||
         prov.Equals("TdlrTabs", StringComparison.OrdinalIgnoreCase) ||
-        prov.Equals("SamGov", StringComparison.OrdinalIgnoreCase))
+        prov.Equals("SamGov", StringComparison.OrdinalIgnoreCase) ||
+        prov.Equals("UsaSpendingAwards", StringComparison.OrdinalIgnoreCase) ||
+        prov.Equals("TxDot", StringComparison.OrdinalIgnoreCase))
         return new EnriquecedorDirecto(sp.GetRequiredService<ILogger<EnriquecedorDirecto>>());
 
     var modo = opts.Value.Ia.Modo ?? "Claude";

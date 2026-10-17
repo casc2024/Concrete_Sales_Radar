@@ -27,7 +27,9 @@ public static class CategoriasLeads
         ["PAVING"] = Rx(@"\bpav(e[sd]?|ing|ements?)\b"),
         ["DRIVEWAY"] = Rx(@"\bdriveways?\b"),
         ["SIDEWALK"] = Rx(@"\bside\s?walks?\b"),
-        ["NEW CONSTRUCTION"] = Rx(@"\bnew\s+construction\b|\bnew\s+builds?\b"),
+        // Incluye fraseo típico de ingeniería vial (TxDOT y similares): "Construct New Road",
+        // "New Arterial", "New Roadway Lanes" son obra nueva aunque no digan "construction".
+        ["NEW CONSTRUCTION"] = Rx(@"\bnew\s+construction\b|\bnew\s+builds?\b|\bconstruct\s+new\b|\bnew\s+(road|roadway|arterial|lanes?)\b"),
         ["NEW BUILDING"] = Rx(@"\bnew\s+buildings?\b"),
         ["COMMERCIAL NEW"] = Rx(@"\bnew\b[^.]{0,30}\bcommercial\b|\bcommercial\b[^.]{0,30}\bnew\b"),
         ["INDUSTRIAL NEW"] = Rx(@"\bnew\b[^.]{0,30}\bindustrial\b|\bindustrial\b[^.]{0,30}\bnew\b"),
