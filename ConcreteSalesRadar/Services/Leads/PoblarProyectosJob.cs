@@ -56,6 +56,16 @@ public class PoblarProyectosJob
         if (leads.Count == 0)
             return "Sin leads: la IA no devolvió proyectos normalizados.";
 
+        // Filtro de categorías del job en background: solo los tipos de obra configurados
+        // (FOUNDATION, PAVING, WAREHOUSE, etc.). Vacío = sin filtro, acepta todo.
+        var categorias = CategoriasLeads.DesdeCsv(_opciones.Categorias);
+        var totalAntesDeCategoria = leads.Count;
+        if (categorias.Length > 0)
+            leads = leads.Where(l => CategoriasLeads.Coincide(l.Tipo, l.NombreProyecto, l.Nota, categorias))
+                         .ToList();
+        if (leads.Count == 0)
+            return $"Sin leads: ninguno de los {totalAntesDeCategoria} normalizados coincide con las categorías configuradas.";
+
         // Dedup: contra la BD (por ClaveExterna) y dentro del propio lote.
         var claves = leads.Where(l => !string.IsNullOrWhiteSpace(l.ClaveExterna))
                           .Select(l => l.ClaveExterna!).Distinct().ToList();

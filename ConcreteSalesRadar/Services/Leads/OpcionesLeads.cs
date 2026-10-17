@@ -24,6 +24,13 @@ public class OpcionesLeads
     public string TipoProyecto { get; set; } = "All";
     public decimal PresupuestoMinimo { get; set; } = 5_000_000m;
 
+    /// <summary>
+    /// Categorías de proyecto que el job acepta, separadas por coma (ver CategoriasLeads).
+    /// Se evalúa por palabra clave contra Tipo + NombreProyecto + Nota del lead, porque cada
+    /// fuente nombra sus tipos distinto. Vacío = sin filtro (acepta cualquier categoría).
+    /// </summary>
+    public string? Categorias { get; set; } = string.Join(',', CategoriasLeads.PorDefecto);
+
     /// <summary>Fuente de datos real (API de construcción).</summary>
     public FuenteApiOpciones Fuente { get; set; } = new();
 
