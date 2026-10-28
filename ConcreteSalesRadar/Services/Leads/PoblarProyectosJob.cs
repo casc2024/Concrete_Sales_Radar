@@ -7,9 +7,10 @@ using Microsoft.Extensions.Options;
 namespace ConcreteSalesRadar.Services.Leads;
 
 /// <summary>
-/// Job de Hangfire que consulta la fuente real de proyectos de construcción, los normaliza con IA
-/// y los inserta en la tabla de proyectos (sin dueño, visibles para el admin). Deduplica por
-/// ClaveExterna para no repetir leads. Su ejecución e historial se ven en /hangfire.
+/// Job de Hangfire que consulta las fuentes reales de proyectos de construcción, las normaliza
+/// (paso directo o IA según la fuente) y las inserta en la tabla de proyectos (sin dueño, visibles
+/// para el admin). Corre TODOS los pipelines configurados en una misma ejecución, junta los leads
+/// y deduplica por ClaveExterna. Su ejecución e historial se ven en /hangfire.
 /// </summary>
 public class PoblarProyectosJob
 {
@@ -17,56 +18,66 @@ public class PoblarProyectosJob
     public const string IdRecurrente = "poblar-proyectos";
 
     private readonly OpcionesLeads _opciones;
-    private readonly IFuenteProyectos _fuente;
-    private readonly IEnriquecedorProyectosIa _ia;
+    private readonly IReadOnlyList<PipelineLeads> _pipelines;
     private readonly AppDbContext _db;
     private readonly ILogger<PoblarProyectosJob> _logger;
 
-    public PoblarProyectosJob(IOptions<OpcionesLeads> opciones, IFuenteProyectos fuente,
-        IEnriquecedorProyectosIa ia, AppDbContext db, ILogger<PoblarProyectosJob> logger)
+    public PoblarProyectosJob(IOptions<OpcionesLeads> opciones, IReadOnlyList<PipelineLeads> pipelines,
+        AppDbContext db, ILogger<PoblarProyectosJob> logger)
     {
         _opciones = opciones.Value;
-        _fuente = fuente;
-        _ia = ia;
+        _pipelines = pipelines;
         _db = db;
         _logger = logger;
     }
 
-    /// <summary>
-    /// Devuelve un resumen que Hangfire guarda como resultado del job (visible en el dashboard).
-    /// Si falta configuración o la fuente no responde, termina con éxito y lo indica en el resumen.
-    /// </summary>
     [AutomaticRetry(Attempts = 2, DelaysInSeconds = new[] { 60, 300 })]
     [DisableConcurrentExecution(timeoutInSeconds: 60 * 30)]
     public async Task<string> EjecutarAsync(CancellationToken ct)
     {
-        if (!_fuente.EstaConfigurada)
-            return "Omitido: fuente de leads sin configurar (Leads:Fuente:ApiKey).";
-        if (!_ia.EstaConfigurado)
-            return "Omitido: IA sin configurar (ANTHROPIC_API_KEY / Leads:Ia:ApiKey).";
-
         var criterios = new CriteriosBusqueda(
             _opciones.Ubicacion, _opciones.RadioMillas, _opciones.TipoProyecto, _opciones.PresupuestoMinimo);
 
-        var crudo = await _fuente.ObtenerDatosCrudosAsync(criterios, ct);
-        if (string.IsNullOrWhiteSpace(crudo))
-            return "Sin datos: la fuente no devolvió respuesta válida.";
+        // --- Corre cada pipeline (fuente + su enriquecedor) y junta los leads ---
+        var leads = new List<ProyectoLead>();
+        var resumen = new List<string>();
 
-        var leads = await _ia.NormalizarAsync(crudo, criterios, ct);
+        foreach (var pipe in _pipelines)
+        {
+            try
+            {
+                if (!pipe.Fuente.EstaConfigurada) { resumen.Add($"{pipe.Nombre}: fuente sin configurar"); continue; }
+                if (!pipe.Ia.EstaConfigurado) { resumen.Add($"{pipe.Nombre}: IA sin configurar"); continue; }
+
+                var crudo = await pipe.Fuente.ObtenerDatosCrudosAsync(criterios, ct);
+                if (string.IsNullOrWhiteSpace(crudo)) { resumen.Add($"{pipe.Nombre}: sin datos"); continue; }
+
+                var norm = await pipe.Ia.NormalizarAsync(crudo, criterios, ct);
+                resumen.Add($"{pipe.Nombre}: {norm.Count} normalizado(s)");
+                leads.AddRange(norm);
+            }
+            catch (Exception ex)
+            {
+                // Un pipeline que falla no tumba a los demás: se anota y se sigue.
+                _logger.LogError(ex, "Pipeline de leads '{Nombre}' falló", pipe.Nombre);
+                resumen.Add($"{pipe.Nombre}: ERROR {ex.Message}");
+            }
+        }
+
+        var detalle = string.Join(" | ", resumen);
         if (leads.Count == 0)
-            return "Sin leads: la IA no devolvió proyectos normalizados.";
+            return $"Sin leads. {detalle}";
 
-        // Filtro de categorías del job en background: solo los tipos de obra configurados
-        // (FOUNDATION, PAVING, WAREHOUSE, etc.). Vacío = sin filtro, acepta todo.
+        // Filtro de categorías (aplica a todas las fuentes a la vez).
         var categorias = CategoriasLeads.DesdeCsv(_opciones.Categorias);
         var totalAntesDeCategoria = leads.Count;
         if (categorias.Length > 0)
             leads = leads.Where(l => CategoriasLeads.Coincide(l.Tipo, l.NombreProyecto, l.Nota, categorias))
                          .ToList();
         if (leads.Count == 0)
-            return $"Sin leads: ninguno de los {totalAntesDeCategoria} normalizados coincide con las categorías configuradas.";
+            return $"Sin leads: ninguno de los {totalAntesDeCategoria} coincide con las categorías. {detalle}";
 
-        // Dedup: contra la BD (por ClaveExterna) y dentro del propio lote.
+        // Dedup: contra la BD (por ClaveExterna) y dentro del propio lote combinado.
         var claves = leads.Where(l => !string.IsNullOrWhiteSpace(l.ClaveExterna))
                           .Select(l => l.ClaveExterna!).Distinct().ToList();
         var existentes = claves.Count == 0
@@ -98,14 +109,10 @@ public class PoblarProyectosJob
                 || !string.IsNullOrWhiteSpace(lead.NombreContacto);
 
             var confianza = ReglasCalidadDatos.Confianza(estado, tieneEmpresa, tieneContacto);
-            // Red amplia (auto-mapeado): se topa la confianza para no inflar datos sin verificar.
             if (lead.BajaConfianza) confianza = Math.Min(confianza, 60);
 
             _db.Proyectos.Add(new Proyecto
             {
-                // Recortamos cada campo a su límite en la entidad: la fuente puede traer
-                // textos más largos (ej. un 'type'/'subtype' de Shovels > 50 chars) y sin
-                // esto Postgres rechaza el insert con "value too long for varying(N)".
                 ClaveExterna = Cortar(string.IsNullOrWhiteSpace(clave) ? null : clave, 200),
                 Direccion = Cortar(lead.Direccion, 250),
                 NombreProyecto = Cortar(lead.NombreProyecto, 200) ?? string.Empty,
@@ -115,7 +122,7 @@ public class PoblarProyectosJob
                     : null,
                 Presupuesto = lead.Presupuesto,
                 Yardas = lead.Yardas,
-                YardasReportadas = lead.YardasReportadas, // casi siempre false = estimadas
+                YardasReportadas = lead.YardasReportadas,
                 EmpresaContacto = Cortar(lead.EmpresaContacto, 200),
                 NombreContacto = Cortar(lead.NombreContacto, 120),
                 Email = Cortar(lead.Email, 120),
@@ -138,7 +145,7 @@ public class PoblarProyectosJob
             await _db.SaveChangesAsync(ct);
 
         _logger.LogInformation("Job de leads: {Insertados} proyecto(s) nuevo(s) insertado(s).", insertados);
-        return $"OK: {insertados} proyecto(s) nuevo(s) de {leads.Count} normalizado(s).";
+        return $"OK: {insertados} nuevo(s) de {leads.Count} candidato(s). {detalle}";
     }
 
     /// <summary>Recorta un texto al máximo permitido por la columna (null-safe).</summary>

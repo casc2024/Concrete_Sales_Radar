@@ -91,64 +91,77 @@ builder.Services.AddHttpClient("leads", c =>
     c.DefaultRequestHeaders.UserAgent.ParseAdd("ConcreteSalesRadar/1.0 (+leads job)");
     c.DefaultRequestHeaders.Accept.ParseAdd("application/json, text/html");
 });
-builder.Services.AddScoped<IFuenteProyectos>(sp =>
+// Pipelines de leads: el proveedor puede ser un CSV (ej. "Nacional,BusquedaWeb") y el job corre
+// TODOS en la misma ejecución, cada uno con su enriquecedor, y junta/deduplica los leads.
+builder.Services.AddScoped<IReadOnlyList<PipelineLeads>>(sp =>
 {
     var opts = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<OpcionesLeads>>();
     var http = sp.GetRequiredService<IHttpClientFactory>().CreateClient("leads");
-    var proveedor = opts.Value.Fuente.Proveedor ?? "Shovels";
-    if (proveedor.Equals("Nacional", StringComparison.OrdinalIgnoreCase))
-    {
-        // Todas las fuentes gratis juntas → cobertura nacional en una sola pasada.
-        var sub = new List<(string, IFuenteProyectos)>
-        {
-            ("TDLR TABS", new FuenteTdlrTabs(http, opts.Value, sp.GetRequiredService<ILogger<FuenteTdlrTabs>>())),
-            ("Datos Abiertos (Socrata)", new FuenteDatosAbiertos(http, opts.Value, sp.GetRequiredService<ILogger<FuenteDatosAbiertos>>())),
-            ("ArcGIS", new FuenteArcGis(http, opts.Value, sp.GetRequiredService<ILogger<FuenteArcGis>>())),
-            ("SAM.gov", new FuenteSamGov(http, opts.Value, sp.GetRequiredService<ILogger<FuenteSamGov>>())),
-            ("USASpending (adjudicados)", new FuenteUsaSpending(http, opts.Value, sp.GetRequiredService<ILogger<FuenteUsaSpending>>())),
-            ("TxDOT", new FuenteTxDot(http, opts.Value, sp.GetRequiredService<ILogger<FuenteTxDot>>())),
-            ("Red amplia (auto)", new FuenteSocrataAuto(http, opts.Value, sp.GetRequiredService<ILogger<FuenteSocrataAuto>>())),
-        };
-        return new FuenteCompuesta(sub, sp.GetRequiredService<ILogger<FuenteCompuesta>>());
-    }
-    if (proveedor.Equals("TdlrTabs", StringComparison.OrdinalIgnoreCase))
-        return new FuenteTdlrTabs(http, opts.Value, sp.GetRequiredService<ILogger<FuenteTdlrTabs>>());
-    if (proveedor.Equals("SamGov", StringComparison.OrdinalIgnoreCase))
-        return new FuenteSamGov(http, opts.Value, sp.GetRequiredService<ILogger<FuenteSamGov>>());
-    if (proveedor.Equals("UsaSpendingAwards", StringComparison.OrdinalIgnoreCase))
-        return new FuenteUsaSpending(http, opts.Value, sp.GetRequiredService<ILogger<FuenteUsaSpending>>());
-    if (proveedor.Equals("TxDot", StringComparison.OrdinalIgnoreCase))
-        return new FuenteTxDot(http, opts.Value, sp.GetRequiredService<ILogger<FuenteTxDot>>());
-    if (proveedor.Equals("DatosAbiertos", StringComparison.OrdinalIgnoreCase))
-        return new FuenteDatosAbiertos(http, opts.Value, sp.GetRequiredService<ILogger<FuenteDatosAbiertos>>());
-    if (proveedor.Equals("ArcGis", StringComparison.OrdinalIgnoreCase))
-        return new FuenteArcGis(http, opts.Value, sp.GetRequiredService<ILogger<FuenteArcGis>>());
-    if (proveedor.Equals("BusquedaWeb", StringComparison.OrdinalIgnoreCase))
-        return new FuenteBusquedaWeb(http, opts.Value, sp.GetRequiredService<ILogger<FuenteBusquedaWeb>>());
-    return proveedor.Equals("Http", StringComparison.OrdinalIgnoreCase)
-        ? new FuenteProyectosHttp(http, opts, sp.GetRequiredService<ILogger<FuenteProyectosHttp>>())
-        : new FuenteProyectosShovels(http, opts, sp.GetRequiredService<ILogger<FuenteProyectosShovels>>());
-});
-builder.Services.AddScoped<IEnriquecedorProyectosIa>(sp =>
-{
-    var opts = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<OpcionesLeads>>();
-    // Las fuentes que ya entregan leads normalizados usan el paso directo (sin IA, sin costo).
-    var prov = opts.Value.Fuente.Proveedor ?? "";
-    if (prov.Equals("Nacional", StringComparison.OrdinalIgnoreCase) ||
-        prov.Equals("DatosAbiertos", StringComparison.OrdinalIgnoreCase) ||
-        prov.Equals("ArcGis", StringComparison.OrdinalIgnoreCase) ||
-        prov.Equals("TdlrTabs", StringComparison.OrdinalIgnoreCase) ||
-        prov.Equals("SamGov", StringComparison.OrdinalIgnoreCase) ||
-        prov.Equals("UsaSpendingAwards", StringComparison.OrdinalIgnoreCase) ||
-        prov.Equals("TxDot", StringComparison.OrdinalIgnoreCase))
-        return new EnriquecedorDirecto(sp.GetRequiredService<ILogger<EnriquecedorDirecto>>());
 
-    var modo = opts.Value.Ia.Modo ?? "Claude";
-    if (modo.Equals("Local", StringComparison.OrdinalIgnoreCase))
-        return new EnriquecedorProyectosLocal(sp.GetRequiredService<ILogger<EnriquecedorProyectosLocal>>());
-    if (modo.Equals("Gemini", StringComparison.OrdinalIgnoreCase))
-        return new EnriquecedorProyectosGemini(opts, sp.GetRequiredService<ILogger<EnriquecedorProyectosGemini>>());
-    return new EnriquecedorProyectosClaude(opts, sp.GetRequiredService<ILogger<EnriquecedorProyectosClaude>>());
+    // Fuentes que ya entregan leads normalizados → paso directo (sin IA, sin costo).
+    static bool EsDirecta(string p) =>
+        p.Equals("Nacional", StringComparison.OrdinalIgnoreCase) ||
+        p.Equals("DatosAbiertos", StringComparison.OrdinalIgnoreCase) ||
+        p.Equals("ArcGis", StringComparison.OrdinalIgnoreCase) ||
+        p.Equals("TdlrTabs", StringComparison.OrdinalIgnoreCase) ||
+        p.Equals("SamGov", StringComparison.OrdinalIgnoreCase) ||
+        p.Equals("UsaSpendingAwards", StringComparison.OrdinalIgnoreCase) ||
+        p.Equals("TxDot", StringComparison.OrdinalIgnoreCase);
+
+    IFuenteProyectos CrearFuente(string proveedor)
+    {
+        if (proveedor.Equals("Nacional", StringComparison.OrdinalIgnoreCase))
+        {
+            var sub = new List<(string, IFuenteProyectos)>
+            {
+                ("TDLR TABS", new FuenteTdlrTabs(http, opts.Value, sp.GetRequiredService<ILogger<FuenteTdlrTabs>>())),
+                ("Datos Abiertos (Socrata)", new FuenteDatosAbiertos(http, opts.Value, sp.GetRequiredService<ILogger<FuenteDatosAbiertos>>())),
+                ("ArcGIS", new FuenteArcGis(http, opts.Value, sp.GetRequiredService<ILogger<FuenteArcGis>>())),
+                ("SAM.gov", new FuenteSamGov(http, opts.Value, sp.GetRequiredService<ILogger<FuenteSamGov>>())),
+                ("USASpending (adjudicados)", new FuenteUsaSpending(http, opts.Value, sp.GetRequiredService<ILogger<FuenteUsaSpending>>())),
+                ("TxDOT", new FuenteTxDot(http, opts.Value, sp.GetRequiredService<ILogger<FuenteTxDot>>())),
+                ("Red amplia (auto)", new FuenteSocrataAuto(http, opts.Value, sp.GetRequiredService<ILogger<FuenteSocrataAuto>>())),
+            };
+            return new FuenteCompuesta(sub, sp.GetRequiredService<ILogger<FuenteCompuesta>>());
+        }
+        if (proveedor.Equals("TdlrTabs", StringComparison.OrdinalIgnoreCase))
+            return new FuenteTdlrTabs(http, opts.Value, sp.GetRequiredService<ILogger<FuenteTdlrTabs>>());
+        if (proveedor.Equals("SamGov", StringComparison.OrdinalIgnoreCase))
+            return new FuenteSamGov(http, opts.Value, sp.GetRequiredService<ILogger<FuenteSamGov>>());
+        if (proveedor.Equals("UsaSpendingAwards", StringComparison.OrdinalIgnoreCase))
+            return new FuenteUsaSpending(http, opts.Value, sp.GetRequiredService<ILogger<FuenteUsaSpending>>());
+        if (proveedor.Equals("TxDot", StringComparison.OrdinalIgnoreCase))
+            return new FuenteTxDot(http, opts.Value, sp.GetRequiredService<ILogger<FuenteTxDot>>());
+        if (proveedor.Equals("DatosAbiertos", StringComparison.OrdinalIgnoreCase))
+            return new FuenteDatosAbiertos(http, opts.Value, sp.GetRequiredService<ILogger<FuenteDatosAbiertos>>());
+        if (proveedor.Equals("ArcGis", StringComparison.OrdinalIgnoreCase))
+            return new FuenteArcGis(http, opts.Value, sp.GetRequiredService<ILogger<FuenteArcGis>>());
+        if (proveedor.Equals("BusquedaWeb", StringComparison.OrdinalIgnoreCase))
+            return new FuenteBusquedaWeb(http, opts.Value, sp.GetRequiredService<ILogger<FuenteBusquedaWeb>>());
+        return proveedor.Equals("Http", StringComparison.OrdinalIgnoreCase)
+            ? new FuenteProyectosHttp(http, opts, sp.GetRequiredService<ILogger<FuenteProyectosHttp>>())
+            : new FuenteProyectosShovels(http, opts, sp.GetRequiredService<ILogger<FuenteProyectosShovels>>());
+    }
+
+    IEnriquecedorProyectosIa CrearEnriquecedor(string proveedor)
+    {
+        if (EsDirecta(proveedor))
+            return new EnriquecedorDirecto(sp.GetRequiredService<ILogger<EnriquecedorDirecto>>());
+        var modo = opts.Value.Ia.Modo ?? "Claude";
+        if (modo.Equals("Local", StringComparison.OrdinalIgnoreCase))
+            return new EnriquecedorProyectosLocal(sp.GetRequiredService<ILogger<EnriquecedorProyectosLocal>>());
+        if (modo.Equals("Gemini", StringComparison.OrdinalIgnoreCase))
+            return new EnriquecedorProyectosGemini(opts, sp.GetRequiredService<ILogger<EnriquecedorProyectosGemini>>());
+        return new EnriquecedorProyectosClaude(opts, sp.GetRequiredService<ILogger<EnriquecedorProyectosClaude>>());
+    }
+
+    var proveedores = (opts.Value.Fuente.Proveedor ?? "Shovels")
+        .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+        .Distinct(StringComparer.OrdinalIgnoreCase)
+        .ToList();
+    if (proveedores.Count == 0) proveedores.Add("Shovels");
+
+    return proveedores.Select(p => new PipelineLeads(p, CrearFuente(p), CrearEnriquecedor(p))).ToList();
 });
 builder.Services.AddScoped<PoblarProyectosJob>();
 
