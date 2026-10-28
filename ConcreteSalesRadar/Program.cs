@@ -123,6 +123,8 @@ builder.Services.AddScoped<IFuenteProyectos>(sp =>
         return new FuenteDatosAbiertos(http, opts.Value, sp.GetRequiredService<ILogger<FuenteDatosAbiertos>>());
     if (proveedor.Equals("ArcGis", StringComparison.OrdinalIgnoreCase))
         return new FuenteArcGis(http, opts.Value, sp.GetRequiredService<ILogger<FuenteArcGis>>());
+    if (proveedor.Equals("BusquedaWeb", StringComparison.OrdinalIgnoreCase))
+        return new FuenteBusquedaWeb(http, opts.Value, sp.GetRequiredService<ILogger<FuenteBusquedaWeb>>());
     return proveedor.Equals("Http", StringComparison.OrdinalIgnoreCase)
         ? new FuenteProyectosHttp(http, opts, sp.GetRequiredService<ILogger<FuenteProyectosHttp>>())
         : new FuenteProyectosShovels(http, opts, sp.GetRequiredService<ILogger<FuenteProyectosShovels>>());
@@ -142,9 +144,11 @@ builder.Services.AddScoped<IEnriquecedorProyectosIa>(sp =>
         return new EnriquecedorDirecto(sp.GetRequiredService<ILogger<EnriquecedorDirecto>>());
 
     var modo = opts.Value.Ia.Modo ?? "Claude";
-    return modo.Equals("Local", StringComparison.OrdinalIgnoreCase)
-        ? new EnriquecedorProyectosLocal(sp.GetRequiredService<ILogger<EnriquecedorProyectosLocal>>())
-        : new EnriquecedorProyectosClaude(opts, sp.GetRequiredService<ILogger<EnriquecedorProyectosClaude>>());
+    if (modo.Equals("Local", StringComparison.OrdinalIgnoreCase))
+        return new EnriquecedorProyectosLocal(sp.GetRequiredService<ILogger<EnriquecedorProyectosLocal>>());
+    if (modo.Equals("Gemini", StringComparison.OrdinalIgnoreCase))
+        return new EnriquecedorProyectosGemini(opts, sp.GetRequiredService<ILogger<EnriquecedorProyectosGemini>>());
+    return new EnriquecedorProyectosClaude(opts, sp.GetRequiredService<ILogger<EnriquecedorProyectosClaude>>());
 });
 builder.Services.AddScoped<PoblarProyectosJob>();
 

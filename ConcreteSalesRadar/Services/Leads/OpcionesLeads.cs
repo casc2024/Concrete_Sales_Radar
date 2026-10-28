@@ -117,6 +117,30 @@ public class FuenteApiOpciones
     /// </summary>
     public string? SamNaics { get; set; }
 
+    // ---- Específico de "BusquedaWeb" (investigación web con Brave Search, gratis) ----
+
+    /// <summary>
+    /// (BusquedaWeb) API key gratuita de Brave Search (brave.com/search/api). Si está vacía se
+    /// usa la variable de entorno BRAVE_API_KEY. Nivel gratis ~2,000 consultas/mes.
+    /// </summary>
+    public string? BraveApiKey { get; set; }
+
+    /// <summary>
+    /// (BusquedaWeb) Consultas de búsqueda a lanzar. Vacío = set por defecto generado a partir de
+    /// la Ubicación (desarrollos residenciales/multifamiliares/industriales nuevos). Usa {region}
+    /// como marcador que se reemplaza por la Ubicación configurada.
+    /// </summary>
+    public List<string> ConsultasWeb { get; set; } = new();
+
+    /// <summary>(BusquedaWeb) Resultados por consulta a pedir a Brave.</summary>
+    public int MaxResultadosPorConsulta { get; set; } = 10;
+
+    /// <summary>
+    /// (BusquedaWeb) Cuántas páginas de resultados abrir para extraer texto completo (de ahí
+    /// salen developer/contacto/scope). 0 = solo usar los snippets de la búsqueda.
+    /// </summary>
+    public int MaxPaginasAbrir { get; set; } = 4;
+
     // ---- Específico del proveedor "Http" genérico ----
 
     /// <summary>URL del endpoint REST genérico (solo cuando Proveedor = "Http").</summary>
